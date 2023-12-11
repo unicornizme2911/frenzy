@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class User implements Serializable {
     private String uuid;
-    private String name;
+    private String email;
     private String gender;
     private String password;
     private String phone;
@@ -16,10 +16,11 @@ public class User implements Serializable {
     private Uri avatar;
     private String birthday;
     private String role;
+    private String createDate;
 
     public User() {
         this.uuid = "";
-        this.name = "";
+        this.email = "";
         this.gender = "";
         this.password = "";
         this.phone = "";
@@ -29,9 +30,9 @@ public class User implements Serializable {
         this.avatar = new Uri.Builder().build();
     }
 
-    public User(String uuid, String name, String gender, String password, String phone, String address, String birthday, String role, Uri avatar) {
+    public User(String uuid, String email, String gender, String password, String phone, String address, String birthday, String role, Uri avatar, String createDate) {
         this.uuid = uuid;
-        this.name = name;
+        this.email = email;
         this.gender = gender;
         this.password = password;
         this.phone = phone;
@@ -39,26 +40,41 @@ public class User implements Serializable {
         this.address = address;
         this.role = String.valueOf(role);
         this.avatar = avatar;
+        this.createDate = createDate;
     }
-
+    public User(User user){
+        this(
+            user.getUuid(),
+            user.getName(),
+            user.getGender(),
+            user.getPassword(),
+            user.getPhone(),
+            user.getAddress(),
+            user.getBirthday(),
+            user.getRole(),
+            user.getAvatar(),
+            user.getCreateDate()
+        );
+    }
     public User(HashMap<String, Object> userMap){
         this(
             userMap.get("uuid").toString(),
-            userMap.get("name").toString(),
+            userMap.get("email").toString(),
             userMap.get("gender").toString(),
             userMap.get("password").toString(),
             userMap.get("phone").toString(),
             userMap.get("address").toString(),
             userMap.get("birthday").toString(),
             userMap.get("role").toString(),
-            (Uri)userMap.get("avatar")
+            (Uri)userMap.get("avatar"),
+            userMap.get("createDate").toString()
         );
     }
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         if(avatar == null){
             result.put("uuid", uuid);
-            result.put("name", name);
+            result.put("email", email);
             result.put("phone", phone);
             result.put("password", password);
             result.put("gender", gender);
@@ -66,9 +82,10 @@ public class User implements Serializable {
             result.put("birthday", birthday);
             result.put("role", role);
             result.put("avatar", "");
+            result.put("createDate", createDate);
         }else{
             result.put("uuid", uuid);
-            result.put("name", name);
+            result.put("email", email);
             result.put("phone", phone);
             result.put("password", password);
             result.put("gender", gender);
@@ -76,6 +93,7 @@ public class User implements Serializable {
             result.put("birthday", birthday);
             result.put("role", role);
             result.put("avatar", avatar.toString());
+            result.put("createDate", createDate);
         }
         return result;
     }
@@ -88,11 +106,11 @@ public class User implements Serializable {
     }
 
     public String getName() {
-        return name;
+        return email;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String email) {
+        this.email = email;
     }
 
     public String getGender() {
@@ -151,11 +169,14 @@ public class User implements Serializable {
         this.role = role;
     }
 
+    public String getCreateDate() { return createDate; }
+
+    public void setCreateDate(String createDate) { this.createDate = createDate; }
     @Override
     public String toString() {
         return "User{" +
                 "uuid='" + uuid + '\'' +
-                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
                 ", gender='" + gender + '\'' +
                 ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
@@ -163,6 +184,7 @@ public class User implements Serializable {
                 ", avatar=" + avatar +
                 ", birthday='" + birthday + '\'' +
                 ", role='" + role + '\'' +
+                ", createDate='" + createDate + '\'' +
                 '}';
     }
 }
