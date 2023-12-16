@@ -1,44 +1,95 @@
 package com.example.myapplication.entities;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Ticket implements Serializable {
-    private String movieName;
-    private String theaterName;
+    private String id;
+    private String movieId;
+    private String theaterId;
+    private String userId;
     private String seat;
     private double ticketPrice;
-    private LocalDate bookingDate;
-    private LocalDate showTime;
+    private String bookingDate;
+    private String showTime;
 
     public Ticket() {
     }
-
-    public Ticket(String movieName, String theaterName, String seat, double ticketPrice, LocalDate bookingDate, LocalDate showTime) {
-        this.movieName = movieName;
-        this.theaterName = theaterName;
+    public Ticket(String id, String movieId, String theaterId, String userId, String seat, double ticketPrice, String bookingDate, String showTime) {
+        this.id = id;
+        this.movieId = movieId;
+        this.theaterId = theaterId;
+        this.userId = userId;
         this.seat = seat;
         this.ticketPrice = ticketPrice;
         this.bookingDate = bookingDate;
         this.showTime = showTime;
     }
-
-    public String getMovieName() {
-        return movieName;
+    public Ticket(String movieId, String theaterId, String userId, String seat, double ticketPrice, String bookingDate, String showTime) {
+        this.movieId = movieId;
+        this.theaterId = theaterId;
+        this.userId = userId;
+        this.seat = seat;
+        this.ticketPrice = ticketPrice;
+        this.bookingDate = bookingDate;
+        this.showTime = showTime;
+    }
+    public Ticket(HashMap<String, Object> ticketMap){
+        this(
+                ticketMap.get("id").toString(),
+                ticketMap.get("movieId").toString(),
+                ticketMap.get("theaterId").toString(),
+                ticketMap.get("userId").toString(),
+                ticketMap.get("seat").toString(),
+                Double.parseDouble(ticketMap.get("ticketPrice").toString()),
+                ticketMap.get("bookingDate").toString(),
+                ticketMap.get("showTime").toString()
+        );
+    }
+    public Map<String, Object> toMap(){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("id", id);
+        result.put("movieId", movieId);
+        result.put("theaterId", theaterId);
+        result.put("userId", userId);
+        result.put("seat", seat);
+        result.put("ticketPrice", ticketPrice);
+        result.put("bookingDate", bookingDate);
+        result.put("showTime", showTime);
+        return result;
     }
 
-    public void setMovieName(String movieName) {
-        this.movieName = movieName;
+    public String getId() {
+        return id;
     }
 
-    public String getTheaterName() {
-        return theaterName;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setTheaterName(String theaterName) {
-        this.theaterName = theaterName;
+    public String getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(String movieId) {
+        this.movieId = movieId;
+    }
+
+    public String getTheaterId() {
+        return theaterId;
+    }
+
+    public void setTheaterId(String theaterId) {
+        this.theaterId = theaterId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getSeat() {
@@ -57,46 +108,28 @@ public class Ticket implements Serializable {
         this.ticketPrice = ticketPrice;
     }
 
-    public LocalDate getBookingDate() {
+    public String getBookingDate() {
         return bookingDate;
     }
 
-    public void setBookingDate(LocalDate bookingDate) {
+    public void setBookingDate(String bookingDate) {
         this.bookingDate = bookingDate;
     }
 
-    public LocalDate getShowTime() {
+    public String getShowTime() {
         return showTime;
     }
 
-    public void setShowTime(LocalDate showTime) {
+    public void setShowTime(String showTime) {
         this.showTime = showTime;
     }
-    public Map<String, Object> toMap(){
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("movieName", movieName);
-        result.put("theaterName", theaterName);
-        result.put("seat", seat);
-        result.put("ticketPrice", ticketPrice);
-        result.put("bookingDate", bookingDate);
-        result.put("showTime", showTime);
-        return result;
-    }
-    public Ticket(HashMap<String, Object> ticketMap){
-        this(
-                ticketMap.get("movieName").toString(),
-                ticketMap.get("theaterName").toString(),
-                ticketMap.get("seat").toString(),
-                Double.parseDouble(ticketMap.get("ticketPrice").toString()),
-                LocalDate.parse(ticketMap.get("bookingDate").toString()),
-                LocalDate.parse(ticketMap.get("showTime").toString())
-        );
-    }
+
     @Override
     public String toString() {
         return "Ticket{" +
-                "movieName='" + movieName + '\'' +
-                ", theaterName='" + theaterName + '\'' +
+                "id='" + id + '\'' +
+                ", movieId='" + movieId + '\'' +
+                ", theaterId='" + theaterId + '\'' +
                 ", seat='" + seat + '\'' +
                 ", ticketPrice=" + ticketPrice +
                 ", bookingDate=" + bookingDate +

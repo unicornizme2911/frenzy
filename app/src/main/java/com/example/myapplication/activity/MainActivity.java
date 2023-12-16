@@ -9,7 +9,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.myapplication.R;
+import com.example.myapplication.entities.Genre;
 import com.example.myapplication.fragments.DetailUserFragment;
+import com.example.myapplication.models.GenresModel;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 

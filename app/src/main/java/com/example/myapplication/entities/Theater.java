@@ -7,28 +7,26 @@ public class Theater {
     private String id;
     private String name;
     private String address;
-    private String phone;
     private String image;
-    private String description;
     private String city;
     private String district;
 
     public Theater() {
+        this.id = "";
+        this.name = "";
+        this.address = "";
+        this.image = "";
+        this.city = "";
+        this.district = "";
     }
 
-    public Theater(String id, String name, String address, String phone, String image, String description, String city, String district) {
+    public Theater(String id, String name, String address, String image, String city, String district) {
         this.id = id;
         this.name = name;
         this.address = address;
-        this.phone = phone;
         this.image = image;
-        this.description = description;
         this.city = city;
         this.district = district;
-    }
-
-    public Theater(String id, String name, String address, String phone, String image, String description) {
-        this(id, name, address, phone, image, description, "", "");
     }
 
     public String getId() {
@@ -55,28 +53,12 @@ public class Theater {
         this.address = address;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public String getImage() {
         return image;
     }
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getCity() {
@@ -100,9 +82,7 @@ public class Theater {
                 theaterMap.get("id").toString(),
                 theaterMap.get("name").toString(),
                 theaterMap.get("address").toString(),
-                theaterMap.get("phone").toString(),
                 theaterMap.get("image").toString(),
-                theaterMap.get("description").toString(),
                 theaterMap.get("city").toString(),
                 theaterMap.get("district").toString()
         );
@@ -112,9 +92,7 @@ public class Theater {
         theaterMap.put("id", id);
         theaterMap.put("name", name);
         theaterMap.put("address", address);
-        theaterMap.put("phone", phone);
         theaterMap.put("image", image);
-        theaterMap.put("description", description);
         theaterMap.put("city", city);
         theaterMap.put("district", district);
         return theaterMap;
@@ -126,9 +104,7 @@ public class Theater {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
                 ", image='" + image + '\'' +
-                ", description='" + description + '\'' +
                 ", city='" + city + '\'' +
                 ", district='" + district + '\'' +
                 '}';

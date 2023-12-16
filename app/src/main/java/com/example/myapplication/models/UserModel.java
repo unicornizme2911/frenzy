@@ -1,15 +1,22 @@
 package com.example.myapplication.models;
 
+import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.myapplication.authentication.ForgotPasswordActivity;
+import com.example.myapplication.authentication.OTPVerifyActivity;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.utlis.EmailUtils;
 import com.example.myapplication.utlis.PasswordUtils;
 import com.example.myapplication.utlis.PhoneUtils;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthOptions;
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,7 +36,7 @@ import java.util.UUID;
 public class UserModel extends Model{
     public static final String TAG = "UserModel";
     private static final String USER_COLLECTION = "users";
-
+    private PhoneAuthOptions phoneAuthOptions;
     public interface LoginCallbacks{
         void onSuccess(User user);
         void onFailed(Exception e);
@@ -41,6 +48,10 @@ public class UserModel extends Model{
     public interface UserCallbacks{
         void onSuccess(User user);
         void onFailed(Exception e);
+    }
+    public interface CheckExistsCallbacks{
+        void onExists();
+        void onNotFound();
     }
     public UserModel() {
         super();
@@ -116,7 +127,7 @@ public class UserModel extends Model{
             }
         });
     }
-    public void register(String email, String phone, String password, String birthday, String gender, String address, Uri avatar, RegisterCallbacks callbacks) {
+    public void register(String email, String phone, String password, String birthday, String gender, String address, RegisterCallbacks callbacks) {
         try{
             String uuid = UUID.randomUUID().toString();
             String hashedPassword = PasswordUtils.hashPassword(password);
@@ -133,7 +144,8 @@ public class UserModel extends Model{
                 callbacks.onFailed(new Exception("Phone is not valid"));
                 return;
             }
-            User user = new User(uuid, email, gender, hashedPassword, phone, address, birthday, "user", avatar, createDate);
+            Uri avatar = Uri.parse("android.resource://com.example.myapplication/drawable/avatar");
+            User user = new User(uuid, email, gender, hashedPassword, phone, address, birthday, "USER", avatar, createDate);
             database.child(USER_COLLECTION).child(uuid).setValue(user.toMap())
                     .addOnCompleteListener(task -> {
                         if(task.isSuccessful()){
@@ -179,6 +191,29 @@ public class UserModel extends Model{
     public String getCurrentUserUid(){
         return mAuth.getCurrentUser().getUid();
     }
+    public void checkUserIsExists(String phone, CheckExistsCallbacks callbacks){
+        database.child(USER_COLLECTION).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = null;
+                for(DataSnapshot dataSnapshot: snapshot.getChildren()){
+                    user = dataSnapshot.getValue(User.class);
+                    if(user != null){
+                        if(user.getPhone().equals(phone)){
+                            callbacks.onExists();
+                            break;
+                        }
+                    }
+                }
+                callbacks.onNotFound();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callbacks.onNotFound();
+            }
+        });
+    }
 
     public void forgotPassword(String value, String newPassword, LoginCallbacks callbacks){
         mAuth.sendPasswordResetEmail(value)
@@ -190,13 +225,53 @@ public class UserModel extends Model{
                     }
                 });
     }
+    public void forgotPassword(String phone, String newPass, String newPassConfirm, ForgotPasswordActivity activity){
+        if(!newPass.equals(newPassConfirm)){
+            Log.w(TAG, "forgotPassword: " + "Password and confirm password must be the same");
+            return;
+        }
+        phoneAuthOptions = PhoneAuthOptions.newBuilder()
+                .setPhoneNumber(phone)
+                .setTimeout(60L, java.util.concurrent.TimeUnit.SECONDS)
+                .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                    @Override
+                    public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                        Log.e(TAG, "onVerificationCompleted: verification completed");
+                    }
+
+                    @Override
+                    public void onVerificationFailed(@NonNull FirebaseException e) {
+
+                    }
+                    @Override
+                    public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                        super.onCodeSent(verificationId, forceResendingToken);
+                        Intent intent = new Intent(activity, OTPVerifyActivity.class);
+                        intent.putExtra("phone", phone);
+                        intent.putExtra("newPass", newPass);
+                        intent.putExtra("verificationId", verificationId);
+                        intent.putExtra("actionOption", OTPVerifyActivity.FORGOT_PASSWORD);
+                        activity.startActivity(intent);
+                        activity.finish();
+                    }
+                }).build();
+        PhoneAuthProvider.verifyPhoneNumber(phoneAuthOptions);
+    }
     public void getUser(String uuid, UserCallbacks callbacks){
-        database.child(USER_COLLECTION).child(uuid).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                User user = new User(task.getResult().getValue(User.class));
+        database.child(USER_COLLECTION).child(uuid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.getValue() == null){
+                    callbacks.onFailed(new Exception("User not found"));
+                    return;
+                }
+                User user = snapshot.getValue(User.class);
                 callbacks.onSuccess(user);
-            } else {
-                callbacks.onFailed(task.getException());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callbacks.onFailed(error.toException());
             }
         });
     }

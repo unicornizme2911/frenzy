@@ -1,29 +1,51 @@
 package com.example.myapplication.entities;
 
-import android.net.Uri;
-
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Movie implements Serializable {
     private String id;
     private String name;
     private int duration;
-    private String[] genres;
-    private LocalDate startingDate;
-    private LocalDate endingDate;
+    private List<String> genres;
+    private String startingDate;
+    private String endingDate;
     private String thumbnail;
-    private Uri[] images;
+    private String image;
     private String sumary;
     private double rating;
-
     public Movie() {
+        this.id = "";
+        this.name = "";
+        this.duration = 0;
+        this.genres = Arrays.asList();
+        this.startingDate = "";
+        this.endingDate = "";
+        this.thumbnail = "";
+        this.image = "";
+        this.sumary = "";
+        this.rating = 0;
     }
 
-    public Movie(String id, String name, int duration, String[] genres, LocalDate startingDate, LocalDate endingDate, String thumbnail, Uri[] images, String sumary, double rating) {
+    public Movie(Movie movie){
+        this(
+            movie.getId(),
+            movie.getName(),
+            movie.getDuration(),
+            movie.getGenres(),
+            movie.getStartingDate(),
+            movie.getEndingDate(),
+            movie.getThumbnail(),
+            movie.getImage(),
+            movie.getSumary(),
+            movie.getRating()
+        );
+    }
+
+    public Movie(String id, String name, int duration, List<String> genres, String startingDate, String endingDate, String thumbnail, String image, String sumary, double rating) {
         this.id = id;
         this.name = name;
         this.duration = duration;
@@ -31,7 +53,7 @@ public class Movie implements Serializable {
         this.startingDate = startingDate;
         this.endingDate = endingDate;
         this.thumbnail = thumbnail;
-        this.images = images;
+        this.image = image;
         this.sumary = sumary;
         this.rating = rating;
     }
@@ -60,27 +82,27 @@ public class Movie implements Serializable {
         this.duration = duration;
     }
 
-    public String[] getGenres() {
+    public List<String> getGenres() {
         return genres;
     }
 
-    public void setGenres(String[] genres) {
+    public void setGenres(List<String> genres) {
         this.genres = genres;
     }
 
-    public LocalDate getStartingDate() {
+    public String getStartingDate() {
         return startingDate;
     }
 
-    public void setStartingDate(LocalDate startingDate) {
+    public void setStartingDate(String startingDate) {
         this.startingDate = startingDate;
     }
 
-    public LocalDate getEndingDate() {
+    public String getEndingDate() {
         return endingDate;
     }
 
-    public void setEndingDate(LocalDate endingDate) {
+    public void setEndingDate(String endingDate) {
         this.endingDate = endingDate;
     }
 
@@ -92,12 +114,12 @@ public class Movie implements Serializable {
         this.thumbnail = thumbnail;
     }
 
-    public Uri[] getImages() {
-        return images;
+    public String getImage() {
+        return image;
     }
 
-    public void setImages(Uri[] images) {
-        this.images = images;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getSumary() {
@@ -118,16 +140,16 @@ public class Movie implements Serializable {
 
     public Movie(HashMap<String, Object> movieMap){
         this(
-            movieMap.get("id").toString(),
-            movieMap.get("name").toString(),
-            Integer.parseInt(movieMap.get("duration").toString()),
-            (String[])movieMap.get("genres"),
-            LocalDate.parse(movieMap.get("startingDate").toString()),
-            LocalDate.parse(movieMap.get("endingDate").toString()),
-            movieMap.get("thumbnail").toString(),
-            (Uri[])movieMap.get("images"),
-            movieMap.get("sumary").toString(),
-            Double.parseDouble(movieMap.get("rating").toString())
+            (String) movieMap.get("id"),
+            (String) movieMap.get("name"),
+            (int) movieMap.get("duration"),
+            (List<String>) movieMap.get("genres"),
+            (String) movieMap.get("startingDate"),
+            (String) movieMap.get("endingDate"),
+            (String) movieMap.get("thumbnail"),
+            (String) movieMap.get("image"),
+            (String) movieMap.get("sumary"),
+            (double) movieMap.get("rating")
         );
     }
 
@@ -140,7 +162,7 @@ public class Movie implements Serializable {
         movieMap.put("startingDate", this.startingDate);
         movieMap.put("endingDate", this.endingDate);
         movieMap.put("thumbnail", this.thumbnail);
-        movieMap.put("images", this.images);
+        movieMap.put("image", this.image);
         movieMap.put("sumary", this.sumary);
         movieMap.put("rating", this.rating);
         return movieMap;
@@ -152,11 +174,11 @@ public class Movie implements Serializable {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", duration=" + duration +
-                ", genres=" + Arrays.toString(genres) +
+                ", genres=" + genres +
                 ", startingDate=" + startingDate +
                 ", endingDate=" + endingDate +
                 ", thumbnail='" + thumbnail + '\'' +
-                ", images=" + Arrays.toString(images) +
+                ", image=" + image +
                 ", sumary='" + sumary + '\'' +
                 ", rating=" + rating +
                 '}';

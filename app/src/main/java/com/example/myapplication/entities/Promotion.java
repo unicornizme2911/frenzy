@@ -1,19 +1,19 @@
 package com.example.myapplication.entities;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Promotion {
     private String code;
     private Double percent;
-    private LocalDate fromDate;
-    private LocalDate toDate;
+    private String fromDate;
+    private String toDate;
 
     public Promotion() {
     }
 
-    public Promotion(String code, Double percent, LocalDate fromDate, LocalDate toDate) {
+    public Promotion(String code, Double percent, String fromDate, String toDate) {
         this.code = code;
         this.percent = percent;
         this.fromDate = fromDate;
@@ -36,25 +36,24 @@ public class Promotion {
         this.percent = percent;
     }
 
-    public LocalDate getFromDate() {
+    public String getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(LocalDate fromDate) {
+    public void setFromDate(String fromDate) {
         this.fromDate = fromDate;
     }
 
-    public LocalDate getToDate() {
+    public String getToDate() {
         return toDate;
     }
 
-    public void setToDate(LocalDate toDate) {
+    public void setToDate(String toDate) {
         this.toDate = toDate;
     }
 
     public boolean isValid(){
-        LocalDate now = LocalDate.now();
-        return now.isAfter(fromDate) && now.isBefore(toDate);
+        return !isExpired() && !isNotStarted();
     }
 
     public double getDiscount(double price){
@@ -62,35 +61,33 @@ public class Promotion {
     }
 
     public boolean isExpired(){
-        LocalDate now = LocalDate.now();
-        return now.isAfter(toDate);
+        Date currentDate = new Date();
+        Date toDate = new Date(this.toDate);
+        return currentDate.after(toDate);
     }
 
     public boolean isNotStarted(){
-        LocalDate now = LocalDate.now();
-        return now.isBefore(fromDate);
-    }
-
-    public boolean isNotValid(){
-        return isExpired() || isNotStarted();
-    }
-
-    public Map<String, Object> toMap(){
-        Map<String, Object> promotionMap = new HashMap<>();
-        promotionMap.put("code", code);
-        promotionMap.put("percent", percent);
-        promotionMap.put("fromDate", fromDate);
-        promotionMap.put("toDate", toDate);
-        return promotionMap;
+        Date currentDate = new Date();
+        Date fromDate = new Date(this.fromDate);
+        return currentDate.before(fromDate);
     }
 
     public Promotion(HashMap<String, Object> promotionMap){
         this(
-            promotionMap.get("code").toString(),
-            Double.parseDouble(promotionMap.get("percent").toString()),
-            LocalDate.parse(promotionMap.get("fromDate").toString()),
-            LocalDate.parse(promotionMap.get("toDate").toString())
+                promotionMap.get("code").toString(),
+                Double.parseDouble(promotionMap.get("percent").toString()),
+                promotionMap.get("fromDate").toString(),
+                promotionMap.get("toDate").toString()
         );
+    }
+
+    public Map<String, Object> toMap(){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("code", code);
+        result.put("percent", percent);
+        result.put("fromDate", fromDate);
+        result.put("toDate", toDate);
+        return result;
     }
 
     @Override

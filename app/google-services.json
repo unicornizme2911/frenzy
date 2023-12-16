@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "158344034005",
+    "firebase_url": "https://frenzy-c54c1-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "frenzy-c54c1",
+    "storage_bucket": "frenzy-c54c1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:158344034005:android:3a7cd131355c321b08145c",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXbRJJ_kVmOMHm6Z58hqxAc8eOpsLa9Yw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
