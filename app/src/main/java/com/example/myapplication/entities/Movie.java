@@ -11,9 +11,10 @@ public class Movie implements Serializable {
     private String name;
     private int duration;
     private List<String> genres;
+    private List<String> actors;
     private String startingDate;
     private String endingDate;
-    private String thumbnail;
+    private String trailer;
     private String image;
     private String sumary;
     private double rating;
@@ -22,9 +23,10 @@ public class Movie implements Serializable {
         this.name = "";
         this.duration = 0;
         this.genres = Arrays.asList();
+        this.actors = Arrays.asList();
         this.startingDate = "";
         this.endingDate = "";
-        this.thumbnail = "";
+        this.trailer = "";
         this.image = "";
         this.sumary = "";
         this.rating = 0;
@@ -36,6 +38,7 @@ public class Movie implements Serializable {
             movie.getName(),
             movie.getDuration(),
             movie.getGenres(),
+            movie.getActors(),
             movie.getStartingDate(),
             movie.getEndingDate(),
             movie.getThumbnail(),
@@ -45,14 +48,15 @@ public class Movie implements Serializable {
         );
     }
 
-    public Movie(String id, String name, int duration, List<String> genres, String startingDate, String endingDate, String thumbnail, String image, String sumary, double rating) {
+    public Movie(String id, String name, int duration, List<String> genres, List<String> actors, String startingDate, String endingDate, String trailer, String image, String sumary, double rating) {
         this.id = id;
         this.name = name;
         this.duration = duration;
         this.genres = genres;
+        this.actors = actors;
         this.startingDate = startingDate;
         this.endingDate = endingDate;
-        this.thumbnail = thumbnail;
+        this.trailer = trailer;
         this.image = image;
         this.sumary = sumary;
         this.rating = rating;
@@ -106,14 +110,6 @@ public class Movie implements Serializable {
         this.endingDate = endingDate;
     }
 
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
-
     public String getImage() {
         return image;
     }
@@ -138,15 +134,32 @@ public class Movie implements Serializable {
         this.rating = rating;
     }
 
+    public List<String> getActors() {
+        return actors;
+    }
+
+    public void setActors(List<String> actors) {
+        this.actors = actors;
+    }
+
+    public String getTrailer() {
+        return trailer;
+    }
+
+    public void setTrailer(String trailer) {
+        this.trailer = trailer;
+    }
+
     public Movie(HashMap<String, Object> movieMap){
         this(
             (String) movieMap.get("id"),
             (String) movieMap.get("name"),
             (int) movieMap.get("duration"),
             (List<String>) movieMap.get("genres"),
+            (List<String>) movieMap.get("actors"),
             (String) movieMap.get("startingDate"),
             (String) movieMap.get("endingDate"),
-            (String) movieMap.get("thumbnail"),
+            (String) movieMap.get("trailer"),
             (String) movieMap.get("image"),
             (String) movieMap.get("sumary"),
             (double) movieMap.get("rating")
@@ -159,9 +172,10 @@ public class Movie implements Serializable {
         movieMap.put("name", this.name);
         movieMap.put("duration", this.duration);
         movieMap.put("genres", this.genres);
+        movieMap.put("actors", this.actors);
         movieMap.put("startingDate", this.startingDate);
         movieMap.put("endingDate", this.endingDate);
-        movieMap.put("thumbnail", this.thumbnail);
+        movieMap.put("trailer", this.trailer);
         movieMap.put("image", this.image);
         movieMap.put("sumary", this.sumary);
         movieMap.put("rating", this.rating);
@@ -175,9 +189,10 @@ public class Movie implements Serializable {
                 ", name='" + name + '\'' +
                 ", duration=" + duration +
                 ", genres=" + genres +
+                ", actors=" + actors +
                 ", startingDate=" + startingDate +
                 ", endingDate=" + endingDate +
-                ", thumbnail='" + thumbnail + '\'' +
+                ", trailer='" + trailer + '\'' +
                 ", image=" + image +
                 ", sumary='" + sumary + '\'' +
                 ", rating=" + rating +

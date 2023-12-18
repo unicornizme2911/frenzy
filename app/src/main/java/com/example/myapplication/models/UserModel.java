@@ -27,9 +27,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -145,7 +147,8 @@ public class UserModel extends Model{
                 return;
             }
             Uri avatar = Uri.parse("android.resource://com.example.myapplication/drawable/avatar");
-            User user = new User(uuid, email, gender, hashedPassword, phone, address, birthday, "USER", avatar, createDate);
+            List<String> invoiceIds = new ArrayList<>();
+            User user = new User(uuid, email, gender, hashedPassword, phone, address, birthday, "USER", avatar, createDate, invoiceIds);
             database.child(USER_COLLECTION).child(uuid).setValue(user.toMap())
                     .addOnCompleteListener(task -> {
                         if(task.isSuccessful()){

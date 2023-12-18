@@ -3,7 +3,9 @@ package com.example.myapplication.entities;
 import android.net.Uri;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class User implements Serializable {
@@ -17,6 +19,7 @@ public class User implements Serializable {
     private String birthday;
     private String role;
     private String createDate;
+    private List<String> invoiceIds;
 
     public User() {
         this.uuid = "";
@@ -28,9 +31,11 @@ public class User implements Serializable {
         this.birthday = "";
         this.role = "";
         this.avatar = new Uri.Builder().build();
+        this.createDate = "";
+        this.invoiceIds = new ArrayList<>();
     }
 
-    public User(String uuid, String email, String gender, String password, String phone, String address, String birthday, String role, Uri avatar, String createDate) {
+    public User(String uuid, String email, String gender, String password, String phone, String address, String birthday, String role, Uri avatar, String createDate, List<String> invoiceIds) {
         this.uuid = uuid;
         this.email = email;
         this.gender = gender;
@@ -41,6 +46,7 @@ public class User implements Serializable {
         this.role = String.valueOf(role);
         this.avatar = avatar;
         this.createDate = createDate;
+        this.invoiceIds = invoiceIds;
     }
     public User(User user){
         this(
@@ -53,7 +59,8 @@ public class User implements Serializable {
             user.getBirthday(),
             user.getRole(),
             user.getAvatar(),
-            user.getCreateDate()
+            user.getCreateDate(),
+            user.getInvoiceIds()
         );
     }
     public User(HashMap<String, Object> userMap){
@@ -67,7 +74,8 @@ public class User implements Serializable {
             userMap.get("birthday").toString(),
             userMap.get("role").toString(),
             (Uri)userMap.get("avatar"),
-            userMap.get("createDate").toString()
+            userMap.get("createDate").toString(),
+            (List<String>)userMap.get("invoiceIds")
         );
     }
     public Map<String, Object> toMap() {
@@ -83,6 +91,7 @@ public class User implements Serializable {
             result.put("role", role);
             result.put("avatar", "");
             result.put("createDate", createDate);
+            result.put("invoiceIds", invoiceIds);
         }else{
             result.put("uuid", uuid);
             result.put("email", email);
@@ -94,6 +103,7 @@ public class User implements Serializable {
             result.put("role", role);
             result.put("avatar", avatar.toString());
             result.put("createDate", createDate);
+            result.put("invoiceIds", invoiceIds);
         }
         return result;
     }
@@ -172,6 +182,23 @@ public class User implements Serializable {
     public String getCreateDate() { return createDate; }
 
     public void setCreateDate(String createDate) { this.createDate = createDate; }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<String> getInvoiceIds() {
+        return invoiceIds;
+    }
+
+    public void setInvoiceIds(List<String> invoiceIds) {
+        this.invoiceIds = invoiceIds;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -185,6 +212,7 @@ public class User implements Serializable {
                 ", birthday='" + birthday + '\'' +
                 ", role='" + role + '\'' +
                 ", createDate='" + createDate + '\'' +
+                ", invoiceIds=" + invoiceIds +
                 '}';
     }
 }

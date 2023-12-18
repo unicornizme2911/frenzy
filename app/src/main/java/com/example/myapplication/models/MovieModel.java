@@ -53,13 +53,14 @@ public class MovieModel extends Model{
                 String name = jsonObject.optString("name");
                 int duration = jsonObject.optInt("duration");
                 List<String> genres = Arrays.asList(jsonObject.optString("genres").split(","));
+                List<String> actors = Arrays.asList(jsonObject.optString("actors").split(","));
                 String startingDate = jsonObject.optString("startingDate");
                 String endingDate = jsonObject.optString("endingDate");
-                String thumbnail = jsonObject.optString("thumbnail");
+                String trailer = jsonObject.optString("trailer");
                 String image = jsonObject.optString("image");
                 String sumary = jsonObject.optString("sumary");
                 double rating = jsonObject.optDouble("rating");
-                Movie movie = new Movie(id, name, duration, genres, startingDate, endingDate, thumbnail, image, sumary, rating);
+                Movie movie = new Movie(id, name, duration, genres, actors, startingDate, endingDate, trailer, image, sumary, rating);
                 Log.e(TAG, "getMovie: " + movie.toString());
                 callbacks.onSuccess(movie);
             }
@@ -82,9 +83,10 @@ public class MovieModel extends Model{
                     String name = jsonObject.optString("name");
                     int duration = jsonObject.optInt("duration");
                     List<String> genres = Arrays.asList(jsonObject.optString("genres").split(","));
+                    List<String> actors = Arrays.asList(jsonObject.optString("actors").split(","));
                     String startingDate = jsonObject.optString("startingDate");
                     String endingDate = jsonObject.optString("endingDate");
-                    String thumbnail = jsonObject.optString("thumbnail");
+                    String trailer = jsonObject.optString("trailer");
                     String image = jsonObject.optString("image");
                     String sumary = jsonObject.optString("sumary");
                     double rating = jsonObject.optDouble("rating");
@@ -92,9 +94,10 @@ public class MovieModel extends Model{
                     movie.setName(name);
                     movie.setDuration(duration);
                     movie.setGenres(genres);
+                    movie.setActors(actors);
                     movie.setStartingDate(startingDate);
                     movie.setEndingDate(endingDate);
-                    movie.setThumbnail(thumbnail);
+                    movie.setTrailer(trailer);
                     movie.setImage(image);
                     movie.setSumary(sumary);
                     movie.setRating(rating);
@@ -124,9 +127,10 @@ public class MovieModel extends Model{
                             String name = jsonObject.optString("name");
                             int duration = jsonObject.optInt("duration");
                             List<String> genres = Arrays.asList(jsonObject.optString("genres").split(","));
+                            List<String> actors = Arrays.asList(jsonObject.optString("actors").split(","));
                             String startingDate = jsonObject.optString("startingDate");
                             String endingDate = jsonObject.optString("endingDate");
-                            String thumbnail = jsonObject.optString("thumbnail");
+                            String trailer = jsonObject.optString("trailer");
                             String image = jsonObject.optString("image");
                             String sumary = jsonObject.optString("sumary");
                             double rating = jsonObject.optDouble("rating");
@@ -134,9 +138,10 @@ public class MovieModel extends Model{
                             movie.setName(name);
                             movie.setDuration(duration);
                             movie.setGenres(genres);
+                            movie.setActors(actors);
                             movie.setStartingDate(startingDate);
                             movie.setEndingDate(endingDate);
-                            movie.setThumbnail(thumbnail);
+                            movie.setTrailer(trailer);
                             movie.setImage(image);
                             movie.setSumary(sumary);
                             movie.setRating(rating);
@@ -150,18 +155,16 @@ public class MovieModel extends Model{
                     }
                 });
     }
-    public void createMovie(String name, int duration, List<String> genresId, String start, String end,
-                            String thumbnail, String image, String sumary, double rating, MovieCallbacks callbacks){
+    public void createMovie(String name, int duration, List<String> genreIds, List<String> actorIds, String start, String end,
+                            String trailer, String image, String sumary, double rating, MovieCallbacks callbacks){
         String id = UUID.randomUUID().toString();
-        Movie movie = new Movie(id, name, duration, genresId, start, end, thumbnail, image, sumary, rating);
-        for(String genre: genresId){
-            database.child(GenresModel.GENRES_COLLECTION).child(genre).child("movies").child(id).setValue(movie.toMap()).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    callbacks.onSuccess(movie);
-                } else {
-                    callbacks.onFailed(task.getException());
-                }
-            });
-        }
+        Movie movie = new Movie(id, name, duration, genreIds, actorIds, start, end, trailer, image, sumary, rating);
+        database.child(MOVIE_COLLECTION).child(id).setValue(movie.toMap()).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                callbacks.onSuccess(movie);
+            } else {
+                callbacks.onFailed(task.getException());
+            }
+        });
     }
 }
