@@ -1,21 +1,22 @@
 package com.example.myapplication.models;
 
-import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.myapplication.entities.Genre;
 import com.example.myapplication.entities.Movie;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class MovieModel extends Model{
     private static final String TAG = "MovieModel";
     private static final String MOVIE_COLLECTION = "movies";
+    private GenreModel genreModel = new GenreModel();
 
     public interface MovieCallbacks{
         void onSuccess(Movie movie);
@@ -52,7 +54,17 @@ public class MovieModel extends Model{
                 String id = snapshot.getKey();
                 String name = jsonObject.optString("name");
                 int duration = jsonObject.optInt("duration");
-                List<String> genres = Arrays.asList(jsonObject.optString("genres").split(","));
+                String genreIds = jsonObject.optString("genres");
+                List<Genre> genres = new ArrayList<>();
+                Gson gson = new Gson();
+                Map<String, Map<String, String>> genreMap = gson.fromJson(genreIds, HashMap.class);
+                for (Map.Entry<String, Map<String, String>> entry : genreMap.entrySet()) {
+                    String genre_id = entry.getKey();
+                    String genre_name = entry.getValue().get("name");
+                    Genre genre = new Genre(genre_id, genre_name);
+                    Log.e(TAG, "onDataChange: " + genre.toString());
+                    genres.add(genre);
+                }
                 List<String> actors = Arrays.asList(jsonObject.optString("actors").split(","));
                 String startingDate = jsonObject.optString("startingDate");
                 String endingDate = jsonObject.optString("endingDate");
@@ -60,7 +72,8 @@ public class MovieModel extends Model{
                 String image = jsonObject.optString("image");
                 String sumary = jsonObject.optString("sumary");
                 double rating = jsonObject.optDouble("rating");
-                Movie movie = new Movie(id, name, duration, genres, actors, startingDate, endingDate, trailer, image, sumary, rating);
+                double price = jsonObject.optDouble("price");
+                Movie movie = new Movie(id, name, duration, genres, actors, startingDate, endingDate, trailer, image, sumary, rating, price);
                 Log.e(TAG, "getMovie: " + movie.toString());
                 callbacks.onSuccess(movie);
             }
@@ -82,7 +95,17 @@ public class MovieModel extends Model{
                     String id = dataSnapshot.getKey();
                     String name = jsonObject.optString("name");
                     int duration = jsonObject.optInt("duration");
-                    List<String> genres = Arrays.asList(jsonObject.optString("genres").split(","));
+                    String genreIds = jsonObject.optString("genres");
+                    List<Genre> genres = new ArrayList<>();
+                    Gson gson = new Gson();
+                    Map<String, Map<String, String>> genreMap = gson.fromJson(genreIds, HashMap.class);
+                    for (Map.Entry<String, Map<String, String>> entry : genreMap.entrySet()) {
+                        String genre_id = entry.getKey();
+                        String genre_name = entry.getValue().get("name");
+                        Genre genre = new Genre(genre_id, genre_name);
+                        Log.e(TAG, "onDataChange: " + genre.toString());
+                        genres.add(genre);
+                    }
                     List<String> actors = Arrays.asList(jsonObject.optString("actors").split(","));
                     String startingDate = jsonObject.optString("startingDate");
                     String endingDate = jsonObject.optString("endingDate");
@@ -90,6 +113,7 @@ public class MovieModel extends Model{
                     String image = jsonObject.optString("image");
                     String sumary = jsonObject.optString("sumary");
                     double rating = jsonObject.optDouble("rating");
+                    double price = jsonObject.optDouble("price");
                     movie.setId(id);
                     movie.setName(name);
                     movie.setDuration(duration);
@@ -101,6 +125,7 @@ public class MovieModel extends Model{
                     movie.setImage(image);
                     movie.setSumary(sumary);
                     movie.setRating(rating);
+                    movie.setPrice(price);
                     movies.add(movie);
                 }
                 callbacks.onSuccess(movies);
@@ -126,7 +151,21 @@ public class MovieModel extends Model{
                             String id = dataSnapshot.getKey();
                             String name = jsonObject.optString("name");
                             int duration = jsonObject.optInt("duration");
-                            List<String> genres = Arrays.asList(jsonObject.optString("genres").split(","));
+                            List<String> genreIds = Arrays.asList(jsonObject.optString("genres").split(","));
+                            List<Genre> genres = new ArrayList<>();
+                            for(String genreId : genreIds){
+                                genreModel.getGenre(genreId, new GenreModel.GenreCallbacks() {
+                                    @Override
+                                    public void onSuccess(Genre genre) {
+                                        genres.add(genre);
+                                    }
+
+                                    @Override
+                                    public void onFailed(Exception e) {
+                                        Log.e(TAG, "onFailed: " + e.getMessage());
+                                    }
+                                });
+                            }
                             List<String> actors = Arrays.asList(jsonObject.optString("actors").split(","));
                             String startingDate = jsonObject.optString("startingDate");
                             String endingDate = jsonObject.optString("endingDate");
@@ -134,6 +173,7 @@ public class MovieModel extends Model{
                             String image = jsonObject.optString("image");
                             String sumary = jsonObject.optString("sumary");
                             double rating = jsonObject.optDouble("rating");
+                            double price = jsonObject.optDouble("price");
                             movie.setId(id);
                             movie.setName(name);
                             movie.setDuration(duration);
@@ -145,6 +185,7 @@ public class MovieModel extends Model{
                             movie.setImage(image);
                             movie.setSumary(sumary);
                             movie.setRating(rating);
+                            movie.setPrice(price);
                             movies.add(movie);
                         }
                         callbacks.onSuccess(movies);
@@ -156,9 +197,23 @@ public class MovieModel extends Model{
                 });
     }
     public void createMovie(String name, int duration, List<String> genreIds, List<String> actorIds, String start, String end,
-                            String trailer, String image, String sumary, double rating, MovieCallbacks callbacks){
+                            String trailer, String image, String sumary, double rating, double price, MovieCallbacks callbacks){
         String id = UUID.randomUUID().toString();
-        Movie movie = new Movie(id, name, duration, genreIds, actorIds, start, end, trailer, image, sumary, rating);
+        List<Genre> genres = new ArrayList<>();
+        for(String genreId : genreIds){
+            genreModel.getGenre(genreId, new GenreModel.GenreCallbacks() {
+                @Override
+                public void onSuccess(Genre genre) {
+                    genres.add(genre);
+                }
+
+                @Override
+                public void onFailed(Exception e) {
+                    Log.e(TAG, "onFailed: " + e.getMessage());
+                }
+            });
+        }
+        Movie movie = new Movie(id, name, duration, genres, actorIds, start, end, trailer, image, sumary, rating, price);
         database.child(MOVIE_COLLECTION).child(id).setValue(movie.toMap()).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 callbacks.onSuccess(movie);

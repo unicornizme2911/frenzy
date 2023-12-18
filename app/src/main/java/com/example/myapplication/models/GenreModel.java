@@ -13,16 +13,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONObject;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
-public class GenresModel extends Model{
+public class GenreModel extends Model{
     public static final String TAG = "GenresModel";
-    public static final String GENRES_COLLECTION = "genres";
+    public static final String GENRE_COLLECTION = "genres";
     public interface GenresCallbacks{
         void onSuccess(ArrayList<Genre> genres);
         void onFailed(Exception e);
@@ -31,14 +27,14 @@ public class GenresModel extends Model{
         void onSuccess(Genre genre);
         void onFailed(Exception e);
     }
-    public GenresModel() {
+    public GenreModel() {
         super();
     }
-    public GenresModel(DatabaseReference database){
+    public GenreModel(DatabaseReference database){
         super(database);
     }
     public void getGenres(GenresCallbacks callbacks){
-        database.child(GENRES_COLLECTION).addValueEventListener(new ValueEventListener() {
+        database.child(GENRE_COLLECTION).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<Genre> genres = new ArrayList<>();
@@ -59,18 +55,14 @@ public class GenresModel extends Model{
         });
     }
     public void getGenre(String genreId, GenreCallbacks callbacks){
-        database.child(GENRES_COLLECTION).child(genreId).addValueEventListener(new ValueEventListener() {
+        database.child(GENRE_COLLECTION).child(genreId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.getValue() == null){
-                    callbacks.onFailed(new Exception("Genre not found"));
-                    return;
-                }
+                Genre genre = new Genre();
                 JSONObject jsonObject = new JSONObject((Map) snapshot.getValue());
-                String id = snapshot.getKey();
-                String name = jsonObject.optString("name");
-                Genre genre = new Genre(id, name);
-                Log.e(TAG, "getGenre: " + genre.toString());
+                genre.setId(snapshot.getKey());
+                genre.setName(jsonObject.optString("name"));
+                Log.e(TAG, "onDataChange: " + genre.toString());
                 callbacks.onSuccess(genre);
             }
 
@@ -81,10 +73,10 @@ public class GenresModel extends Model{
         });
     }
     public void createGenre(String name, String description, ArrayList<Movie> movies, GenreCallbacks callbacks){
-        String genreId = database.child(GENRES_COLLECTION).push().getKey();
+        String genreId = database.child(GENRE_COLLECTION).push().getKey();
         Genre genre = new Genre(genreId, name);
         Map<String, Object> genreMap = genre.toMap();
-        database.child(GENRES_COLLECTION).child(genreId).setValue(genre).addOnCompleteListener(task -> {
+        database.child(GENRE_COLLECTION).child(genreId).setValue(genre).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.e(TAG, "createGenre: " + genre.toString());
                 callbacks.onSuccess(genre);

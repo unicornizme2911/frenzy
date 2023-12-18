@@ -10,13 +10,14 @@ public class Movie implements Serializable {
     private String id;
     private String name;
     private int duration;
-    private List<String> genres;
+    private List<Genre> genres;
     private List<String> actors;
     private String startingDate;
     private String endingDate;
     private String trailer;
     private String image;
     private String sumary;
+    private double price;
     private double rating;
     public Movie() {
         this.id = "";
@@ -27,6 +28,7 @@ public class Movie implements Serializable {
         this.startingDate = "";
         this.endingDate = "";
         this.trailer = "";
+        this.price = 0;
         this.image = "";
         this.sumary = "";
         this.rating = 0;
@@ -41,14 +43,15 @@ public class Movie implements Serializable {
             movie.getActors(),
             movie.getStartingDate(),
             movie.getEndingDate(),
-            movie.getThumbnail(),
+            movie.getTrailer(),
             movie.getImage(),
             movie.getSumary(),
-            movie.getRating()
+            movie.getRating(),
+            movie.getPrice()
         );
     }
 
-    public Movie(String id, String name, int duration, List<String> genres, List<String> actors, String startingDate, String endingDate, String trailer, String image, String sumary, double rating) {
+    public Movie(String id, String name, int duration, List<Genre> genres, List<String> actors, String startingDate, String endingDate, String trailer, String image, String sumary, double rating, double price) {
         this.id = id;
         this.name = name;
         this.duration = duration;
@@ -60,6 +63,7 @@ public class Movie implements Serializable {
         this.image = image;
         this.sumary = sumary;
         this.rating = rating;
+        this.price = price;
     }
 
     public String getId() {
@@ -86,11 +90,11 @@ public class Movie implements Serializable {
         this.duration = duration;
     }
 
-    public List<String> getGenres() {
+    public List<Genre> getGenres() {
         return genres;
     }
 
-    public void setGenres(List<String> genres) {
+    public void setGenres(List<Genre> genres) {
         this.genres = genres;
     }
 
@@ -150,19 +154,28 @@ public class Movie implements Serializable {
         this.trailer = trailer;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public Movie(HashMap<String, Object> movieMap){
         this(
             (String) movieMap.get("id"),
             (String) movieMap.get("name"),
             (int) movieMap.get("duration"),
-            (List<String>) movieMap.get("genres"),
+            (List<Genre>) movieMap.get("genres"),
             (List<String>) movieMap.get("actors"),
             (String) movieMap.get("startingDate"),
             (String) movieMap.get("endingDate"),
             (String) movieMap.get("trailer"),
             (String) movieMap.get("image"),
             (String) movieMap.get("sumary"),
-            (double) movieMap.get("rating")
+            (double) movieMap.get("rating"),
+            (double) movieMap.get("price")
         );
     }
 
@@ -179,6 +192,7 @@ public class Movie implements Serializable {
         movieMap.put("image", this.image);
         movieMap.put("sumary", this.sumary);
         movieMap.put("rating", this.rating);
+        movieMap.put("price", this.price);
         return movieMap;
     }
 
@@ -188,14 +202,32 @@ public class Movie implements Serializable {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", duration=" + duration +
-                ", genres=" + genres +
-                ", actors=" + actors +
+                ", genres=" + getGenresString() +
+                ", actors=" + getActorsString() +
                 ", startingDate=" + startingDate +
                 ", endingDate=" + endingDate +
                 ", trailer='" + trailer + '\'' +
                 ", image=" + image +
                 ", sumary='" + sumary + '\'' +
                 ", rating=" + rating +
+                ", price=" + price +
                 '}';
+    }
+
+    public String getGenresString(){
+        String genresString = "[";
+        for(Genre genre : genres){
+            genresString += genre.getName() + ", ";
+        }
+        return genresString.substring(0, genresString.length() - 2) + "]";
+    }
+
+    public String getActorsString(){
+        String actorsString = "[";
+        for(String actor : actors){
+            actorsString += actor + ", ";
+        }
+//        return actorsString.substring(0, actorsString.length() - 2) + "]";
+        return actorsString;
     }
 }

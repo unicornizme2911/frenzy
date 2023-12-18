@@ -1,21 +1,23 @@
 package com.example.myapplication.entities;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Invoice {
     private String id;
     private String userId;
-    private String ticketId;
+    private List<String> ticketId;
     private String promotionId;
     private String paymentMethod;
     private String paymentDate;
     private double totalPrice;
 
     public Invoice() {
+        super();
     }
 
-    public Invoice(String id, String userId, String ticketId, String promotionId, String paymentMethod, String paymentDate, double totalPrice) {
+    public Invoice(String id, String userId, List<String> ticketId, String promotionId, String paymentMethod, String paymentDate, double totalPrice) {
         this.id = id;
         this.userId = userId;
         this.ticketId = ticketId;
@@ -25,13 +27,37 @@ public class Invoice {
         this.totalPrice = totalPrice;
     }
 
-    public Invoice(String userId, String ticketId, String promotionId, String paymentMethod, String paymentDate, double totalPrice) {
+    public Invoice(String userId, List<String> ticketId, String promotionId, String paymentMethod, String paymentDate, double totalPrice) {
         this.userId = userId;
         this.ticketId = ticketId;
         this.promotionId = promotionId;
         this.paymentMethod = paymentMethod;
         this.paymentDate = paymentDate;
         this.totalPrice = totalPrice;
+    }
+
+    public Invoice(HashMap<String, Object> invoiceMap){
+        this(
+                invoiceMap.get("id").toString(),
+                invoiceMap.get("userId").toString(),
+                (List<String>) invoiceMap.get("ticketId"),
+                invoiceMap.get("promotionId").toString(),
+                invoiceMap.get("paymentMethod").toString(),
+                invoiceMap.get("paymentDate").toString(),
+                Double.parseDouble(invoiceMap.get("totalPrice").toString())
+        );
+    }
+
+    public Map<String, Object> toMap(){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("id", id);
+        result.put("userId", userId);
+        result.put("ticketId", ticketId);
+        result.put("promotionId", promotionId);
+        result.put("paymentMethod", paymentMethod);
+        result.put("paymentDate", paymentDate);
+        result.put("totalPrice", totalPrice);
+        return result;
     }
 
     public String getId() {
@@ -50,11 +76,11 @@ public class Invoice {
         this.userId = userId;
     }
 
-    public String getTicketId() {
+    public List<String> getTicketId() {
         return ticketId;
     }
 
-    public void setTicketId(String ticketId) {
+    public void setTicketId(List<String> ticketId) {
         this.ticketId = ticketId;
     }
 
@@ -90,35 +116,12 @@ public class Invoice {
         this.totalPrice = totalPrice;
     }
 
-    public Invoice(HashMap<String, Object> invoiceMap){
-        this(
-            invoiceMap.get("id").toString(),
-            invoiceMap.get("userId").toString(),
-            invoiceMap.get("ticketId").toString(),
-            invoiceMap.get("promotionId").toString(),
-            invoiceMap.get("paymentMethod").toString(),
-            invoiceMap.get("paymentDate").toString(),
-            Double.parseDouble(invoiceMap.get("totalPrice").toString())
-        );
-    }
-
-    public Map<String, Object> toMap(){
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("id", id);
-        result.put("userId", userId);
-        result.put("ticketId", ticketId);
-        result.put("promotionId", promotionId);
-        result.put("paymentMethod", paymentMethod);
-        result.put("paymentDate", paymentDate);
-        result.put("totalPrice", totalPrice);
-        return result;
-    }
     @Override
     public String toString() {
         return "Invoice{" +
                 "id='" + id + '\'' +
                 ", userId='" + userId + '\'' +
-                ", ticketId='" + ticketId + '\'' +
+                ", ticketId=" + ticketId +
                 ", promotionId='" + promotionId + '\'' +
                 ", paymentMethod='" + paymentMethod + '\'' +
                 ", paymentDate='" + paymentDate + '\'' +

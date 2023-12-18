@@ -49,6 +49,6 @@ public class Genre{
     public String toString(){
         return "Genre{" +
                 "id = " + this.id +
-                ", name = " + this.name + "";
+                ", name = " + this.name + "}";
     }
 }
