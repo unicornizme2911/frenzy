@@ -62,10 +62,15 @@ public class MovieModel extends Model{
                     String genre_id = entry.getKey();
                     String genre_name = entry.getValue().get("name");
                     Genre genre = new Genre(genre_id, genre_name);
-                    Log.e(TAG, "onDataChange: " + genre.toString());
                     genres.add(genre);
                 }
-                List<String> actors = Arrays.asList(jsonObject.optString("actors").split(","));
+                List<String> temp_artists = Arrays.asList(jsonObject.optString("artists").split("[,\\[\\]\"]"));
+                List<String> artists = new ArrayList<>();
+                for (int i = 0; i < temp_artists.size(); i++) {
+                    if(!temp_artists.get(i).equals("")){
+                        artists.add(temp_artists.get(i));
+                    }
+                }
                 String startingDate = jsonObject.optString("startingDate");
                 String endingDate = jsonObject.optString("endingDate");
                 String trailer = jsonObject.optString("trailer");
@@ -73,7 +78,7 @@ public class MovieModel extends Model{
                 String sumary = jsonObject.optString("sumary");
                 double rating = jsonObject.optDouble("rating");
                 double price = jsonObject.optDouble("price");
-                Movie movie = new Movie(id, name, duration, genres, actors, startingDate, endingDate, trailer, image, sumary, rating, price);
+                Movie movie = new Movie(id, name, duration, genres, artists, startingDate, endingDate, trailer, image, sumary, rating, price);
                 Log.e(TAG, "getMovie: " + movie.toString());
                 callbacks.onSuccess(movie);
             }
@@ -91,8 +96,8 @@ public class MovieModel extends Model{
                 ArrayList<Movie> movies = new ArrayList<>();
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     Movie movie = new Movie();
-                    JSONObject jsonObject = new JSONObject((Map) dataSnapshot.getValue());
-                    String id = dataSnapshot.getKey();
+                    JSONObject jsonObject = new JSONObject((Map) snapshot.getValue());
+                    String id = snapshot.getKey();
                     String name = jsonObject.optString("name");
                     int duration = jsonObject.optInt("duration");
                     String genreIds = jsonObject.optString("genres");
@@ -103,10 +108,15 @@ public class MovieModel extends Model{
                         String genre_id = entry.getKey();
                         String genre_name = entry.getValue().get("name");
                         Genre genre = new Genre(genre_id, genre_name);
-                        Log.e(TAG, "onDataChange: " + genre.toString());
                         genres.add(genre);
                     }
-                    List<String> actors = Arrays.asList(jsonObject.optString("actors").split(","));
+                    List<String> temp_artists = Arrays.asList(jsonObject.optString("artists").split("[,\\[\\]\"]"));
+                    List<String> artists = new ArrayList<>();
+                    for (int i = 0; i < temp_artists.size(); i++) {
+                        if(!temp_artists.get(i).equals("")){
+                            artists.add(temp_artists.get(i));
+                        }
+                    }
                     String startingDate = jsonObject.optString("startingDate");
                     String endingDate = jsonObject.optString("endingDate");
                     String trailer = jsonObject.optString("trailer");
@@ -118,7 +128,7 @@ public class MovieModel extends Model{
                     movie.setName(name);
                     movie.setDuration(duration);
                     movie.setGenres(genres);
-                    movie.setActors(actors);
+                    movie.setArtists(artists);
                     movie.setStartingDate(startingDate);
                     movie.setEndingDate(endingDate);
                     movie.setTrailer(trailer);
@@ -147,26 +157,27 @@ public class MovieModel extends Model{
                         ArrayList<Movie> movies = new ArrayList<>();
                         for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                             Movie movie = new Movie();
-                            JSONObject jsonObject = new JSONObject((Map) dataSnapshot.getValue());
-                            String id = dataSnapshot.getKey();
+                            JSONObject jsonObject = new JSONObject((Map) snapshot.getValue());
+                            String id = snapshot.getKey();
                             String name = jsonObject.optString("name");
                             int duration = jsonObject.optInt("duration");
-                            List<String> genreIds = Arrays.asList(jsonObject.optString("genres").split(","));
+                            String genreIds = jsonObject.optString("genres");
                             List<Genre> genres = new ArrayList<>();
-                            for(String genreId : genreIds){
-                                genreModel.getGenre(genreId, new GenreModel.GenreCallbacks() {
-                                    @Override
-                                    public void onSuccess(Genre genre) {
-                                        genres.add(genre);
-                                    }
-
-                                    @Override
-                                    public void onFailed(Exception e) {
-                                        Log.e(TAG, "onFailed: " + e.getMessage());
-                                    }
-                                });
+                            Gson gson = new Gson();
+                            Map<String, Map<String, String>> genreMap = gson.fromJson(genreIds, HashMap.class);
+                            for (Map.Entry<String, Map<String, String>> entry : genreMap.entrySet()) {
+                                String genre_id = entry.getKey();
+                                String genre_name = entry.getValue().get("name");
+                                Genre genre = new Genre(genre_id, genre_name);
+                                genres.add(genre);
                             }
-                            List<String> actors = Arrays.asList(jsonObject.optString("actors").split(","));
+                            List<String> temp_artists = Arrays.asList(jsonObject.optString("artists").split("[,\\[\\]\"]"));
+                            List<String> artists = new ArrayList<>();
+                            for (int i = 0; i < temp_artists.size(); i++) {
+                                if(!temp_artists.get(i).equals("")){
+                                    artists.add(temp_artists.get(i));
+                                }
+                            }
                             String startingDate = jsonObject.optString("startingDate");
                             String endingDate = jsonObject.optString("endingDate");
                             String trailer = jsonObject.optString("trailer");
@@ -178,7 +189,7 @@ public class MovieModel extends Model{
                             movie.setName(name);
                             movie.setDuration(duration);
                             movie.setGenres(genres);
-                            movie.setActors(actors);
+                            movie.setArtists(artists);
                             movie.setStartingDate(startingDate);
                             movie.setEndingDate(endingDate);
                             movie.setTrailer(trailer);

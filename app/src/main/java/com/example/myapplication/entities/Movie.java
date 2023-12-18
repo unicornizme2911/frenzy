@@ -11,7 +11,7 @@ public class Movie implements Serializable {
     private String name;
     private int duration;
     private List<Genre> genres;
-    private List<String> actors;
+    private List<String> artists;
     private String startingDate;
     private String endingDate;
     private String trailer;
@@ -24,7 +24,7 @@ public class Movie implements Serializable {
         this.name = "";
         this.duration = 0;
         this.genres = Arrays.asList();
-        this.actors = Arrays.asList();
+        this.artists = Arrays.asList();
         this.startingDate = "";
         this.endingDate = "";
         this.trailer = "";
@@ -40,7 +40,7 @@ public class Movie implements Serializable {
             movie.getName(),
             movie.getDuration(),
             movie.getGenres(),
-            movie.getActors(),
+            movie.getArtists(),
             movie.getStartingDate(),
             movie.getEndingDate(),
             movie.getTrailer(),
@@ -51,12 +51,12 @@ public class Movie implements Serializable {
         );
     }
 
-    public Movie(String id, String name, int duration, List<Genre> genres, List<String> actors, String startingDate, String endingDate, String trailer, String image, String sumary, double rating, double price) {
+    public Movie(String id, String name, int duration, List<Genre> genres, List<String> artists, String startingDate, String endingDate, String trailer, String image, String sumary, double rating, double price) {
         this.id = id;
         this.name = name;
         this.duration = duration;
         this.genres = genres;
-        this.actors = actors;
+        this.artists = artists;
         this.startingDate = startingDate;
         this.endingDate = endingDate;
         this.trailer = trailer;
@@ -98,6 +98,14 @@ public class Movie implements Serializable {
         this.genres = genres;
     }
 
+    public List<String> getArtists() {
+        return artists;
+    }
+
+    public void setArtists(List<String> artists) {
+        this.artists = artists;
+    }
+
     public String getStartingDate() {
         return startingDate;
     }
@@ -112,6 +120,14 @@ public class Movie implements Serializable {
 
     public void setEndingDate(String endingDate) {
         this.endingDate = endingDate;
+    }
+
+    public String getTrailer() {
+        return trailer;
+    }
+
+    public void setTrailer(String trailer) {
+        this.trailer = trailer;
     }
 
     public String getImage() {
@@ -130,30 +146,6 @@ public class Movie implements Serializable {
         this.sumary = sumary;
     }
 
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
-
-    public List<String> getActors() {
-        return actors;
-    }
-
-    public void setActors(List<String> actors) {
-        this.actors = actors;
-    }
-
-    public String getTrailer() {
-        return trailer;
-    }
-
-    public void setTrailer(String trailer) {
-        this.trailer = trailer;
-    }
-
     public double getPrice() {
         return price;
     }
@@ -162,13 +154,21 @@ public class Movie implements Serializable {
         this.price = price;
     }
 
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
     public Movie(HashMap<String, Object> movieMap){
         this(
             (String) movieMap.get("id"),
             (String) movieMap.get("name"),
             (int) movieMap.get("duration"),
             (List<Genre>) movieMap.get("genres"),
-            (List<String>) movieMap.get("actors"),
+            (List<String>) movieMap.get("artists"),
             (String) movieMap.get("startingDate"),
             (String) movieMap.get("endingDate"),
             (String) movieMap.get("trailer"),
@@ -185,7 +185,7 @@ public class Movie implements Serializable {
         movieMap.put("name", this.name);
         movieMap.put("duration", this.duration);
         movieMap.put("genres", this.genres);
-        movieMap.put("actors", this.actors);
+        movieMap.put("artists", this.artists);
         movieMap.put("startingDate", this.startingDate);
         movieMap.put("endingDate", this.endingDate);
         movieMap.put("trailer", this.trailer);
@@ -203,7 +203,7 @@ public class Movie implements Serializable {
                 ", name='" + name + '\'' +
                 ", duration=" + duration +
                 ", genres=" + getGenresString() +
-                ", actors=" + getActorsString() +
+                ", artists=" + getActorsString() +
                 ", startingDate=" + startingDate +
                 ", endingDate=" + endingDate +
                 ", trailer='" + trailer + '\'' +
@@ -223,11 +223,10 @@ public class Movie implements Serializable {
     }
 
     public String getActorsString(){
-        String actorsString = "[";
-        for(String actor : actors){
-            actorsString += actor + ", ";
+        String artistsString = "[";
+        for(String actor : artists){
+            artistsString += actor + ", ";
         }
-//        return actorsString.substring(0, actorsString.length() - 2) + "]";
-        return actorsString;
+        return artistsString.substring(0, artistsString.length() - 2) + "]";
     }
 }
