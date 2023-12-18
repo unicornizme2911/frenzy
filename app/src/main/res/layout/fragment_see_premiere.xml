@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar_premiere"
+        layout="@layout/toolbar_premiere"
+        tools:layout_editor_absoluteX="-150dp"
+        tools:layout_editor_absoluteY="55dp" />
+    <LinearLayout
+        android:id="@+id/LN1_premiere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_premiere"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
+        android:background="">
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/baseline_calendar_month_24">
+        </ImageButton>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="11/12/2023"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/LN2_premiere"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/LN1_premiere"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/grey_dark"
+        app:layout_constraintStart_toStartOf="parent"
+        android:paddingLeft="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:text="Time"/>
+        <TextView
+            android:layout_weight="2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:text="Cinema"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/LN2_premiere"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/grey_dark"
+        app:layout_constraintStart_toStartOf="parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_home_phimrandom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+/>
+    </LinearLayout>
+
+
+
+</android.support.constraint.ConstraintLayout>
