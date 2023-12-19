@@ -78,7 +78,8 @@ public class MovieModel extends Model{
                 String sumary = jsonObject.optString("sumary");
                 double rating = jsonObject.optDouble("rating");
                 double price = jsonObject.optDouble("price");
-                Movie movie = new Movie(id, name, duration, genres, artists, startingDate, endingDate, trailer, image, sumary, rating, price);
+                List<String> showTimes = Arrays.asList(jsonObject.optString("showTimes").split("[,\\[\\]\"]"));
+                Movie movie = new Movie(id, name, duration, genres, artists, showTimes, startingDate, endingDate, trailer, image, sumary, rating, price);
                 Log.e(TAG, "getMovie: " + movie.toString());
                 callbacks.onSuccess(movie);
             }
@@ -207,7 +208,7 @@ public class MovieModel extends Model{
                     }
                 });
     }
-    public void createMovie(String name, int duration, List<String> genreIds, List<String> actorIds, String start, String end,
+    public void createMovie(String name, int duration, List<String> genreIds, List<String> actorIds, List<String> showTimes, String start, String end,
                             String trailer, String image, String sumary, double rating, double price, MovieCallbacks callbacks){
         String id = UUID.randomUUID().toString();
         List<Genre> genres = new ArrayList<>();
@@ -224,7 +225,7 @@ public class MovieModel extends Model{
                 }
             });
         }
-        Movie movie = new Movie(id, name, duration, genres, actorIds, start, end, trailer, image, sumary, rating, price);
+        Movie movie = new Movie(id, name, duration, genres, actorIds, showTimes, start, end, trailer, image, sumary, rating, price);
         database.child(MOVIE_COLLECTION).child(id).setValue(movie.toMap()).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 callbacks.onSuccess(movie);

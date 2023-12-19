@@ -19,12 +19,14 @@ public class Movie implements Serializable {
     private String sumary;
     private double price;
     private double rating;
+    private List<String> showTimes;
     public Movie() {
         this.id = "";
         this.name = "";
         this.duration = 0;
         this.genres = Arrays.asList();
         this.artists = Arrays.asList();
+        this.showTimes = Arrays.asList();
         this.startingDate = "";
         this.endingDate = "";
         this.trailer = "";
@@ -41,6 +43,7 @@ public class Movie implements Serializable {
             movie.getDuration(),
             movie.getGenres(),
             movie.getArtists(),
+            movie.getShowTimes(),
             movie.getStartingDate(),
             movie.getEndingDate(),
             movie.getTrailer(),
@@ -51,12 +54,13 @@ public class Movie implements Serializable {
         );
     }
 
-    public Movie(String id, String name, int duration, List<Genre> genres, List<String> artists, String startingDate, String endingDate, String trailer, String image, String sumary, double rating, double price) {
+    public Movie(String id, String name, int duration, List<Genre> genres, List<String> artists, List<String> showTimes, String startingDate, String endingDate, String trailer, String image, String sumary, double rating, double price) {
         this.id = id;
         this.name = name;
         this.duration = duration;
         this.genres = genres;
         this.artists = artists;
+        this.showTimes = showTimes;
         this.startingDate = startingDate;
         this.endingDate = endingDate;
         this.trailer = trailer;
@@ -162,6 +166,14 @@ public class Movie implements Serializable {
         this.rating = rating;
     }
 
+    public List<String> getShowTimes() {
+        return showTimes;
+    }
+
+    public void setShowTimes(List<String> showTimes) {
+        this.showTimes = showTimes;
+    }
+
     public Movie(HashMap<String, Object> movieMap){
         this(
             (String) movieMap.get("id"),
@@ -169,6 +181,7 @@ public class Movie implements Serializable {
             (int) movieMap.get("duration"),
             (List<Genre>) movieMap.get("genres"),
             (List<String>) movieMap.get("artists"),
+            (List<String>) movieMap.get("showTimes"),
             (String) movieMap.get("startingDate"),
             (String) movieMap.get("endingDate"),
             (String) movieMap.get("trailer"),
@@ -186,6 +199,7 @@ public class Movie implements Serializable {
         movieMap.put("duration", this.duration);
         movieMap.put("genres", this.genres);
         movieMap.put("artists", this.artists);
+        movieMap.put("showTimes", this.showTimes);
         movieMap.put("startingDate", this.startingDate);
         movieMap.put("endingDate", this.endingDate);
         movieMap.put("trailer", this.trailer);
