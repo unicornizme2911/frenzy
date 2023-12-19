@@ -23,9 +23,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-        Log.d(TAG,"Helo may cung");
-        ImageView imageView = findViewById(R.id.iconLogin);
-        imageView.setOnClickListener(view -> new DetailUserFragment());
+//        ImageView imageView = findViewById(R.id.iconLogin);
+//        imageView.setOnClickListener(view -> new DetailUserFragment(id));
     }
 
     private void init(){

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 import com.example.myapplication.entities.User;
+import com.example.myapplication.fragments.HomeFragment;
 import com.example.myapplication.models.UserModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -55,7 +56,9 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(User user) {
                             Toast.makeText(RegisterActivity.this,"Successful account registration",Toast.LENGTH_LONG).show();
-                            swapLogin();
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragment_container, new HomeFragment(user.getUuid()))
+                                    .commit();
                         }
                         @Override
                         public void onFailed(Exception e) {

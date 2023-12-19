@@ -9,9 +9,14 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
+import com.example.myapplication.fragments.HomeFragment;
 
 
 public class PaymentHistoryActivity extends AppCompatActivity {
+    private String id;
+    private PaymentHistoryActivity(String id){
+        this.id = id;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +26,9 @@ public class PaymentHistoryActivity extends AppCompatActivity {
         imageView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goHome();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new HomeFragment(id))
+                        .commit();
             }
         });
     }
