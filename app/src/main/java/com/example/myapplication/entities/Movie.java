@@ -220,6 +220,7 @@ public class Movie implements Serializable {
                 ", artists=" + getActorsString() +
                 ", startingDate=" + startingDate +
                 ", endingDate=" + endingDate +
+                ", showTimes=" + getShowTimesString() +
                 ", trailer='" + trailer + '\'' +
                 ", image=" + image +
                 ", sumary='" + sumary + '\'' +
@@ -242,5 +243,12 @@ public class Movie implements Serializable {
             artistsString += actor + ", ";
         }
         return artistsString.substring(0, artistsString.length() - 2) + "]";
+    }
+    public String getShowTimesString(){
+        String showTimesString = "[";
+        for(String showTime : showTimes){
+            showTimesString += showTime + ", ";
+        }
+        return showTimesString.substring(0, showTimesString.length() - 2) + "]";
     }
 }

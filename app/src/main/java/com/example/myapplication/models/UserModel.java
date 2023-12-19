@@ -105,6 +105,7 @@ public class UserModel extends Model{
                         try {
                             boolean isMatch = PasswordUtils.verifyPassword(password, user.getPassword());
                             if(isMatch && user.getPhone().equals(phone)){
+                                Log.e(TAG, "onDataChange: " + user.toString());
                                 callbacks.onSuccess(user);
                                 found = true;
                                 break;
@@ -129,7 +130,7 @@ public class UserModel extends Model{
             }
         });
     }
-    public void register(String email, String phone, String password, String address, RegisterCallbacks callbacks) {
+    public void register(String email, String phone, String password, String fullname, String address, String birthday, String gender, RegisterCallbacks callbacks) {
         try{
             String uuid = UUID.randomUUID().toString();
             String hashedPassword = PasswordUtils.hashPassword(password);
@@ -148,7 +149,7 @@ public class UserModel extends Model{
             }
             Uri avatar = Uri.parse("android.resource://com.example.myapplication/drawable/avatar");
             List<String> invoiceIds = new ArrayList<>();
-            User user = new User(uuid, email, hashedPassword, phone, address, "USER", avatar, createDate, invoiceIds);
+            User user = new User(uuid, email, hashedPassword, phone, address, gender, birthday, fullname, avatar, createDate, invoiceIds);
             database.child(USER_COLLECTION).child(uuid).setValue(user.toMap())
                     .addOnCompleteListener(task -> {
                         if(task.isSuccessful()){

@@ -17,7 +17,7 @@ public class User implements Serializable {
     private String address;
     private Uri avatar;
     private String birthday;
-    private String role;
+    private String fullname;
     private String createDate;
     private List<String> invoiceIds;
 
@@ -27,13 +27,13 @@ public class User implements Serializable {
         this.password = "";
         this.phone = "";
         this.address = "";
-        this.role = "";
+        this.fullname = "";
         this.avatar = new Uri.Builder().build();
         this.createDate = "";
         this.invoiceIds = new ArrayList<>();
     }
 
-    public User(String uuid, String email, String password, String phone, String address, String role, Uri avatar, String createDate, List<String> invoiceIds) {
+    public User(String uuid, String email, String password, String phone, String address, String gender, String birthday, String fullname, Uri avatar, String createDate, List<String> invoiceIds) {
         this.uuid = uuid;
         this.email = email;
         this.gender = gender;
@@ -41,8 +41,20 @@ public class User implements Serializable {
         this.phone = phone;
         this.birthday = birthday;
         this.address = address;
-        this.role = String.valueOf(role);
+        this.fullname = String.valueOf(fullname);
         this.avatar = avatar;
+        this.createDate = createDate;
+        this.invoiceIds = invoiceIds;
+    }
+    public User(String uuid, String email, String password, String phone, String address, String fullname, String createDate, List<String> invoiceIds) {
+        this.uuid = uuid;
+        this.email = email;
+        this.gender = gender;
+        this.password = password;
+        this.phone = phone;
+        this.birthday = birthday;
+        this.address = address;
+        this.fullname = String.valueOf(fullname);
         this.createDate = createDate;
         this.invoiceIds = invoiceIds;
     }
@@ -53,24 +65,40 @@ public class User implements Serializable {
             user.getPassword(),
             user.getPhone(),
             user.getAddress(),
-            user.getRole(),
+            user.getGender(),
+            user.getBirthday(),
+            user.getFullname(),
             user.getAvatar(),
             user.getCreateDate(),
             user.getInvoiceIds()
         );
     }
     public User(HashMap<String, Object> userMap){
-        this(
-            userMap.get("uuid").toString(),
-            userMap.get("email").toString(),
-            userMap.get("password").toString(),
-            userMap.get("phone").toString(),
-            userMap.get("address").toString(),
-            userMap.get("role").toString(),
-            (Uri)userMap.get("avatar"),
-            userMap.get("createDate").toString(),
-            (List<String>)userMap.get("invoiceIds")
-        );
+        if(userMap.get("avatar").toString().equals("")) {
+            this.uuid = userMap.get("uuid").toString();
+            this.email = userMap.get("email").toString();
+            this.password = userMap.get("password").toString();
+            this.phone = userMap.get("phone").toString();
+            this.address = userMap.get("address").toString();
+            this.gender = userMap.get("gender").toString();
+            this.birthday = userMap.get("birthday").toString();
+            this.fullname = userMap.get("fullname").toString();
+            this.avatar = new Uri.Builder().build();
+            this.createDate = userMap.get("createDate").toString();
+            this.invoiceIds = (List<String>) userMap.get("invoiceIds");
+        } else{
+            this.uuid = userMap.get("uuid").toString();
+            this.email = userMap.get("email").toString();
+            this.password = userMap.get("password").toString();
+            this.phone = userMap.get("phone").toString();
+            this.address = userMap.get("address").toString();
+            this.gender = userMap.get("gender").toString();
+            this.birthday = userMap.get("birthday").toString();
+            this.fullname = userMap.get("fullname").toString();
+            this.avatar = Uri.parse(userMap.get("avatar").toString());
+            this.createDate = userMap.get("createDate").toString();
+            this.invoiceIds = (List<String>) userMap.get("invoiceIds");
+        }
     }
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
@@ -80,7 +108,9 @@ public class User implements Serializable {
             result.put("phone", phone);
             result.put("password", password);
             result.put("address", address);
-            result.put("role", role);
+            result.put("gender", gender);
+            result.put("birthday", birthday);
+            result.put("fullname", fullname);
             result.put("avatar", "");
             result.put("createDate", createDate);
             result.put("invoiceIds", invoiceIds);
@@ -90,7 +120,9 @@ public class User implements Serializable {
             result.put("phone", phone);
             result.put("password", password);
             result.put("address", address);
-            result.put("role", role);
+            result.put("gender", gender);
+            result.put("birthday", birthday);
+            result.put("fullname", fullname);
             result.put("avatar", avatar.toString());
             result.put("createDate", createDate);
             result.put("invoiceIds", invoiceIds);
@@ -113,7 +145,21 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public String getGender() {
+        return gender;
+    }
 
     public String getPassword() {
         return password;
@@ -147,14 +193,12 @@ public class User implements Serializable {
         this.avatar = avatar;
     }
 
-
-
-    public String getRole() {
-        return role;
+    public String getFullname() {
+        return fullname;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public String getCreateDate() { return createDate; }
@@ -185,8 +229,10 @@ public class User implements Serializable {
                 ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
+                ", gender='" + gender + '\'' +
+                ", birthday='" + birthday + '\'' +
                 ", avatar=" + avatar +
-                ", role='" + role + '\'' +
+                ", fullname='" + fullname + '\'' +
                 ", createDate='" + createDate + '\'' +
                 ", invoiceIds=" + invoiceIds +
                 '}';

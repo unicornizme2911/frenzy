@@ -78,7 +78,14 @@ public class MovieModel extends Model{
                 String sumary = jsonObject.optString("sumary");
                 double rating = jsonObject.optDouble("rating");
                 double price = jsonObject.optDouble("price");
-                List<String> showTimes = Arrays.asList(jsonObject.optString("showTimes").split("[,\\[\\]\"]"));
+                List<String> temp_showTimes = Arrays.asList(jsonObject.optString("showTime").split("[,{}]"));
+                List<String> showTimes = new ArrayList<>();
+                for(int i = 0; i < temp_showTimes.size(); i++){
+                    if(temp_showTimes.get(i).equals("")) continue;
+                    String[] parts = temp_showTimes.get(i).replace("\"", "").split(":");
+                    String replacedText = parts[0] + ":" + parts[1] + " ~ " + parts[2] + ":" + parts[3];
+                    showTimes.add(replacedText);
+                }
                 Movie movie = new Movie(id, name, duration, genres, artists, showTimes, startingDate, endingDate, trailer, image, sumary, rating, price);
                 Log.e(TAG, "getMovie: " + movie.toString());
                 callbacks.onSuccess(movie);

@@ -12,9 +12,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
+import com.example.myapplication.entities.Movie;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.fragments.HomeFragment;
+import com.example.myapplication.models.MovieModel;
 import com.example.myapplication.models.UserModel;
+import com.example.myapplication.utlis.EmailUtils;
+import com.example.myapplication.utlis.PhoneUtils;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText username;
@@ -27,6 +31,18 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        MovieModel movieModel = new MovieModel();
+        movieModel.getMovie("0XP3WQZ7", new MovieModel.MovieCallbacks() {
+            @Override
+            public void onSuccess(Movie movie) {
+                Log.d("Movie", "success");
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Log.d("Movie", "fail");
+            }
+        });
         btnDangky = findViewById(R.id.btn_to_register);
         btnDangNhap = findViewById(R.id.btn_login);
         username = findViewById(R.id.et_username_lg);
@@ -47,30 +63,38 @@ public class LoginActivity extends AppCompatActivity {
                 if(TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(txt_username)){
                     Toast.makeText(LoginActivity.this,"Account dose not exits",Toast.LENGTH_LONG).show();
                 }else{
-                    userModel.login(txt_username, txt_password, new UserModel.LoginCallbacks() {
-                        @Override
-                        public void onSuccess(User user) {
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.fragment_container, new HomeFragment(user.getUuid()))
-                                    .commit();
-                        }
-                        @Override
-                        public void onFailed(Exception e) {
-                            Log.d("User Login","fail");
-                        }
-                    });
-                    userModel.loginWithPhone(txt_username, txt_password, new UserModel.LoginCallbacks() {
-                        @Override
-                        public void onSuccess(User user) {
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.fragment_container, new HomeFragment(user.getUuid()))
-                                    .commit();
-                        }
-                        @Override
-                        public void onFailed(Exception e) {
-                            Log.d("User Login","fail");
-                        }
-                    });
+                    if(EmailUtils.isValid(txt_username)){
+                        Log.d("login User","email");
+                        userModel.login(txt_username, txt_password, new UserModel.LoginCallbacks() {
+                            @Override
+                            public void onSuccess(User user) {
+                                getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.fragment_container, new HomeFragment(user.getUuid()))
+                                        .commit();
+                            }
+                            @Override
+                            public void onFailed(Exception e) {
+                                Log.d("User Login","fail");
+                            }
+                        });
+                    } else if(PhoneUtils.isValid(txt_username)){
+                        Log.d("login User","phone");
+                        userModel.loginWithPhone(txt_username, txt_password, new UserModel.LoginCallbacks() {
+                            @Override
+                            public void onSuccess(User user) {
+                                getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.fragment_container, new HomeFragment(user.getUuid()))
+                                        .commit();
+                            }
+                            @Override
+                            public void onFailed(Exception e) {
+                                Log.d("User Login","fail");
+                            }
+                        });
+                    } else {
+                        Log.d("Login user", "fail");
+                        return;
+                    }
                 }
             }
         });

@@ -52,20 +52,20 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Password to short", Toast.LENGTH_LONG).show();
                 } else
                 {
-                    userModel.register(txt_email, txt_phone, txt_password, txt_khuvuc, new UserModel.RegisterCallbacks() {
-                        @Override
-                        public void onSuccess(User user) {
-                            Toast.makeText(RegisterActivity.this,"Successful account registration",Toast.LENGTH_LONG).show();
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.fragment_container, new HomeFragment(user.getUuid()))
-                                    .commit();
-                        }
-                        @Override
-                        public void onFailed(Exception e) {
-                            Snackbar.make(view, "Register fail", Snackbar.LENGTH_LONG).show();
-
-                        }
-                    });
+//                    userModel.register(txt_email, txt_phone, txt_password, txt_khuvuc, new UserModel.RegisterCallbacks() {
+//                        @Override
+//                        public void onSuccess(User user) {
+//                            Toast.makeText(RegisterActivity.this,"Successful account registration",Toast.LENGTH_LONG).show();
+//                            getSupportFragmentManager().beginTransaction()
+//                                    .replace(R.id.fragment_container, new HomeFragment(user.getUuid()))
+//                                    .commit();
+//                        }
+//                        @Override
+//                        public void onFailed(Exception e) {
+//                            Snackbar.make(view, "Register fail", Snackbar.LENGTH_LONG).show();
+//
+//                        }
+//                    });
 //                    userModel.checkUserIsExists(txt_phone, new UserModel.CheckExistsCallbacks() {
 //                        @Override
 //                        public void onExists() {
