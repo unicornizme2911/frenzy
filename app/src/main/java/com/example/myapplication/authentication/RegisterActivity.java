@@ -83,7 +83,6 @@ public class RegisterActivity extends AppCompatActivity {
                 String txt_khuvuc = khuvuc.getText().toString();
                 String txt_bd = birthday.getText().toString();
                 String txt_gender = fmale.getText().toString();
-                Log.d("check gender", txt_gender);
                 if(TextUtils.isEmpty(txt_fullname) || TextUtils.isEmpty(txt_phone)|| TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(txt_khuvuc)){
                     Toast.makeText(RegisterActivity.this,"Empty credentials",Toast.LENGTH_LONG).show();
                 } else if(txt_password.length() < 6){
@@ -100,7 +99,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                         @Override
                         public void onFailed(Exception e) {
-                            Snackbar.make(view, "Register fail", Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(view, "Register fail: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
 
                         }
                     });

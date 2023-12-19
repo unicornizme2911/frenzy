@@ -94,6 +94,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="4"
                         android:hint="Birthday"
+                        android:textColor="@color/white"
                         android:textColorHint="@color/grey_dark"></EditText>
                     <ImageButton
                         android:id="@+id/ig_bd"

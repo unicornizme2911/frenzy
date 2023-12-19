@@ -62,26 +62,8 @@ public class UserModel extends Model{
         super(database);
     }
 
-    public void login(String email, String password, LoginCallbacks callbacks){
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        String uid = mAuth.getCurrentUser().getUid();
-                        database.child(USER_COLLECTION).child(uid).get().addOnCompleteListener(task1 -> {
-                            if (task1.isSuccessful()) {
-                                User user = new User(task1.getResult().getValue(User.class));
-                                callbacks.onSuccess(user);
-                            } else {
-                                callbacks.onFailed(task1.getException());
-                            }
-                        });
-                    } else {
-                        callbacks.onFailed(task.getException());
-                    }
-                });
-    }
-    public void loginWithPhone(String phone, String password, LoginCallbacks callbacks){
-        Log.e(TAG, "loginWithPhone: " + phone + " " + password );
+    public void login(String value, String password, LoginCallbacks callbacks){
+        Log.e(TAG, "login: " + value + " " + password );
         Query query = database.child(USER_COLLECTION);
         query.addListenerForSingleValueEvent(new ValueEventListener(){
             @Override
@@ -104,7 +86,7 @@ public class UserModel extends Model{
                     if(user != null){
                         try {
                             boolean isMatch = PasswordUtils.verifyPassword(password, user.getPassword());
-                            if(isMatch && user.getPhone().equals(phone)){
+                            if(isMatch && (user.getEmail().equals(value)|| user.getPhone().equals(value))){
                                 Log.e(TAG, "onDataChange: " + user.toString());
                                 callbacks.onSuccess(user);
                                 found = true;
@@ -172,22 +154,25 @@ public class UserModel extends Model{
                 return;
             }
             String hashedPassword = PasswordUtils.hashPassword(newPassword);
-            mAuth.signInWithEmailAndPassword(email, oldPassword)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            String uid = mAuth.getCurrentUser().getUid();
-                            database.child(USER_COLLECTION).child(uid).child("password").setValue(hashedPassword)
-                                    .addOnCompleteListener(task1 -> {
-                                        if (task1.isSuccessful()) {
-                                            callbacks.onSuccess(null);
-                                        } else {
-                                            callbacks.onFailed(task1.getException());
-                                        }
-                                    });
-                        } else {
-                            callbacks.onFailed(task.getException());
+            database.child(USER_COLLECTION).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for(DataSnapshot dataSnapshot: snapshot.getChildren()){
+                        String emailUser = (String) dataSnapshot.child("email").getValue();
+                        if(emailUser != null){
+                            if(emailUser.equals(email)){
+                                database.child(USER_COLLECTION).child(dataSnapshot.getKey()).child("password").setValue(hashedPassword);
+                                callbacks.onSuccess(null);
+                                break;
+                            }
                         }
-                    });
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e(TAG, "onCancelled: " + error.toString());
+                }
+            });
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }

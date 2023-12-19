@@ -20,6 +20,8 @@ import com.example.myapplication.models.UserModel;
 import com.example.myapplication.utlis.EmailUtils;
 import com.example.myapplication.utlis.PhoneUtils;
 
+import java.util.ArrayList;
+
 public class LoginActivity extends AppCompatActivity {
     private EditText username;
     private EditText password;
@@ -51,40 +53,20 @@ public class LoginActivity extends AppCompatActivity {
                 if(TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(txt_username)){
                     Toast.makeText(LoginActivity.this,"Account dose not exits",Toast.LENGTH_LONG).show();
                 }else{
-                    if(EmailUtils.isValid(txt_username)){
-                        Log.d("login User","email");
-                        userModel.login(txt_username, txt_password, new UserModel.LoginCallbacks() {
-                            @Override
-                            public void onSuccess(User user) {
-                                getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.fragment_container, new HomeFragment(user.getUuid()))
-                                        .commit();
-                            }
-                            @Override
-                            public void onFailed(Exception e) {
-                                Log.d("pw",txt_password);
-                                Log.d("User Login","fail");
-                            }
-                        });
-                    } else if(PhoneUtils.isValid(txt_username)){
-                        Log.d("login User","phone");
-                        userModel.loginWithPhone(txt_username, txt_password, new UserModel.LoginCallbacks() {
-                            @Override
-                            public void onSuccess(User user) {
-                                getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.fragment_container, new HomeFragment(user.getUuid()))
-                                        .commit();
-                            }
-                            @Override
-                            public void onFailed(Exception e) {
-                                Log.d("pw",txt_password);
-                                Log.d("User Login","fail");
-                            }
-                        });
-                    } else {
-                        Log.d("Login user", "fail");
-                        return;
-                    }
+                    userModel.login(txt_username, txt_password, new UserModel.LoginCallbacks() {
+                        @Override
+                        public void onSuccess(User user) {
+                            Log.d("User Login","success");
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragment_container, new HomeFragment(user.getUuid()))
+                                    .commit();
+                        }
+                        @Override
+                        public void onFailed(Exception e) {
+                            Log.d("pw",txt_password);
+                            Log.d("User Login","fail");
+                        }
+                    });
                 }
             }
         });
