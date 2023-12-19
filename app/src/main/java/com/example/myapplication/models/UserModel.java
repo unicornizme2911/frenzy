@@ -199,17 +199,15 @@ public class UserModel extends Model{
         database.child(USER_COLLECTION).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user = null;
                 for(DataSnapshot dataSnapshot: snapshot.getChildren()){
-                    user = dataSnapshot.getValue(User.class);
-                    if(user != null){
-                        if(user.getPhone().equals(phone)){
+                    String phoneUser = (String) dataSnapshot.child("phone").getValue();
+                    if(phoneUser != null){
+                        if(phoneUser.equals(phone)){
                             callbacks.onExists();
                             break;
                         }
                     }
                 }
-                callbacks.onNotFound();
             }
 
             @Override

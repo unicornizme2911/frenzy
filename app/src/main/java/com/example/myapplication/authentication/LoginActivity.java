@@ -31,18 +31,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        MovieModel movieModel = new MovieModel();
-        movieModel.getMovie("0XP3WQZ7", new MovieModel.MovieCallbacks() {
-            @Override
-            public void onSuccess(Movie movie) {
-                Log.d("Movie", "success");
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                Log.d("Movie", "fail");
-            }
-        });
         btnDangky = findViewById(R.id.btn_to_register);
         btnDangNhap = findViewById(R.id.btn_login);
         username = findViewById(R.id.et_username_lg);
