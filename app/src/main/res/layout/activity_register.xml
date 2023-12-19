@@ -114,7 +114,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
                         android:layout_weight="1"
-                        android:checked="true"
+                        android:checked="false"
                         android:text="Male"
                         android:textColor="@color/grey_dark"
                         android:textSize="14dp" />

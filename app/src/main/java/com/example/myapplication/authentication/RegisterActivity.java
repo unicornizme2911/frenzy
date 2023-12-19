@@ -62,7 +62,17 @@ public class RegisterActivity extends AppCompatActivity {
                 showDatePickerDialog();
             }
         });
-
+        gender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // Kiểm tra xem RadioButton nào được chọn
+                if (checkedId == R.id.radioF) {
+                    fmale.setText("Female");
+                } else if (checkedId == R.id.radioM) {
+                    fmale.setText("Male");
+                }
+            }
+        });
         registerUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,27 +82,15 @@ public class RegisterActivity extends AppCompatActivity {
                 String txt_password = password.getText().toString();
                 String txt_khuvuc = khuvuc.getText().toString();
                 String txt_bd = birthday.getText().toString();
-                final String[] txt_gender = new String[2];
-                gender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-                {
-                    @Override
-                    public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        if (checkedId == R.id.radioF) {
-                            txt_gender[0] = "Female";
-                        } else if (checkedId == R.id.radioM) {
-                            txt_gender[0] = "Female";
-                        }
-                    }
-                });
-                Log.d("Register User",txt_phone);
+                String txt_gender = fmale.getText().toString();
+                Log.d("check gender", txt_gender);
                 if(TextUtils.isEmpty(txt_fullname) || TextUtils.isEmpty(txt_phone)|| TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(txt_khuvuc)){
                     Toast.makeText(RegisterActivity.this,"Empty credentials",Toast.LENGTH_LONG).show();
                 } else if(txt_password.length() < 6){
                     Toast.makeText(RegisterActivity.this, "Password to short", Toast.LENGTH_LONG).show();
                 } else
                 {
-
-                    userModel.register(txt_email, txt_phone, txt_password,txt_fullname ,txt_khuvuc,txt_bd,txt_gender[0], new UserModel.RegisterCallbacks() {
+                    userModel.register(txt_email, txt_phone, txt_password,txt_fullname ,txt_khuvuc,txt_bd, txt_gender, new UserModel.RegisterCallbacks() {
                         @Override
                         public void onSuccess(User user) {
                             Toast.makeText(RegisterActivity.this,"Successful account registration",Toast.LENGTH_LONG).show();
@@ -142,6 +140,7 @@ public class RegisterActivity extends AppCompatActivity {
         khuvuc = findViewById(R.id.et_khuvuc);
         birthday = findViewById(R.id.et_bd);
         gender = findViewById(R.id.radioGrp);
+        fmale = findViewById(R.id.radioF);
         registerUser = findViewById(R.id.btn_to_register);
     }
     private void swapLogin(){

@@ -74,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                             @Override
                             public void onFailed(Exception e) {
+                                Log.d("pw",txt_password);
                                 Log.d("User Login","fail");
                             }
                         });
@@ -88,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                             @Override
                             public void onFailed(Exception e) {
+                                Log.d("pw",txt_password);
                                 Log.d("User Login","fail");
                             }
                         });
