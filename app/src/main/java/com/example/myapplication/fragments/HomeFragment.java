@@ -12,6 +12,12 @@ import androidx.fragment.app.Fragment;
 import com.example.myapplication.R;
 
 public class HomeFragment extends Fragment {
+    private String id;
+
+
+    public HomeFragment(String id){
+        this.id = id;
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

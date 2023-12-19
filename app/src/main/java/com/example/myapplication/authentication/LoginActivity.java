@@ -2,19 +2,27 @@ package com.example.myapplication.authentication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 import com.example.myapplication.activity.MainActivity;
 import com.example.myapplication.entities.Movie;
+import com.example.myapplication.entities.User;
 import com.example.myapplication.fragments.HomeFragment;
 import com.example.myapplication.models.MovieModel;
+import com.example.myapplication.models.UserModel;
 
 public class LoginActivity extends AppCompatActivity {
+    private EditText username;
+    private EditText password;
+    private final UserModel userModel = new UserModel();
 
     private Button btnDangky;
     private Button btnDangNhap;
@@ -23,19 +31,22 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         MovieModel movieModel = new MovieModel();
-        movieModel.getMovie("0XP3WQZ7", new MovieModel.MovieCallbacks() {
-            @Override
-            public void onSuccess(Movie movie) {
-                Log.e("Movie", movie.toString());
-            }
+//        movieModel.getMovie("0XP3WQZ7", new MovieModel.MovieCallbacks() {
+//            @Override
+//            public void onSuccess(Movie movie) {
+//                Log.e("Movie222", movie.toString());
+//            }
+//
+//            @Override
+//            public void onFailed(Exception e) {
+//
+//            }
+//        });
 
-            @Override
-            public void onFailed(Exception e) {
-
-            }
-        });
         btnDangky = findViewById(R.id.btn_to_register);
         btnDangNhap = findViewById(R.id.btn_login);
+        username = findViewById(R.id.et_username_lg);
+        password = findViewById(R.id.et_password_lg);
         btnDangky.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,17 +56,40 @@ public class LoginActivity extends AppCompatActivity {
         btnDangNhap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (savedInstanceState == null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, new HomeFragment())
-                            .commit();
+
+                String txt_username = username.getText().toString();
+                String txt_password = password.getText().toString();
+                Log.d("login User", txt_username);
+                if(TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(txt_username)){
+                    Toast.makeText(LoginActivity.this,"Account dose not exits",Toast.LENGTH_LONG).show();
+                }else{
+                    userModel.login(txt_username, txt_password, new UserModel.LoginCallbacks() {
+                        @Override
+                        public void onSuccess(User user) {
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragment_container, new HomeFragment(user.getUuid()))
+                                    .commit();
+                        }
+                        @Override
+                        public void onFailed(Exception e) {
+                            Log.d("User Login","fail");
+                        }
+                    });
+                    userModel.loginWithPhone(txt_username, txt_password, new UserModel.LoginCallbacks() {
+                        @Override
+                        public void onSuccess(User user) {
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragment_container, new HomeFragment(user.getUuid()))
+                                    .commit();
+                        }
+                        @Override
+                        public void onFailed(Exception e) {
+                            Log.d("User Login","fail");
+                        }
+                    });
                 }
             }
         });
-    }
-    private void swapHome(){
-        Intent goHome = new Intent(this, MainActivity.class);
-        startActivity(goHome);
     }
     private void swapRegister(){
         Intent sw = new Intent(this, RegisterActivity.class);

@@ -129,7 +129,7 @@ public class UserModel extends Model{
             }
         });
     }
-    public void register(String email, String phone, String password, String birthday, String gender, String address, RegisterCallbacks callbacks) {
+    public void register(String email, String phone, String password, String address, RegisterCallbacks callbacks) {
         try{
             String uuid = UUID.randomUUID().toString();
             String hashedPassword = PasswordUtils.hashPassword(password);
@@ -148,7 +148,7 @@ public class UserModel extends Model{
             }
             Uri avatar = Uri.parse("android.resource://com.example.myapplication/drawable/avatar");
             List<String> invoiceIds = new ArrayList<>();
-            User user = new User(uuid, email, gender, hashedPassword, phone, address, birthday, "USER", avatar, createDate, invoiceIds);
+            User user = new User(uuid, email, hashedPassword, phone, address, "USER", avatar, createDate, invoiceIds);
             database.child(USER_COLLECTION).child(uuid).setValue(user.toMap())
                     .addOnCompleteListener(task -> {
                         if(task.isSuccessful()){

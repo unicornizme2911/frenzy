@@ -24,18 +24,16 @@ public class User implements Serializable {
     public User() {
         this.uuid = "";
         this.email = "";
-        this.gender = "";
         this.password = "";
         this.phone = "";
         this.address = "";
-        this.birthday = "";
         this.role = "";
         this.avatar = new Uri.Builder().build();
         this.createDate = "";
         this.invoiceIds = new ArrayList<>();
     }
 
-    public User(String uuid, String email, String gender, String password, String phone, String address, String birthday, String role, Uri avatar, String createDate, List<String> invoiceIds) {
+    public User(String uuid, String email, String password, String phone, String address, String role, Uri avatar, String createDate, List<String> invoiceIds) {
         this.uuid = uuid;
         this.email = email;
         this.gender = gender;
@@ -52,11 +50,9 @@ public class User implements Serializable {
         this(
             user.getUuid(),
             user.getName(),
-            user.getGender(),
             user.getPassword(),
             user.getPhone(),
             user.getAddress(),
-            user.getBirthday(),
             user.getRole(),
             user.getAvatar(),
             user.getCreateDate(),
@@ -67,11 +63,9 @@ public class User implements Serializable {
         this(
             userMap.get("uuid").toString(),
             userMap.get("email").toString(),
-            userMap.get("gender").toString(),
             userMap.get("password").toString(),
             userMap.get("phone").toString(),
             userMap.get("address").toString(),
-            userMap.get("birthday").toString(),
             userMap.get("role").toString(),
             (Uri)userMap.get("avatar"),
             userMap.get("createDate").toString(),
@@ -85,9 +79,7 @@ public class User implements Serializable {
             result.put("email", email);
             result.put("phone", phone);
             result.put("password", password);
-            result.put("gender", gender);
             result.put("address", address);
-            result.put("birthday", birthday);
             result.put("role", role);
             result.put("avatar", "");
             result.put("createDate", createDate);
@@ -97,9 +89,7 @@ public class User implements Serializable {
             result.put("email", email);
             result.put("phone", phone);
             result.put("password", password);
-            result.put("gender", gender);
             result.put("address", address);
-            result.put("birthday", birthday);
             result.put("role", role);
             result.put("avatar", avatar.toString());
             result.put("createDate", createDate);
@@ -123,13 +113,7 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public String getGender() {
-        return gender;
-    }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
 
     public String getPassword() {
         return password;
@@ -163,13 +147,7 @@ public class User implements Serializable {
         this.avatar = avatar;
     }
 
-    public String getBirthday() {
-        return birthday;
-    }
 
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
-    }
 
     public String getRole() {
         return role;
@@ -204,12 +182,10 @@ public class User implements Serializable {
         return "User{" +
                 "uuid='" + uuid + '\'' +
                 ", email='" + email + '\'' +
-                ", gender='" + gender + '\'' +
                 ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
                 ", avatar=" + avatar +
-                ", birthday='" + birthday + '\'' +
                 ", role='" + role + '\'' +
                 ", createDate='" + createDate + '\'' +
                 ", invoiceIds=" + invoiceIds +

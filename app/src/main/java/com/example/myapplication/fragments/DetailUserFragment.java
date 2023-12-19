@@ -25,13 +25,13 @@ public class DetailUserFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail_user2, container, false);
         init(view);
-        Listener(view);
+//        Listener(view);
         return view;
     }
 
     private void Listener(View view){
-        view.findViewById(R.id.iv_close).setOnClickListener(view1 -> changeFragment(new HomeFragment()));
-        view.findViewById(R.id.iv_home).setOnClickListener(view1 -> changeFragment(new HomeFragment()));
+//        view.findViewById(R.id.iv_close).setOnClickListener(view1 -> changeFragment(new HomeFragment()));
+//        view.findViewById(R.id.iv_home).setOnClickListener(view1 -> changeFragment(new HomeFragment()));
         Intent intent = new Intent();
         intent.setClass(getActivity(), PaymentHistoryActivity.class);
         view.findViewById(R.id.LN_history_payment).setOnClickListener(view1 ->
