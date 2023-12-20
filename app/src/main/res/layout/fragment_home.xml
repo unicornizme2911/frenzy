@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/black"
         android:orientation="vertical"
         >
 
@@ -15,7 +15,7 @@
             android:background="@drawable/con_b__ci_logo"
             android:id="@+id/rv_home_phimrandom"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_height="150dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:paddingTop="20dp"/>
@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="#EEEEEE">
+            android:background="@color/black">
 
             <Button
                 android:id="@+id/btn_home_phimdangchieu"
@@ -37,7 +37,7 @@
                 android:textStyle="bold"
                 android:textSize="13sp"
 
-                android:textColor="@color/black"/>
+                android:textColor="@color/grey_dark"/>
 
             <Button
                 android:id="@+id/btn_home_phimsapchieu"
@@ -48,15 +48,15 @@
                 android:text="Sắp chiếu"
                 android:textStyle="bold"
                 android:textSize="13sp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/grey_dark"/>
 
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_home_movielist_container"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:background="@drawable/hi_cu"
+            android:layout_height="350dp"
+            android:background="@drawable/con_b__ci_logo"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="10dp"
@@ -94,7 +94,7 @@
             android:layout_width="match_parent"
             android:layout_height="270dp"
             android:layout_marginBottom="10dp"
-            android:background="@android:color/white"
+            android:background="@android:color/black"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="20dp" />
