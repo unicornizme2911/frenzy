@@ -13,13 +13,15 @@
         app:layout_constraintStart_toStartOf="parent"
         android:paddingLeft="20dp">
         <TextView
+            android:id="@+id/tv_premiereMovie"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:text="160 phut"/>
+            android:text="14:00"/>
         <TextView
+            android:id="@+id/tv_cinema"
             android:layout_weight="3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

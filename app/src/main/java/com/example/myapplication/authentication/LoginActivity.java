@@ -35,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Log.d(TAG, "onCreate: "+ "login");
         btnDangky = findViewById(R.id.btn_to_register);
         btnDangNhap = findViewById(R.id.btn_login);
         username = findViewById(R.id.et_username_lg);

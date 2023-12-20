@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment {
                 listMovieAdapter.OnSetDetailListener(new ListMovieAdapter.OnUpdateListener() {
                     @Override
                     public void OnUpdate(Movie movie) {
-                        showMovieFragment(new MovieDetailFragment(movie));
+                        showMovieFragment(new MovieDetailFragment(movie,id));
                     }
                 });
             }
@@ -79,7 +79,6 @@ public class HomeFragment extends Fragment {
     private void showMovieFragment(Fragment fragment) {
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
                 .commit();
     }
 }

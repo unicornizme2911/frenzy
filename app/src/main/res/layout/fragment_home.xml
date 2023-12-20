@@ -58,6 +58,7 @@
             android:orientation="horizontal">
 
             <androidx.recyclerview.widget.RecyclerView
+                android:background="@drawable/con_b__ci_logo"
                 android:id="@+id/rv_home_movielist_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -132,13 +132,14 @@
 
                         android:textSize="14dp" />
                 </RadioGroup>
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_to_register"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/btn_bg"
-                    android:backgroundTint="@color/black"
+                    app:cornerRadius="10dp"
+                    app:strokeWidth="1dp"
+                    app:backgroundTint="@color/red"
                     android:text="Đăng ký tài khoản Frenzy"
                     android:textColor="@color/white" />
 
