@@ -1,5 +1,7 @@
 package com.example.myapplication.models;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.myapplication.entities.Ticket;
@@ -24,6 +26,10 @@ public class TicketModel extends Model{
     }
     public interface TicketsCallbacks{
         void onSuccess(ArrayList<Ticket> tickets);
+        void onFailed(Exception e);
+    }
+    public interface SeatCallbacks{
+        void onSuccess(ArrayList<String> seats);
         void onFailed(Exception e);
     }
     public TicketModel() {
@@ -67,25 +73,30 @@ public class TicketModel extends Model{
         });
         query.child("seat").setValue(seat);
     }
-    public ArrayList<String> getSeatIsBooked(String theaterId, String movieId, String date, String time){
+    public void getSeatIsBooked(String theaterId, String movieId, String date, String time, SeatCallbacks callback){
         ArrayList<String> seatIsBooked = new ArrayList<>();
         database.child(TICKET_COLLECTION).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    Ticket ticket = dataSnapshot.getValue(Ticket.class);
-                    if(ticket.getTheaterId().equals(theaterId) && ticket.getMovieId().equals(movieId) && ticket.getBookingDate().equals(date) && ticket.getShowTime().equals(time)){
-                        seatIsBooked.add(ticket.getSeat());
+                    JSONObject jsonObject = new JSONObject((Map) dataSnapshot.getValue());
+                    String theater = jsonObject.optString("theaterId");
+                    String movie = jsonObject.optString("movieId");
+                    String bookingDate = jsonObject.optString("bookingDate");
+                    String showTime = jsonObject.optString("showTime");
+                    String seat = jsonObject.optString("seat");
+                    if(theater.equals(theaterId) && movie.equals(movieId) && bookingDate.equals(date) && showTime.equals(time)){
+                        seatIsBooked.add(seat);
                     }
                 }
+                callback.onSuccess(seatIsBooked);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.d(TAG, "onCancelled: "+ error.getMessage());
+                callback.onFailed(new Exception(error.getMessage()));
             }
         });
-        return seatIsBooked;
     }
 
     public class Seat{

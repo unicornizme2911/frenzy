@@ -3,6 +3,7 @@ package com.example.myapplication.models;
 import androidx.annotation.NonNull;
 
 import com.example.myapplication.entities.Invoice;
+import com.example.myapplication.entities.Promotion;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -15,6 +16,8 @@ import java.util.UUID;
 public class InvoiceModel extends Model{
     public static final String TAG = "InvoiceModel";
     public static final String INVOICE_COLLECTION = "invoices";
+    public static final String TICKET_COLLECTION = "tickets";
+    public static final String PROMOTION_COLLECTION = "promotions";
     public interface InvoiceCallbacks{
         void onSuccess(Invoice invoice);
         void onFailed(Exception e);
@@ -30,10 +33,45 @@ public class InvoiceModel extends Model{
         super(database);
     }
 
-    public void createInvoice(String userId, List<String> ticketId, String promotionId, String paymentMethod, String paymentStatus, double totalPrice, InvoiceCallbacks callback){
+    public void createInvoice(String userId, List<String> ticketId, String promotionId, String paymentMethod, String paymentStatus, InvoiceCallbacks callback){
         String id = UUID.randomUUID().toString();
-        Invoice invoice = new Invoice(id, userId, ticketId, promotionId, paymentMethod, paymentStatus, totalPrice);
-        database.child(INVOICE_COLLECTION).child(id).setValue(invoice).addOnSuccessListener(aVoid -> {
+        final double[] total = {0};
+        for(String idTicket : ticketId){
+            database.child(TICKET_COLLECTION).child(idTicket).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.getValue() == null){
+                        callback.onFailed(new Exception("Ticket not found"));
+                        return;
+                    }
+                    total[0] += Double.parseDouble(snapshot.child("ticketPrice").getValue().toString());
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    callback.onFailed(new Exception(error.getMessage()));
+                }
+            });
+        }
+        database.child(PROMOTION_COLLECTION).child(promotionId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.getValue() == null){
+                    callback.onFailed(new Exception("Promotion not found"));
+                    return;
+                }
+                Promotion promotion = snapshot.getValue(Promotion.class);
+                if(promotion.getPercent() != 0){
+                    total[0] = total[0] * (1 - promotion.getPercent());
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onFailed(new Exception(error.getMessage()));
+            }
+        });
+        Invoice invoice = new Invoice(id, userId, ticketId, promotionId, paymentMethod, paymentStatus, total[0]);
+        database.child(INVOICE_COLLECTION).child(id).setValue(invoice.toMap()).addOnSuccessListener(aVoid -> {
             callback.onSuccess(invoice);
         }).addOnFailureListener(e -> {
             callback.onFailed(e);

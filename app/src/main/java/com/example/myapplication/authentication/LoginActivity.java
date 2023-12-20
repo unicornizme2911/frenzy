@@ -16,6 +16,7 @@ import com.example.myapplication.entities.Movie;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.fragments.HomeFragment;
 import com.example.myapplication.models.MovieModel;
+import com.example.myapplication.models.TicketModel;
 import com.example.myapplication.models.UserModel;
 import com.example.myapplication.utlis.EmailUtils;
 import com.example.myapplication.utlis.PhoneUtils;

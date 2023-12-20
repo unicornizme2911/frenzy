@@ -19,6 +19,7 @@ public class User implements Serializable {
     private String birthday;
     private String fullname;
     private String createDate;
+    private List<String> movieIds;
     private List<String> invoiceIds;
 
     public User() {
@@ -30,10 +31,11 @@ public class User implements Serializable {
         this.fullname = "";
         this.avatar = new Uri.Builder().build();
         this.createDate = "";
+        this.movieIds = new ArrayList<>();
         this.invoiceIds = new ArrayList<>();
     }
 
-    public User(String uuid, String email, String password, String phone, String address, String gender, String birthday, String fullname, Uri avatar, String createDate, List<String> invoiceIds) {
+    public User(String uuid, String email, String password, String phone, String address, String gender, String birthday, String fullname, Uri avatar, String createDate, List<String> movieIds, List<String> invoiceIds) {
         this.uuid = uuid;
         this.email = email;
         this.gender = gender;
@@ -44,9 +46,10 @@ public class User implements Serializable {
         this.fullname = String.valueOf(fullname);
         this.avatar = avatar;
         this.createDate = createDate;
+        this.movieIds = movieIds;
         this.invoiceIds = invoiceIds;
     }
-    public User(String uuid, String email, String password, String phone, String address, String fullname, String createDate, List<String> invoiceIds) {
+    public User(String uuid, String email, String password, String phone, String address, String gender, String birthday, String fullname, String createDate, List<String> movieIds, List<String> invoiceIds) {
         this.uuid = uuid;
         this.email = email;
         this.gender = gender;
@@ -56,6 +59,7 @@ public class User implements Serializable {
         this.address = address;
         this.fullname = String.valueOf(fullname);
         this.createDate = createDate;
+        this.movieIds = movieIds;
         this.invoiceIds = invoiceIds;
     }
     public User(User user){
@@ -70,6 +74,7 @@ public class User implements Serializable {
             user.getFullname(),
             user.getAvatar(),
             user.getCreateDate(),
+            user.getMovieIds(),
             user.getInvoiceIds()
         );
     }
@@ -85,6 +90,7 @@ public class User implements Serializable {
             this.fullname = userMap.get("fullname").toString();
             this.avatar = new Uri.Builder().build();
             this.createDate = userMap.get("createDate").toString();
+            this.movieIds = (List<String>) userMap.get("movieIds");
             this.invoiceIds = (List<String>) userMap.get("invoiceIds");
         } else{
             this.uuid = userMap.get("uuid").toString();
@@ -97,6 +103,7 @@ public class User implements Serializable {
             this.fullname = userMap.get("fullname").toString();
             this.avatar = Uri.parse(userMap.get("avatar").toString());
             this.createDate = userMap.get("createDate").toString();
+            this.movieIds = (List<String>) userMap.get("movieIds");
             this.invoiceIds = (List<String>) userMap.get("invoiceIds");
         }
     }
@@ -113,6 +120,7 @@ public class User implements Serializable {
             result.put("fullname", fullname);
             result.put("avatar", "");
             result.put("createDate", createDate);
+            result.put("movieIds", movieIds);
             result.put("invoiceIds", invoiceIds);
         }else{
             result.put("uuid", uuid);
@@ -125,6 +133,7 @@ public class User implements Serializable {
             result.put("fullname", fullname);
             result.put("avatar", avatar.toString());
             result.put("createDate", createDate);
+            result.put("movieIds", movieIds);
             result.put("invoiceIds", invoiceIds);
         }
         return result;
@@ -132,91 +141,70 @@ public class User implements Serializable {
     public String getUuid() {
         return uuid;
     }
-
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
-
     public String getName() {
         return email;
     }
-
     public void setName(String email) {
         this.email = email;
     }
-
     public void setGender(String gender) {
         this.gender = gender;
     }
-
     public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
-
     public String getBirthday() {
         return birthday;
     }
-
     public String getGender() {
         return gender;
     }
-
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
-
     public String getPhone() {
         return phone;
     }
-
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
     public String getAddress() {
         return address;
     }
-
     public void setAddress(String address) {
         this.address = address;
     }
-
     public Uri getAvatar() {
         return avatar;
     }
-
     public void setAvatar(Uri avatar) {
         this.avatar = avatar;
     }
-
     public String getFullname() {
         return fullname;
     }
-
     public void setFullname(String fullname) {
         this.fullname = fullname;
     }
-
     public String getCreateDate() { return createDate; }
-
     public void setCreateDate(String createDate) { this.createDate = createDate; }
-
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
-
+    public List<String> getMovieIds() { return movieIds; }
+    public void setMovieIds(List<String> movieIds) { this.movieIds = movieIds; }
     public List<String> getInvoiceIds() {
         return invoiceIds;
     }
-
     public void setInvoiceIds(List<String> invoiceIds) {
         this.invoiceIds = invoiceIds;
     }
@@ -234,6 +222,7 @@ public class User implements Serializable {
                 ", avatar=" + avatar +
                 ", fullname='" + fullname + '\'' +
                 ", createDate='" + createDate + '\'' +
+                ", movieIds=" + movieIds +
                 ", invoiceIds=" + invoiceIds +
                 '}';
     }

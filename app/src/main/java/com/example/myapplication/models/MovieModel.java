@@ -37,6 +37,10 @@ public class MovieModel extends Model{
         void onSuccess(ArrayList<Movie> movies);
         void onFailed(Exception e);
     }
+    public interface ShowTimesCallbacks{
+        void onSuccess(ArrayList<String> showTimes);
+        void onFailed(Exception e);
+    }
     public MovieModel() {
         super();
     }
@@ -243,6 +247,32 @@ public class MovieModel extends Model{
                     }
                 }
                 callbacks.onSuccess(movies);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callbacks.onFailed(error.toException());
+            }
+        });
+    }
+    public void getTimeOfMovie(String movieId, ShowTimesCallbacks callbacks){
+        database.child(MOVIE_COLLECTION).child(movieId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.getValue() == null){
+                    callbacks.onFailed(new Exception("Movie not found"));
+                    return;
+                }
+                JSONObject jsonObject = new JSONObject((Map) snapshot.getValue());
+                List<String> temp_showTimes = Arrays.asList(jsonObject.optString("showTime").split("[,{}]"));
+                ArrayList<String> showTimes = new ArrayList<>();
+                for(int i = 0; i < temp_showTimes.size(); i++){
+                    if(temp_showTimes.get(i).equals("")) continue;
+                    String[] parts = temp_showTimes.get(i).replace("\"", "").split(":");
+                    String replacedText = parts[0] + ":" + parts[1] + " ~ " + parts[2] + ":" + parts[3];
+                    showTimes.add(replacedText);
+                }
+                callbacks.onSuccess(showTimes);
             }
 
             @Override

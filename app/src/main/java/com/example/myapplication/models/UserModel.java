@@ -131,7 +131,8 @@ public class UserModel extends Model{
             }
             Uri avatar = Uri.parse("android.resource://com.example.myapplication/drawable/avatar");
             List<String> invoiceIds = new ArrayList<>();
-            User user = new User(uuid, email, hashedPassword, phone, address, gender, birthday, fullname, avatar, createDate, invoiceIds);
+            List<String> movieIds = new ArrayList<>();
+            User user = new User(uuid, email, hashedPassword, phone, address, gender, birthday, fullname, avatar, createDate, movieIds, invoiceIds);
             database.child(USER_COLLECTION).child(uuid).setValue(user.toMap())
                     .addOnCompleteListener(task -> {
                         if(task.isSuccessful()){
@@ -252,8 +253,48 @@ public class UserModel extends Model{
                     callbacks.onFailed(new Exception("User not found"));
                     return;
                 }
-                User user = snapshot.getValue(User.class);
+                JSONObject userObject = new JSONObject((Map) snapshot.getValue());
+                HashMap<String, Object> userMap = new HashMap<>();
+                Iterator<String> keys = userObject.keys();
+                while( keys.hasNext()){
+                    String key = keys.next();
+                    try {
+                        userMap.put(key, userObject.get(key));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                User user = new User(userMap);
                 callbacks.onSuccess(user);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callbacks.onFailed(error.toException());
+            }
+        });
+    }
+    public void addMovieToFavorite(String uuid, String movieId, UserCallbacks callbacks){
+        database.child(USER_COLLECTION).child(uuid).child("movieIds").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> movieIds = (ArrayList<String>) snapshot.getValue();
+                if(movieIds == null){
+                    movieIds = new ArrayList<>();
+                }
+                if(movieIds.contains(movieId)){
+                    callbacks.onFailed(new Exception("Movie already in favorite list"));
+                    return;
+                }
+                movieIds.add(movieId);
+                database.child(USER_COLLECTION).child(uuid).child("movieIds").setValue(movieIds).addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        Log.e(TAG, "onDataChange: " + "add movie to favorite success");
+                        callbacks.onSuccess(null);
+                    }else{
+                        callbacks.onFailed(task.getException());
+                    }
+                });
             }
 
             @Override
