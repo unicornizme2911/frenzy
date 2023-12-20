@@ -1,5 +1,6 @@
 package com.example.myapplication.fragments;
 
+import android.health.connect.datatypes.units.Length;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,8 +19,10 @@ import com.example.myapplication.entities.Movie;
 import com.example.myapplication.models.MovieModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
+    private static final String TAG = "Home Fragment";
     private String id;
     private final HomeFragment homeFragment = this;
     private final MovieModel movieModel = new MovieModel();
@@ -33,7 +36,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_main, container, false);
         view.findViewById(R.id.iconLogin).setOnClickListener(view1 -> changeFragment(new DetailUserFragment(id)));
-        ListMovieAdapter movieListAdapter = new ListMovieAdapter(homeFragment.getContext(), movies);
         init(view);
         downloadMovie();
         return view;
@@ -55,10 +57,17 @@ public class HomeFragment extends Fragment {
             public void onSuccess(ArrayList<Movie> moviesData) {
                 movies = moviesData;
                 Log.d("get movie at home", movies.toString());
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                rvListmovie.setLayoutManager(layoutManager);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                Log.d(TAG, "onSuccess:  "+ movies.size());
                 ListMovieAdapter listMovieAdapter = new ListMovieAdapter(homeFragment.getContext(),movies);
+                rvListmovie.setLayoutManager(layoutManager);
                 rvListmovie.setAdapter(listMovieAdapter);
+                listMovieAdapter.OnSetDetailListener(new ListMovieAdapter.OnUpdateListener() {
+                    @Override
+                    public void OnUpdate(Movie movie) {
+                        showMovieFragment(new MovieDetailFragment(movie));
+                    }
+                });
             }
 
             @Override
@@ -66,5 +75,11 @@ public class HomeFragment extends Fragment {
 
             }
         });
+    }
+    private void showMovieFragment(Fragment fragment) {
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

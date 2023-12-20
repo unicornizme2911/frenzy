@@ -23,6 +23,8 @@ import com.example.myapplication.utlis.PhoneUtils;
 import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = "LoginActivity";
+
     private EditText username;
     private EditText password;
     private final UserModel userModel = new UserModel();
@@ -49,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 String txt_username = username.getText().toString();
                 String txt_password = password.getText().toString();
-                Log.d("login User", txt_username);
+                Log.d(TAG, txt_username);
                 if(TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(txt_username)){
                     Toast.makeText(LoginActivity.this,"Account dose not exits",Toast.LENGTH_LONG).show();
                 }else{
@@ -63,7 +65,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         @Override
                         public void onFailed(Exception e) {
-                            Log.d("pw",txt_password);
                             Log.d("User Login","fail");
                         }
                     });

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="#E3DDF1"
     android:orientation="vertical">
 
     <androidx.core.widget.NestedScrollView
@@ -25,8 +25,14 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_scrollFlags="scroll|enterAlways">
 
+                <include
+                    layout="@layout/toolbar_film"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <ImageView
-                    android:id="@+id/iv_still_cut"
+                    android:id="@+id/Wv_trailer"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -62,7 +68,6 @@
                 android:id="@+id/linear1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/grey_dark"
                 android:orientation="vertical"
                 android:paddingStart="15dp"
                 android:paddingTop="8dp"
@@ -91,7 +96,9 @@
                             android:src="@drawable/baseline_calendar_month_24" />
 
                         <TextView
-                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/black"
+                            android:id="@+id/tv_dayMovie"
+                            android:layout_marginLeft="5dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
@@ -111,6 +118,8 @@
                             android:layout_height="wrap_content"
                             android:src="@drawable/baseline_access_time_24" />
                         <TextView
+                            android:textColor="@color/black"
+                            android:id="@+id/tv_timeMovie"
                             android:layout_marginLeft="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -125,14 +134,17 @@
                         android:paddingBottom="10dp">
 
                         <ImageView
+                            android:id="@+id/iv_rate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/baseline_add_task_24" />
+                            android:src="@drawable/baseline_stars_24" />
                         <TextView
+                            android:textColor="@color/black"
+                            android:id="@+id/tv_rate"
                             android:layout_marginLeft="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Theo dỗi" />
+                            android:text="9.5" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -140,7 +152,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#E2E2E2" />
+                    android:background="#675C5C" />
 
                 <LinearLayout
                     android:layout_marginTop="20dp"
@@ -148,64 +160,67 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <TextView
+                        android:textColor="@color/black"
+
                         android:id="@+id/tv_summary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="20dp"
                         android:text="Hehehehehe lala lolo"
                         android:textStyle="bold"
-
                         />
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#E2E2E2" />
+                        android:background="#675C5C" />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <TextView
+                            android:textColor="@color/black"
                             android:id="@+id/tv_type_movie"
                             android:layout_width="150dp"
                             android:layout_height="wrap_content"
                             android:text="Thể loại"
                             android:textStyle="bold"
-
                             />
                         <TextView
+                            android:textColor="@color/black"
                             android:id="@+id/tv_name_type"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Tình yêu" />
                     </LinearLayout>
 
+<!--                    <LinearLayout-->
+<!--                        android:layout_marginTop="15dp"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="horizontal">-->
+<!--                        <TextView-->
+<!--                            android:id="@+id/tv_director"-->
+<!--                            android:layout_width="150dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="Đạo diễn"-->
+<!--                            android:textStyle="bold"-->
+
+<!--                            />-->
+<!--                        <TextView-->
+<!--                            android:id="@+id/tv_name_director"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="CiPu ne" />-->
+
+<!--                    </LinearLayout>-->
+
                     <LinearLayout
                         android:layout_marginTop="15dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <TextView
-                            android:id="@+id/tv_director"
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
-                            android:text="Đạo diễn"
-                            android:textStyle="bold"
-
-                            />
-                        <TextView
-                            android:id="@+id/tv_name_director"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="CiPu ne" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_marginTop="15dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
+                            android:textColor="@color/black"
                             android:id="@+id/tv_actor"
                             android:layout_width="150dp"
                             android:layout_height="wrap_content"
@@ -213,25 +228,51 @@
                             android:textStyle="bold"
                             />
                         <TextView
+                            android:textColor="@color/black"
                             android:id="@+id/tv_name_actor"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="CiPu, Panana, Kanasta" />
 
                     </LinearLayout>
-
                 </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-    <Button
-        android:layout_marginTop="30dp"
-        android:id="@+id/btn_buyTicket"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/red"
-        android:text="Xem xuất chiếu">
-    </Button>
+        android:orientation="horizontal"
+        >
+        <com.google.android.material.button.MaterialButton
+            android:layout_margin="20dp"
+            android:id="@+id/btn_xemxuatchiet"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            app:cornerRadius="10dp"
+            app:strokeWidth="1dp"
+            android:textColor="@color/white"
+            app:strokeColor="@color/white"
+            app:backgroundTint="#979191"
+            android:text="Xem xuất chiếu">
+        </com.google.android.material.button.MaterialButton>
+        <com.google.android.material.button.MaterialButton
+            android:layout_margin="20dp"
+            android:id="@+id/btn_theodoi"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            app:cornerRadius="10dp"
+            app:strokeWidth="1dp"
+            android:textColor="@color/white"
+            app:strokeColor="@color/white"
+            app:backgroundTint="#979191"
+            android:text="Theo dỗi">
+        </com.google.android.material.button.MaterialButton>
+    </LinearLayout>
+
 </LinearLayout>

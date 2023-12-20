@@ -14,6 +14,8 @@ import com.example.myapplication.fragments.HomeFragment;
 
 
 public class PaymentHistoryActivity extends AppCompatActivity {
+    private static final String TAG = "PaymentHistoryAdapter";
+
     private String id;
 //    private PaymentHistoryActivity(String id){
 //        this.id = id;
