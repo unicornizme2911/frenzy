@@ -24,6 +24,7 @@ import com.example.myapplication.adapter.home.ListMovieAdapter;
 import com.example.myapplication.adapter.home.ListTheatersAdapter;
 import com.example.myapplication.entities.Movie;
 import com.example.myapplication.entities.Theater;
+import com.example.myapplication.entities.User;
 import com.example.myapplication.models.MovieModel;
 import com.example.myapplication.models.TheaterModel;
 
@@ -43,14 +44,15 @@ public class HomeFragment extends Fragment {
     private RecyclerView rvListmovie, rvListCinema, rvRandomMovie;
     private EditText address;
     private ImageView find;
-    public HomeFragment(String id){
-        this.id = id;
+    private User user;
+    public HomeFragment(User user){
+        this.user = user;
     }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_main, container, false);
-        view.findViewById(R.id.iconLogin).setOnClickListener(view1 -> changeFragment(new DetailUserFragment(id)));
+        view.findViewById(R.id.iconLogin).setOnClickListener(view1 -> changeFragment(new DetailUserFragment(user)));
         address = view.findViewById(R.id.et_address);
         find = view.findViewById(R.id.ig_find);
         find.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +109,7 @@ public class HomeFragment extends Fragment {
                 listMovieAdapter.OnSetDetailListener(new ListMovieAdapter.OnUpdateListener() {
                     @Override
                     public void OnUpdate(Movie movie) {
-                        showMovieFragment(new MovieDetailFragment(movie,id));
+                        showMovieFragment(new MovieDetailFragment(movie,user));
                     }
                 });
             }

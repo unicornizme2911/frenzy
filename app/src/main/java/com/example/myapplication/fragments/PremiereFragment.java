@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.home.ListMovieAdapter;
 import com.example.myapplication.entities.Movie;
+import com.example.myapplication.entities.User;
 import com.example.myapplication.models.MovieModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -43,16 +44,16 @@ public class PremiereFragment extends Fragment {
     private Movie movie;
     private TextView dateMovie,nameMovie;
     private ImageButton date;
-    private String userId;
+    private User user;
     private MaterialButton choghe;
     private int dayStart,monthStart,yearStart,dayEnd,monthEnd,yearEnd;
-    public PremiereFragment(Movie movie, String userId){
-        this.userId = userId;
+    public PremiereFragment(Movie movie, User user){
+        this.user = user;
         this.movie=movie;
     }
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_see_premiere, container, false);
-        view.findViewById(R.id.iv_back).setOnClickListener(view1 -> changeFragment(new MovieDetailFragment(movie,userId)));
+        view.findViewById(R.id.iv_back).setOnClickListener(view1 -> changeFragment(new MovieDetailFragment(movie,user)));
         nameMovie = view.findViewById(R.id.tv_toolbar_title);
         nameMovie.setText(movie.getName());
         date = view.findViewById(R.id.ib_calendar);

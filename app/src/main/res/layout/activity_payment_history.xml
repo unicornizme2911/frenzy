@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingLeft="10dp"
     android:paddingRight="10dp">
@@ -28,7 +29,8 @@
             android:layout_height="30dp"
             android:layout_weight="3"
             android:text="Lịch sử giao dịch"
-            android:textSize="20dp"
+            android:textSize="25dp"
+            android:textColor="@color/red"
             android:textStyle="bold"
             tools:layout_editor_absoluteX="10dp" />
 <!--        <ImageView-->

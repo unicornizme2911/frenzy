@@ -18,12 +18,11 @@ import com.example.myapplication.models.UserModel;
 
 
 public class DetailUserFragment extends Fragment {
-    private String id;
     private User user;
     private TextView name;
     private final UserModel userModel = new UserModel();
-    public DetailUserFragment(String id){
-        this.id = id;
+    public DetailUserFragment(User user){
+        this.user = user;
     }
     private static final String TAG = "DetailUserFragment";
 
@@ -36,14 +35,18 @@ public class DetailUserFragment extends Fragment {
         init(view);
         Listener(view);
         name = view.findViewById(R.id.tv_name);
-//        fillData();
+        fillData();
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), PaymentHistoryActivity.class);
+        view.findViewById(R.id.LN_history_payment).setOnClickListener(view1 ->
+                changeFragment(new PaymentHistoryFragment(user)));
         return view;
     }
     private void fillData(){
-        userModel.getUser(id, new UserModel.UserCallbacks() {
+        userModel.getUser(user.getUuid(), new UserModel.UserCallbacks() {
             @Override
             public void onSuccess(User user) {
-                name.setText("Phone: "+ user.getPhone().toString());
+                name.setText(user.getFullname().toString());
             }
 
             @Override
@@ -54,13 +57,8 @@ public class DetailUserFragment extends Fragment {
     }
 
     private void Listener(View view){
-        view.findViewById(R.id.iv_close).setOnClickListener(view1 -> changeFragment(new HomeFragment(id)));
-        view.findViewById(R.id.iv_home).setOnClickListener(view1 -> changeFragment(new HomeFragment(id)));
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), PaymentHistoryActivity.class);
-        view.findViewById(R.id.LN_history_payment).setOnClickListener(view1 ->
-                getActivity().startActivity(intent));
-
+        view.findViewById(R.id.iv_close).setOnClickListener(view1 -> changeFragment(new HomeFragment(user)));
+        view.findViewById(R.id.iv_home).setOnClickListener(view1 -> changeFragment(new HomeFragment(user)));
     }
 
     private void init(View view) {

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
+import com.example.myapplication.entities.User;
 import com.example.myapplication.fragments.DetailUserFragment;
 import com.example.myapplication.fragments.HomeFragment;
 
@@ -16,10 +17,13 @@ import com.example.myapplication.fragments.HomeFragment;
 public class PaymentHistoryActivity extends AppCompatActivity {
     private static final String TAG = "PaymentHistoryAdapter";
 
-    private String id;
-//    private PaymentHistoryActivity(String id){
-//        this.id = id;
-//    }
+    private User user;
+    private PaymentHistoryActivity(){
+
+    }
+    private PaymentHistoryActivity(User user){
+        this.user = user;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +34,7 @@ public class PaymentHistoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new DetailUserFragment(id))
+                        .replace(R.id.fragment_container, new DetailUserFragment(user))
                         .commit();
             }
         });

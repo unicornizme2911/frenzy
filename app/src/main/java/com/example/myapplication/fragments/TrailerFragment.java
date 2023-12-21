@@ -13,19 +13,20 @@ import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.entities.Movie;
+import com.example.myapplication.entities.User;
 
 public class TrailerFragment extends Fragment {
     private Movie movie;
     private WebView webView;
-    private String userId;
-    public TrailerFragment(Movie movie, String id){
-        this.userId = id;
+    private User user;
+    public TrailerFragment(Movie movie, User user){
+        this.user = user;
         this.movie = movie;
     }
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trailer, container, false);
-        view.findViewById(R.id.iv_back).setOnClickListener(view1 -> changeFragment(new MovieDetailFragment(movie,userId)));
+        view.findViewById(R.id.iv_back).setOnClickListener(view1 -> changeFragment(new MovieDetailFragment(movie,user)));
         webView = view.findViewById(R.id.Wv_trailer);
         String video = movie.getTrailer();
         webView.loadData(video,"text/html","utf-8");

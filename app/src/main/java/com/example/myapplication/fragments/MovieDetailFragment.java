@@ -17,20 +17,23 @@ import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.home.ListMovieAdapter;
 import com.example.myapplication.entities.Movie;
+import com.example.myapplication.entities.User;
 import com.example.myapplication.models.MovieModel;
+import com.example.myapplication.models.UserModel;
 import com.google.android.material.button.MaterialButton;
 
 public class MovieDetailFragment extends Fragment {
     private static final String TAG = "MovieDetailFragment";
-    private TextView dayMovie,timeMovie,summary,nameType,rate,nameActor,trailer;
+    private TextView dayMovie,timeMovie,summary,nameType,rate,nameActor,trailer,nameMovie;
     private ImageView poster,poster2,back;
     private ListMovieAdapter listMovieAdapter;
+    private final UserModel userModel = new UserModel();
     private final MovieModel movieModel = new MovieModel();
-    private MaterialButton seePremiere;
-    private String userId;
+    private MaterialButton seePremiere,follow;
+    private User user;
     private Movie movie;
-    public MovieDetailFragment(Movie movie, String userId){
-        this.userId = userId;
+    public MovieDetailFragment(Movie movie, User user){
+        this.user = user;
         this.movie = movie;
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -46,7 +49,8 @@ public class MovieDetailFragment extends Fragment {
         seePremiere = view.findViewById(R.id.btn_xemxuatchiet);
         trailer = view.findViewById(R.id.tv_link);
         back = view.findViewById(R.id.iv_back);
-
+        nameMovie = view.findViewById(R.id.tv_nameMovie);
+        follow = view.findViewById(R.id.btn_theodoi);
         Log.d(TAG, "onCreateView: "+movie.getId());
         movieModel.getMovie(movie.getId(), new MovieModel.MovieCallbacks() {
             @Override
@@ -63,10 +67,11 @@ public class MovieDetailFragment extends Fragment {
                 nameType.setText(movie.getGenresString());
                 nameActor.setText(movie.getActorsString());
                 rate.setText(String.valueOf(movie.getRating()));
+                nameMovie.setText(movie.getName());
                 back.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        changeFragment(new HomeFragment(userId));
+                        changeFragment(new HomeFragment(user));
 
                     }
                 });
@@ -75,13 +80,30 @@ public class MovieDetailFragment extends Fragment {
                 trailer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        changeFragment(new TrailerFragment(movie,userId));
+                        changeFragment(new TrailerFragment(movie,user));
                     }
                 });
                 seePremiere.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        changeFragment(new PremiereFragment(movie,userId));
+                        changeFragment(new PremiereFragment(movie,user));
+                    }
+                });
+                follow.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        follow.setText("Đã theo dỗi");
+                        Log.d(TAG, "onClick: "+ movie.getName());
+                        userModel.addMovieToFavorite(user.getUuid(), movie.getId(), new UserModel.UserCallbacks() {
+                            @Override
+                            public void onSuccess(User user) {
+                            }
+
+                            @Override
+                            public void onFailed(Exception e) {
+
+                            }
+                        });
                     }
                 });
 

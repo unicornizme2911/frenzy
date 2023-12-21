@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void onSuccess(User user) {
                             Log.d("User Login","success");
                             getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.fragment_container, new HomeFragment(user.getUuid()))
+                                    .replace(R.id.fragment_container, new HomeFragment(user))
                                     .commit();
                         }
                         @Override
