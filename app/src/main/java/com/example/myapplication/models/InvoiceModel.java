@@ -18,6 +18,7 @@ public class InvoiceModel extends Model{
     public static final String INVOICE_COLLECTION = "invoices";
     public static final String TICKET_COLLECTION = "tickets";
     public static final String PROMOTION_COLLECTION = "promotions";
+    public static final String USER_COLLECTION = "users";
     public interface InvoiceCallbacks{
         void onSuccess(Invoice invoice);
         void onFailed(Exception e);
@@ -72,6 +73,7 @@ public class InvoiceModel extends Model{
         });
         Invoice invoice = new Invoice(id, userId, ticketId, promotionId, paymentMethod, paymentStatus, total[0]);
         database.child(INVOICE_COLLECTION).child(id).setValue(invoice.toMap()).addOnSuccessListener(aVoid -> {
+            database.child(USER_COLLECTION).child(userId).child("invoiceId").setValue(id);
             callback.onSuccess(invoice);
         }).addOnFailureListener(e -> {
             callback.onFailed(e);

@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
 
 public class MovieModel extends Model{
     private static final String TAG = "MovieModel";
@@ -39,6 +40,10 @@ public class MovieModel extends Model{
     }
     public interface ShowTimesCallbacks{
         void onSuccess(ArrayList<String> showTimes);
+        void onFailed(Exception e);
+    }
+    public interface GenreOfMovieCallbacks{
+        void onSuccess(ArrayList<String> genres);
         void onFailed(Exception e);
     }
     public MovieModel() {
@@ -171,6 +176,78 @@ public class MovieModel extends Model{
             }
         });
     }
+    public void getMovieByGenre(String genreId, MoviesCallbacks callbacks){
+        database.child(MOVIE_COLLECTION).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Movie> movies = new ArrayList<>();
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Movie movie = new Movie();
+                    JSONObject jsonObject = new JSONObject((Map) dataSnapshot.getValue());
+                    String id = dataSnapshot.getKey();
+                    String name = jsonObject.optString("name");
+                    int duration = jsonObject.optInt("duration");
+                    String genreIds = jsonObject.optString("genres");
+                    List<Genre> genres = new ArrayList<>();
+                    Gson gson = new Gson();
+                    Map<String, Map<String, String>> genreMap = gson.fromJson(genreIds, HashMap.class);
+                    for (Map.Entry<String, Map<String, String>> entry : genreMap.entrySet()) {
+                        String genre_id = entry.getKey();
+                        String genre_name = entry.getValue().get("name");
+                        Genre genre = new Genre(genre_id, genre_name);
+                        genres.add(genre);
+                    }
+                    List<String> temp_artists = Arrays.asList(jsonObject.optString("artists").split("[,\\[\\]\"]"));
+                    List<String> artists = new ArrayList<>();
+                    for (int i = 0; i < temp_artists.size(); i++) {
+                        if(!temp_artists.get(i).equals("")){
+                            artists.add(temp_artists.get(i));
+                        }
+                    }
+                    String startingDate = jsonObject.optString("startingDate");
+                    String endingDate = jsonObject.optString("endingDate");
+                    String trailer = jsonObject.optString("trailer");
+                    String image = jsonObject.optString("image");
+                    String sumary = jsonObject.optString("sumary");
+                    double rating = jsonObject.optDouble("rating");
+                    double price = jsonObject.optDouble("price");
+                    List<String> temp_showTimes = Arrays.asList(jsonObject.optString("showTime").split("[,{}]"));
+                    List<String> showTimes = new ArrayList<>();
+                    for(int i = 0; i < temp_showTimes.size(); i++){
+                        if(temp_showTimes.get(i).equals("")) continue;
+                        String[] parts = temp_showTimes.get(i).replace("\"", "").split(":");
+                        String replacedText = parts[0] + ":" + parts[1] + " ~ " + parts[2] + ":" + parts[3];
+                        showTimes.add(replacedText);
+                    }
+                    movie.setId(id);
+                    movie.setName(name);
+                    movie.setDuration(duration);
+                    movie.setGenres(genres);
+                    movie.setArtists(artists);
+                    movie.setStartingDate(startingDate);
+                    movie.setEndingDate(endingDate);
+                    movie.setTrailer(trailer);
+                    movie.setImage(image);
+                    movie.setSumary(sumary);
+                    movie.setRating(rating);
+                    movie.setPrice(price);
+                    movie.setShowTimes(showTimes);
+                    for(Genre genre : genres){
+                        if(genre.getId().equals(genreId)){
+                            movies.add(movie);
+                            break;
+                        }
+                    }
+                }
+                callbacks.onSuccess(movies);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callbacks.onFailed(error.toException());
+            }
+        });
+    }
     public void movieWithTime(String type, MoviesCallbacks callbacks){
         Date currentDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -251,6 +328,32 @@ public class MovieModel extends Model{
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                callbacks.onFailed(error.toException());
+            }
+        });
+    }
+    public void getGenresOfMovie(String movieId, GenreOfMovieCallbacks callbacks){
+        database.child(MOVIE_COLLECTION).child(movieId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.getValue() == null){
+                    return;
+                }
+                ArrayList<String> genres = new ArrayList<>();
+                JSONObject jsonObject = new JSONObject((Map) snapshot.getValue());
+                String genreIds = jsonObject.optString("genres");
+                Gson gson = new Gson();
+                Map<String, Map<String, String>> genreMap = gson.fromJson(genreIds, HashMap.class);
+                for (Map.Entry<String, Map<String, String>> entry : genreMap.entrySet()) {
+                    String genre_id = entry.getKey();
+                    genres.add(genre_id);
+                }
+                callbacks.onSuccess(genres);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "onCancelled: " + error.getMessage());
                 callbacks.onFailed(error.toException());
             }
         });

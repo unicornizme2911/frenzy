@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.example.myapplication.authentication.ForgotPasswordActivity;
 import com.example.myapplication.authentication.OTPVerifyActivity;
+import com.example.myapplication.entities.Movie;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.utlis.EmailUtils;
 import com.example.myapplication.utlis.PasswordUtils;
@@ -23,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,6 +41,7 @@ public class UserModel extends Model{
     public static final String TAG = "UserModel";
     private static final String USER_COLLECTION = "users";
     private PhoneAuthOptions phoneAuthOptions;
+    private final MovieModel movieModel = new MovieModel();
     public interface LoginCallbacks{
         void onSuccess(User user);
         void onFailed(Exception e);
@@ -54,6 +57,10 @@ public class UserModel extends Model{
     public interface CheckExistsCallbacks{
         void onExists();
         void onNotFound();
+    }
+    public interface SuggestionsCallbacks{
+        void onSuccess(ArrayList<Movie> movies);
+        void onFailed(Exception e);
     }
     public UserModel() {
         super();
@@ -77,7 +84,16 @@ public class UserModel extends Model{
                     while( keys.hasNext()){
                         String key = keys.next();
                         try {
-                            userMap.put(key, userObject.get(key));
+                            if (key.equals("movieIds") || key.equals("invoiceIds")) {
+                                JSONArray jsonArray = userObject.getJSONArray(key);
+                                List<String> listIds = new ArrayList<>();
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    listIds.add(jsonArray.getString(i));
+                                }
+                                userMap.put(key, listIds);
+                            } else {
+                                userMap.put(key, userObject.get(key));
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -87,7 +103,6 @@ public class UserModel extends Model{
                         try {
                             boolean isMatch = PasswordUtils.verifyPassword(password, user.getPassword());
                             if(isMatch && (user.getEmail().equals(value)|| user.getPhone().equals(value))){
-                                Log.e(TAG, "onDataChange: " + user.toString());
                                 callbacks.onSuccess(user);
                                 found = true;
                                 break;
@@ -259,7 +274,16 @@ public class UserModel extends Model{
                 while( keys.hasNext()){
                     String key = keys.next();
                     try {
-                        userMap.put(key, userObject.get(key));
+                        if (key.equals("movieIds") || key.equals("invoiceIds")) {
+                            JSONArray jsonArray = userObject.getJSONArray(key);
+                            List<String> listIds = new ArrayList<>();
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                listIds.add(jsonArray.getString(i));
+                            }
+                            userMap.put(key, listIds);
+                        } else {
+                            userMap.put(key, userObject.get(key));
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -297,6 +321,85 @@ public class UserModel extends Model{
                 });
             }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callbacks.onFailed(error.toException());
+            }
+        });
+    }
+    public void removeMovieFromFavorite(String uuid, String movieId, UserCallbacks callbacks){
+        database.child(USER_COLLECTION).child(uuid).child("movieIds").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> movieIds = (ArrayList<String>) snapshot.getValue();
+                if(movieIds == null){
+                    movieIds = new ArrayList<>();
+                }
+                if(!movieIds.contains(movieId)){
+                    callbacks.onFailed(new Exception("Movie not in favorite list"));
+                    return;
+                }
+                movieIds.remove(movieId);
+                database.child(USER_COLLECTION).child(uuid).child("movieIds").setValue(movieIds).addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        Log.e(TAG, "onDataChange: " + "remove movie from favorite success");
+                        callbacks.onSuccess(null);
+                    }else{
+                        callbacks.onFailed(task.getException());
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callbacks.onFailed(error.toException());
+            }
+        });
+    }
+    public void suggestMoviesByGenre(String uuid, SuggestionsCallbacks callbacks) {
+        database.child(USER_COLLECTION).child(uuid).child("movieIds").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> favoriteMovieIds = (ArrayList<String>) snapshot.getValue();
+                if(favoriteMovieIds == null){
+                    favoriteMovieIds = new ArrayList<>();
+                }
+                HashMap<String, Integer> genreCountMap = new HashMap<>();
+
+                for (String movieId : favoriteMovieIds) {
+                    movieModel.getGenresOfMovie(movieId, new MovieModel.GenreOfMovieCallbacks() {
+                        @Override
+                        public void onSuccess(ArrayList<String> genres) {
+                            for(String genre : genres){
+                                int count = genreCountMap.getOrDefault(genre, 0) + 1;
+                                genreCountMap.put(genre, count);
+                            }
+                            String mostWatchedGenre = "";
+                            int maxCount = 0;
+                            for (Map.Entry<String, Integer> entry : genreCountMap.entrySet()) {
+                                if (entry.getValue() > maxCount) {
+                                    mostWatchedGenre = entry.getKey();
+                                    maxCount = entry.getValue();
+                                }
+                            }
+                            movieModel.getMovieByGenre(mostWatchedGenre, new MovieModel.MoviesCallbacks() {
+                                @Override
+                                public void onSuccess(ArrayList<Movie> movie) {
+                                    callbacks.onSuccess(movie);
+                                }
+                                @Override
+                                public void onFailed(Exception e) {
+                                    callbacks.onFailed(e);
+                                }
+                            });
+                        }
+                        @Override
+                        public void onFailed(Exception e) {
+                            Log.e(TAG, "onFailed: " + e.getMessage());
+                        }
+                    });
+                }
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 callbacks.onFailed(error.toException());
