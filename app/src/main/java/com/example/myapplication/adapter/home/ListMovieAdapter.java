@@ -58,8 +58,6 @@ public class ListMovieAdapter extends RecyclerView.Adapter<ListMovieAdapter.MyVi
         Glide.with(context)
                 .load(Uri.parse(movie.getImage()))
                 .into(holder.ig_poster);
-        Log.d(TAG,movie.toString());
-        Log.d(TAG,holder.ig_poster.toString());
         holder.ig_poster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

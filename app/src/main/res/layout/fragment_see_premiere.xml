@@ -21,12 +21,14 @@
         app:layout_constraintStart_toStartOf="parent"
         android:orientation="vertical">
         <ImageButton
+            android:id="@+id/ib_calendar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/baseline_calendar_month_24">
         </ImageButton>
         <TextView
+            android:id="@+id/tv_showdate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -35,42 +37,78 @@
     </LinearLayout>
     <LinearLayout
         android:id="@+id/LN2_premiere"
-        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/LN1_premiere"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:paddingLeft="20dp">
-
+        android:padding="20dp"
+        android:orientation="vertical">
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/red"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="Chọn rạp"
             android:textStyle="bold"
-            android:textSize="20sp"
-            android:textColor="@color/grey_dark"
-            android:text="Time"/>
-        <TextView
-            android:layout_weight="3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:textColor="@color/grey_dark"
-            android:text="Cinema"/>
+            android:textSize="20sp">
+        </TextView>
+        <Spinner
+            android:id="@+id/spinnerTheater"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/combined_background_spinner"
+            android:imeOptions="actionDone|flagNoExtractUi"
+            android:rotation="0"
+            android:outlineAmbientShadowColor="@color/black"
+            android:outlineSpotShadowColor="@color/black"
+            android:scrollbars="vertical"
+            android:spinnerMode="dropdown" />
     </LinearLayout>
     <LinearLayout
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/LN2_premiere"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_home_phimrandom"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical">
+        <TextView
+            android:textColor="@color/red"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-/>
+            android:text="Chọn giờ"
+            android:textStyle="bold"
+            android:textSize="20sp">
+
+        </TextView>
+        <Spinner
+            android:id="@+id/spinnerTimeOfMovie"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/combined_background_spinner"
+            android:imeOptions="actionDone|flagNoExtractUi"
+            android:rotation="0"
+            android:scrollbars="vertical"
+            android:spinnerMode="dropdown" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_chonghe"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cornerRadius="10dp"
+            app:strokeWidth="1dp"
+            app:backgroundTint="@color/red"
+            android:text="Chọn chỗ ngồi"
+            android:textColor="@color/white"
+            >
+
+        </com.google.android.material.button.MaterialButton>
+
     </LinearLayout>
 
 

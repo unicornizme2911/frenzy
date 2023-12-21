@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="#E3DDF1"
     android:orientation="vertical">
 
@@ -219,27 +219,6 @@
                             android:text="Tình yêu" />
                     </LinearLayout>
 
-<!--                    <LinearLayout-->
-<!--                        android:layout_marginTop="15dp"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:orientation="horizontal">-->
-<!--                        <TextView-->
-<!--                            android:id="@+id/tv_director"-->
-<!--                            android:layout_width="150dp"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="Đạo diễn"-->
-<!--                            android:textStyle="bold"-->
-
-<!--                            />-->
-<!--                        <TextView-->
-<!--                            android:id="@+id/tv_name_director"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="CiPu ne" />-->
-
-<!--                    </LinearLayout>-->
-
                     <LinearLayout
                         android:layout_marginTop="15dp"
                         android:layout_width="match_parent"
@@ -289,7 +268,7 @@
     </androidx.core.widget.NestedScrollView>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:orientation="horizontal"
         >
         <com.google.android.material.button.MaterialButton

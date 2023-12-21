@@ -25,7 +25,7 @@ public class DetailUserFragment extends Fragment {
     public DetailUserFragment(String id){
         this.id = id;
     }
-    private static final String TAG = "FragHome2";
+    private static final String TAG = "DetailUserFragment";
 
 
 

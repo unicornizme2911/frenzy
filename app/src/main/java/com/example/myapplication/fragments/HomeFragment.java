@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
-    private static final String TAG = "Home Fragment";
+    private static final String TAG = "HomeFragment";
     private String id;
     private final HomeFragment homeFragment = this;
     private final MovieModel movieModel = new MovieModel();
