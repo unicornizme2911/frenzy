@@ -46,7 +46,6 @@ public class PremiereAdapter extends RecyclerView.Adapter<PremiereAdapter.Premie
         private TextView tvTime, tvCinema;
         public PremiereViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTime =itemView.findViewById(R.id.tv_premiereMovie);
             tvCinema = itemView.findViewById(R.id.tv_cinema);
         }
     }

@@ -1,32 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:background="@color/black"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/LN2_premiere"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <LinearLayout
-        android:id="@+id/LN2_premiere"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    android:orientation="vertical"
+    android:paddingLeft="0dp">
+    <TextView
+        android:textColor="@color/white"
+        android:id="@+id/tv_cinema"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@color/grey_dark"
-        app:layout_constraintStart_toStartOf="parent"
-        android:paddingLeft="20dp">
-        <TextView
-            android:id="@+id/tv_premiereMovie"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:text="14:00"/>
-        <TextView
-            android:id="@+id/tv_cinema"
-            android:layout_weight="3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:text="Frenzy Quan 7"/>
-    </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:text="Frenzy Quan 7"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/grey_dark" />
+</LinearLayout>

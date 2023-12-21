@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background Color -->
+    <item android:drawable="@color/black" />
+    <item android:drawable="@color/black"></item>
+    <!-- btn_dropdown -->
+    <item android:drawable="@android:drawable/btn_dropdown" android:height="40dp"/>
+</layer-list>
