@@ -200,17 +200,21 @@ public class UserModel extends Model{
         database.child(USER_COLLECTION).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean isFound = false;
                 for(DataSnapshot dataSnapshot: snapshot.getChildren()){
                     String phoneUser = (String) dataSnapshot.child("phone").getValue();
                     if(phoneUser != null){
                         if(phoneUser.equals(phone)){
+                            isFound = true;
                             callbacks.onExists();
                             break;
                         }
                     }
                 }
+                if (!isFound){
+                    callbacks.onNotFound();
+                }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 callbacks.onNotFound();

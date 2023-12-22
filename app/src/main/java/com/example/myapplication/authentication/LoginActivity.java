@@ -50,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
         btnDangNhap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 String txt_username = username.getText().toString();
                 String txt_password = password.getText().toString();
                 Log.d(TAG, txt_username);
