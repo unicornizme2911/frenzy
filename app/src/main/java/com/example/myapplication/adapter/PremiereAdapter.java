@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.adapter.home.ListMovieAdapter;
 import com.example.myapplication.entities.Movie;
 
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class PremiereAdapter extends RecyclerView.Adapter<PremiereAdapter.Premie
     @NonNull
     @Override
     public PremiereAdapter.PremiereViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_image_movie, parent, false);
         return null;
     }
 

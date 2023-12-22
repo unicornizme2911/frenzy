@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="0dp"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_weight="1"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -25,9 +25,9 @@
             app:srcCompat="@drawable/ic_arrow_back_white" />
         <TextView
             android:layout_width="0dp"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_weight="8"
-            android:text="Phim"
+            android:text="Chọn rạp"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/red"
@@ -45,7 +45,7 @@
         app:layout_constraintTop_toBottomOf="@+id/LN1"
         android:orientation="horizontal">
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_list_movie_follow"
+            android:id="@+id/rv_list_theater"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -53,7 +53,6 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="20dp"/>
-
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

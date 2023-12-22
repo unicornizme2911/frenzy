@@ -13,20 +13,19 @@ import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.activity.PaymentHistoryActivity;
+import com.example.myapplication.authentication.LoginActivity;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.models.UserModel;
 
 
 public class DetailUserFragment extends Fragment {
     private User user;
-    private TextView name;
+    private TextView name,logout;
     private final UserModel userModel = new UserModel();
     public DetailUserFragment(User user){
         this.user = user;
     }
     private static final String TAG = "DetailUserFragment";
-
-
 
     @Nullable
     @Override
@@ -36,10 +35,7 @@ public class DetailUserFragment extends Fragment {
         Listener(view);
         name = view.findViewById(R.id.tv_name);
         fillData();
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), PaymentHistoryActivity.class);
-        view.findViewById(R.id.LN_history_payment).setOnClickListener(view1 ->
-                changeFragment(new PaymentHistoryFragment(user)));
+
         return view;
     }
     private void fillData(){
@@ -59,6 +55,17 @@ public class DetailUserFragment extends Fragment {
     private void Listener(View view){
         view.findViewById(R.id.iv_close).setOnClickListener(view1 -> changeFragment(new HomeFragment(user)));
         view.findViewById(R.id.iv_home).setOnClickListener(view1 -> changeFragment(new HomeFragment(user)));
+        view.findViewById(R.id.LN_history_payment).setOnClickListener(view1 -> changeFragment(new PaymentHistoryFragment(user)));
+        view.findViewById(R.id.LN2_movieFollow).setOnClickListener(view1 -> changeFragment(new MovieFollowFragment(user)));
+        view.findViewById(R.id.LN_choose_theater).setOnClickListener(view1 -> changeFragment(new TheaterFragment(user)));
+        view.findViewById(R.id.tv_logout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+
+            }
+        });
     }
 
     private void init(View view) {

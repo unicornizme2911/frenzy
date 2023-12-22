@@ -12,19 +12,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.entities.Theater;
+import com.example.myapplication.fragments.TheaterFragment;
 
 import java.util.ArrayList;
 
 public class ListTheatersAdapter extends RecyclerView.Adapter<ListTheatersAdapter.MyViewHolder> {
     private final Context context;
     private ArrayList<Theater> theaters;
+    private Theater theater;
     private static final String TAG = "ListTheatersAdapter";
     public ListTheatersAdapter(Context context, ArrayList<Theater> theaters) {
         this.context = context;
         this.theaters = theaters;
     }
 
+    public interface OnTheaterListener{
+        void OnTheater(Theater theater );
+    }
+    private OnTheaterListener listener;
 
+    public void OnSetTheatersListener(OnTheaterListener  listener) {
+        this.listener = listener;
+    }
 
     private TextView nameTheater;
     @NonNull
@@ -40,6 +49,12 @@ public class ListTheatersAdapter extends RecyclerView.Adapter<ListTheatersAdapte
         Theater theater = theaters.get(position);
         Log.d(TAG, "onBindViewHolder: "+theater);
         holder.theater.setText(theater.getName());
+        holder.theater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.OnTheater(theater);
+            }
+        });
     }
 
 

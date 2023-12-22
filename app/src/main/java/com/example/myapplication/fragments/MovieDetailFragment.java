@@ -10,6 +10,8 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -36,7 +38,9 @@ public class MovieDetailFragment extends Fragment {
         this.user = user;
         this.movie = movie;
     }
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie_detail_info, container, false);
         timeMovie = view.findViewById(R.id.tv_timeMovie);
         dayMovie = view.findViewById(R.id.tv_dayMovie);
@@ -51,7 +55,6 @@ public class MovieDetailFragment extends Fragment {
         back = view.findViewById(R.id.iv_back);
         nameMovie = view.findViewById(R.id.tv_nameMovie);
         follow = view.findViewById(R.id.btn_theodoi);
-        Log.d(TAG, "onCreateView: "+movie.getId());
         movieModel.getMovie(movie.getId(), new MovieModel.MovieCallbacks() {
             @Override
             public void onSuccess(Movie movie) {
@@ -93,10 +96,10 @@ public class MovieDetailFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         follow.setText("Đã theo dỗi");
-                        Log.d(TAG, "onClick: "+ movie.getName());
                         userModel.addMovieToFavorite(user.getUuid(), movie.getId(), new UserModel.UserCallbacks() {
                             @Override
-                            public void onSuccess(User user) {
+                            public void onSuccess(User userloi) {
+                                user.getMovieIds().add(movie.getId());
                             }
 
                             @Override
@@ -118,14 +121,9 @@ public class MovieDetailFragment extends Fragment {
     }
     private void changeFragment(Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//        for(int i =0; i <= fragmentManager.getBackStackEntryCount(); i++){
-//            fragmentManager.popBackStack();
-//        }
         fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
                 .commit();
-//        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-//        .commit();
 
     }
     private void init(View view){
