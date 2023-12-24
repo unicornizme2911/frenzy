@@ -43,8 +43,6 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText phone;
     private EditText email;
     private Context context;
-
-
     private EditText password;
     private EditText khuvuc;
     private EditText birthday;
@@ -194,7 +192,6 @@ public class RegisterActivity extends AppCompatActivity {
                 dayOfMonth, month, year);
         // Hiển thị DatePickerDialog
         datePickerDialog.show();
-
     }
 
 }

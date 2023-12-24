@@ -426,4 +426,14 @@ public class UserModel extends Model{
             }
         });
     }
+    public void changeAvatar(String uuid, String avatar, UserCallbacks callbacks){
+        database.child(USER_COLLECTION).child(uuid).child("avatar").setValue(avatar).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.e(TAG, "onComplete: " + "change avatar success");
+                callbacks.onSuccess(null);
+            } else {
+                callbacks.onFailed(task.getException());
+            }
+        });
+    }
 }
