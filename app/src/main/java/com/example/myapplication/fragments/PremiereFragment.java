@@ -103,29 +103,28 @@ public class PremiereFragment extends Fragment {
                         listTheaters.add(theater3.getName());
                     }
                     Log.d(TAG, "onSuccess:ListT "+listTheaters);
+                    ArrayAdapter<String> staticAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, listTheaters);
+                    staticAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    Spinner spnTheater= view.findViewById(R.id.spinnerTheater);
+                    spnTheater.setAdapter(staticAdapter);
+                    spnTheater.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            String theaterSelected = parent.getItemAtPosition(position).toString();
+                            Log.d(TAG, "onItemSelected: "+theaterSelected);
+                            listener.onTheaterSelected(theaterSelected);
+                        }
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+                        }
+                    });
+
                 }
                 @Override
                 public void onFailed(Exception e) {
 
                 }
             });
-            Log.d(TAG, "getTheater: "+listTheaters);
-            ArrayAdapter<String> staticAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, listTheaters);
-            staticAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            Spinner spnTheater= view.findViewById(R.id.spinnerTheater);
-            spnTheater.setAdapter(staticAdapter);
-            spnTheater.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    String theaterSelected = parent.getItemAtPosition(position).toString();
-                    Log.d(TAG, "onItemSelected: "+theaterSelected);
-                    listener.onTheaterSelected(theaterSelected);
-                }
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            });
-
         }
     }
     private void getTimeOfMovie(View view, OnTimeSelectedListener listener, Movie movie,int check) {

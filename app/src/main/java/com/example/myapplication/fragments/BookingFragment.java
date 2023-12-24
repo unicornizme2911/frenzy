@@ -23,11 +23,15 @@ import com.example.myapplication.entities.User;
 import com.example.myapplication.models.InvoiceModel;
 import com.example.myapplication.models.TicketModel;
 import com.google.android.material.button.MaterialButton;
+import com.google.gson.Gson;
 
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class BookingFragment extends Fragment {
     private static final String TAG = "BookingFragment";
@@ -62,11 +66,25 @@ public class BookingFragment extends Fragment {
         book = view.findViewById(R.id.btn_Datve);
         init(view);
         getSeat(view);
-        getSeatIsExits();
-        Log.e(TAG, "onCreateView: "+seatIsExit);
-        RecyclerView recyclerView = view.findViewById(R.id.rv_list_seat);
-        recyclerView.setAdapter(seatAdapter);
-        listener();
+        ticketModel.getSeatIsBooked(theater, movie.getId(), date, time, new TicketModel.SeatCallbacks() {
+            @Override
+            public void onSuccess(ArrayList<String> seats) {
+                for(String seat : seats){
+                    Gson gson = new Gson();
+                    Type type = gson.fromJson(seat, Map.class).getClass();
+                    Map<String, Object> map = gson.fromJson(seat, type);
+                    seatIsExit.add(map.get("seatName").toString());
+                }
+                Log.e(TAG, "onCreateView: "+seatIsExit);
+                RecyclerView recyclerView = view.findViewById(R.id.rv_list_seat);
+                recyclerView.setAdapter(seatAdapter);
+                listener();
+            }
+            @Override
+            public void onFailed(Exception e) {
+                Log.d(TAG, "onFailed: " + e.getMessage());
+            }
+        });
         return view;
     }
     private void listener(){
@@ -115,23 +133,4 @@ public class BookingFragment extends Fragment {
             seat.add("E" + String.valueOf(i));
         }
     }
-    private void getSeatIsExits(){
-        Log.e(TAG, "getSeatIsExits: "+movie.getId()+theater);
-
-        ticketModel.getSeatIsBooked(theater, movie.getId(), date, time, new TicketModel.SeatCallbacks() {
-            @Override
-            public void onSuccess(ArrayList<String> seats) {
-                for(String seat:seats){
-                    seatIsExit.add(seat);
-                    Log.e(TAG, "onSuccess: Haha ");
-
-                }
-            }
-            @Override
-            public void onFailed(Exception e) {
-                Log.e(TAG, "onFailed: Heheheheh" );
-            }
-        });
-    }
-
 }
