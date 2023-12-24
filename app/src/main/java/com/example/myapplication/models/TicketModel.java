@@ -39,7 +39,7 @@ public class TicketModel extends Model{
         super(database);
     }
 
-    public void createTicket(String userId, String movieId, String theaterId, String seatNumber, String date, String time, TicketCallbacks callback){
+    public void createTicket(String userId, String movieId, String theaterName, String seatNumber, String date, String time, TicketCallbacks callback){
         String id = UUID.randomUUID().toString().toUpperCase().substring(0,8);
         final double[] ticketPrice = {0};
         database.child("movies").child(movieId).addValueEventListener(new ValueEventListener() {
@@ -57,7 +57,7 @@ public class TicketModel extends Model{
                 if(seat.isVip(row, col)){
                     ticketPrice[0] += 45000;
                 }
-                Ticket ticket = new Ticket(id, movieId, theaterId, userId, seatNumber, ticketPrice[0], date, time);
+                Ticket ticket = new Ticket(id, movieId, theaterName, userId, seatNumber, ticketPrice[0], date, time);
                 DatabaseReference query = database.child(TICKET_COLLECTION).child(id);
                 query.setValue(ticket).addOnSuccessListener(aVoid -> {
                     callback.onSuccess(ticket);
@@ -73,19 +73,19 @@ public class TicketModel extends Model{
             }
         });
     }
-    public void getSeatIsBooked(String theaterId, String movieId, String date, String time, SeatCallbacks callback){
+    public void getSeatIsBooked(String theaterName, String movieId, String date, String time, SeatCallbacks callback){
         ArrayList<String> seatIsBooked = new ArrayList<>();
         database.child(TICKET_COLLECTION).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     JSONObject jsonObject = new JSONObject((Map) dataSnapshot.getValue());
-                    String theater = jsonObject.optString("theaterId");
+                    String theater = jsonObject.optString("theaterName");
                     String movie = jsonObject.optString("movieId");
                     String bookingDate = jsonObject.optString("bookingDate");
                     String showTime = jsonObject.optString("showTime");
                     String seat = jsonObject.optString("seat");
-                    if(theater.equals(theaterId) && movie.equals(movieId) && bookingDate.equals(date) && showTime.equals(time)){
+                    if(theater.equals(theaterName) && movie.equals(movieId) && bookingDate.equals(date) && showTime.equals(time)){
                         seatIsBooked.add(seat);
                     }
                 }

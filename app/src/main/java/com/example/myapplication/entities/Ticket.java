@@ -7,7 +7,7 @@ import java.util.Map;
 public class Ticket implements Serializable {
     private String id;
     private String movieId;
-    private String theaterId;
+    private String theaterName;
     private String userId;
     private String seat;
     private double ticketPrice;
@@ -16,19 +16,19 @@ public class Ticket implements Serializable {
 
     public Ticket() {
     }
-    public Ticket(String id, String movieId, String theaterId, String userId, String seat, double ticketPrice, String bookingDate, String showTime) {
+    public Ticket(String id, String movieId, String theaterName, String userId, String seat, double ticketPrice, String bookingDate, String showTime) {
         this.id = id;
         this.movieId = movieId;
-        this.theaterId = theaterId;
+        this.theaterName = theaterName;
         this.userId = userId;
         this.seat = seat;
         this.ticketPrice = ticketPrice;
         this.bookingDate = bookingDate;
         this.showTime = showTime;
     }
-    public Ticket(String movieId, String theaterId, String userId, String seat, double ticketPrice, String bookingDate, String showTime) {
+    public Ticket(String movieId, String theaterName, String userId, String seat, double ticketPrice, String bookingDate, String showTime) {
         this.movieId = movieId;
-        this.theaterId = theaterId;
+        this.theaterName = theaterName;
         this.userId = userId;
         this.seat = seat;
         this.ticketPrice = ticketPrice;
@@ -39,7 +39,7 @@ public class Ticket implements Serializable {
         this(
                 ticketMap.get("id").toString(),
                 ticketMap.get("movieId").toString(),
-                ticketMap.get("theaterId").toString(),
+                ticketMap.get("theaterName").toString(),
                 ticketMap.get("userId").toString(),
                 ticketMap.get("seat").toString(),
                 Double.parseDouble(ticketMap.get("ticketPrice").toString()),
@@ -51,7 +51,7 @@ public class Ticket implements Serializable {
         HashMap<String, Object> result = new HashMap<>();
         result.put("id", id);
         result.put("movieId", movieId);
-        result.put("theaterId", theaterId);
+        result.put("theaterName", theaterName);
         result.put("userId", userId);
         result.put("seat", seat);
         result.put("ticketPrice", ticketPrice);
@@ -76,12 +76,12 @@ public class Ticket implements Serializable {
         this.movieId = movieId;
     }
 
-    public String getTheaterId() {
-        return theaterId;
+    public String getTheaterName() {
+        return theaterName;
     }
 
-    public void setTheaterId(String theaterId) {
-        this.theaterId = theaterId;
+    public void setTheaterName(String theaterName) {
+        this.theaterName = theaterName;
     }
 
     public String getUserId() {
@@ -129,7 +129,7 @@ public class Ticket implements Serializable {
         return "Ticket{" +
                 "id='" + id + '\'' +
                 ", movieId='" + movieId + '\'' +
-                ", theaterId='" + theaterId + '\'' +
+                ", theaterName='" + theaterName + '\'' +
                 ", seat='" + seat + '\'' +
                 ", ticketPrice=" + ticketPrice +
                 ", bookingDate=" + bookingDate +
