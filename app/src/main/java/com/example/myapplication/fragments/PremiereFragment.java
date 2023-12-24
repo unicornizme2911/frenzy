@@ -64,7 +64,7 @@ public class PremiereFragment extends Fragment {
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view2) {
-                Log.d(TAG, "onClick: "+"Hello");
+//                Log.d(TAG, "onClick: "+"Hello");
                 showDatePickerDialog(view);
             }
         });
@@ -88,30 +88,29 @@ public class PremiereFragment extends Fragment {
 //        this.listener = listener;
 //    }
     private void getTheater(View view, OnTheaterSelectedListener listener,int check) {
-        Log.d(TAG, "getTheater: "+check);
+//        Log.d(TAG, "getTheater: "+check);
         if(check == 1){
             List<String> time = movie.getShowTimes();
             List<String> theater = new ArrayList<>();
 //            ArrayAdapter<String> staticAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, theater);
 //            staticAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         }else{
-//            ArrayList<String> listTheaters = new ArrayList<>();
-//            theaterModel.getAllTheaters(new TheaterModel.TheatersCallbacks() {
-//                @Override
-//                public void onSuccess(ArrayList<Theater> theaters) {
-//                    for (Theater theater3:theaters) {
-//                        listTheaters.add(theater3.getName());
-//                    }
-//                    Log.d(TAG, "onSuccess:ListT "+listTheaters);
-//                }
-//
-//                @Override
-//                public void onFailed(Exception e) {
-//
-//                }
-//            });
-//            Log.d(TAG, "getTheater: "+listTheaters);
-            ArrayAdapter<CharSequence> staticAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.theater_array, android.R.layout.simple_spinner_item);
+            ArrayList<String> listTheaters = new ArrayList<>();
+            theaterModel.getAllTheaters(new TheaterModel.TheatersCallbacks() {
+                @Override
+                public void onSuccess(ArrayList<Theater> theaters) {
+                    for (Theater theater3:theaters) {
+                        listTheaters.add(theater3.getName());
+                    }
+                    Log.d(TAG, "onSuccess:ListT "+listTheaters);
+                }
+                @Override
+                public void onFailed(Exception e) {
+
+                }
+            });
+            Log.d(TAG, "getTheater: "+listTheaters);
+            ArrayAdapter<String> staticAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, listTheaters);
             staticAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             Spinner spnTheater= view.findViewById(R.id.spinnerTheater);
             spnTheater.setAdapter(staticAdapter);
@@ -130,7 +129,7 @@ public class PremiereFragment extends Fragment {
         }
     }
     private void getTimeOfMovie(View view, OnTimeSelectedListener listener, Movie movie,int check) {
-        Log.d(TAG, "getTimeOfMovie: "+check);
+//        Log.d(TAG, "getTimeOfMovie: "+check);
         if(check == 1){
             List<String> time = movie.getShowTimes();
             List<String> timeofmovie = new ArrayList<>();
@@ -203,7 +202,7 @@ public class PremiereFragment extends Fragment {
                         },movie,checkdate);
 
 
-                        Log.d(TAG, "onDateSet: "+checkdate);
+//                        Log.d(TAG, "onDateSet: "+checkdate);
                         if(year >= yearStart){
                             Log.d(TAG, "onDateSet: year start");
                             if(month >= monthStart){
@@ -221,7 +220,6 @@ public class PremiereFragment extends Fragment {
                                                 getTheater(view, theater -> {
                                                     theaterSelected[0] = theater;
                                                     Log.e(TAG, "onCreateView: " + theaterSelected[0]);
-
                                                 },checkdate);
 
                                                 getTimeOfMovie(view, time -> {

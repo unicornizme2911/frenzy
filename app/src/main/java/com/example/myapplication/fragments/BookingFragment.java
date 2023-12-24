@@ -43,6 +43,8 @@ public class BookingFragment extends Fragment {
     private TicketModel ticketModel = new TicketModel();
     private List<String> tickets = new ArrayList<>();
     private InvoiceModel invoiceModel = new InvoiceModel();
+    private ArrayList<String> seatIsExit = new ArrayList<>();
+    private ListSeatAdapter seatAdapter = new ListSeatAdapter(bookingFragment.getContext(),seat,seatIsExit);
 
     public BookingFragment(Movie movie, User user, String time, String date, String theater){
         this.user = user;
@@ -60,23 +62,29 @@ public class BookingFragment extends Fragment {
         book = view.findViewById(R.id.btn_Datve);
         init(view);
         getSeat(view);
+        getSeatIsExits();
+        Log.e(TAG, "onCreateView: "+seatIsExit);
         RecyclerView recyclerView = view.findViewById(R.id.rv_list_seat);
-        ListSeatAdapter seatAdapter = new ListSeatAdapter(bookingFragment.getContext(),seat);
         recyclerView.setAdapter(seatAdapter);
+        listener();
+        return view;
+    }
+    private void listener(){
         seatAdapter.OnSetClickBookListener(new ListSeatAdapter.OnBookingListener() {
             @Override
             public void OnBooking(String seatName) {
+                Log.e(TAG, "OnBooking: "+seatName );
                 seatPick.add(seatName);
             }
         });
         book.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.e(TAG, "onClick Book: "+seatPick );
                 changeFragment(new PaymentFragment(movie,user,time,date,theater,seatPick));
             }
         });
 
-        return view;
     }
     private void init(View view){
         title.setText(movie.getName());
@@ -106,6 +114,24 @@ public class BookingFragment extends Fragment {
         for(int i =1;i<9;i++) {
             seat.add("E" + String.valueOf(i));
         }
+    }
+    private void getSeatIsExits(){
+        Log.e(TAG, "getSeatIsExits: "+movie.getId()+theater);
+
+        ticketModel.getSeatIsBooked(theater, movie.getId(), date, time, new TicketModel.SeatCallbacks() {
+            @Override
+            public void onSuccess(ArrayList<String> seats) {
+                for(String seat:seats){
+                    seatIsExit.add(seat);
+                    Log.e(TAG, "onSuccess: Haha ");
+
+                }
+            }
+            @Override
+            public void onFailed(Exception e) {
+                Log.e(TAG, "onFailed: Heheheheh" );
+            }
+        });
     }
 
 }

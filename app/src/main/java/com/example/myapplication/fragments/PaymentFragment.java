@@ -25,6 +25,7 @@ import com.example.myapplication.entities.Movie;
 import com.example.myapplication.entities.Ticket;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.models.InvoiceModel;
+import com.example.myapplication.models.MovieModel;
 import com.example.myapplication.models.TicketModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -32,6 +33,7 @@ import com.google.firebase.database.collection.LLRBNode;
 
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PaymentFragment extends Fragment {
     private static final String TAG = "PaymentFragment";
@@ -44,6 +46,12 @@ public class PaymentFragment extends Fragment {
     private InvoiceModel invoiceModel = new InvoiceModel();
     private ArrayList<String> seats = new ArrayList<>();
     private ArrayList<String> ticketsID = new ArrayList<>();
+    private ImageView iv_poster,back;
+    private TextView tv_title,tv_date,tv_time,tv_theater,tv_seats,tv_total,tv_quantity,tv_total2;
+    private MaterialButton thanhtoan;
+    private long tongtien =0;
+    private LinearLayout momo,zalo;
+    private MovieModel movieModel = new MovieModel();
     public PaymentFragment(Movie movie, User user, String time, String date, String theater, ArrayList<String> seats){
         this.movie = movie;
         this.time = time;
@@ -52,21 +60,16 @@ public class PaymentFragment extends Fragment {
         this.seats = seats;
         this.user = user;
     }
-    private ImageView iv_poster,back;
-    private TextView tv_title,tv_date,tv_time,tv_theater,tv_seats,tv_total,tv_quantity,tv_total2;
-    private MaterialButton thanhtoan;
-    private long tongtien =0;
-    private LinearLayout momo,zalo;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_payment, container, false);
         init(view);
-        Log.e(TAG, "onCreateView: "+user );
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeFragment(new DetailUserFragment(user));
+                changeFragment(new BookingFragment(movie,user,time,date,theater));
             }
         });
         momo.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +95,7 @@ public class PaymentFragment extends Fragment {
                     Toast.makeText(view.getContext(),"Select a payment method",Toast.LENGTH_LONG).show();
                 }else{
                     createTickets();
-                    createInvoic();
+                    changeFragment(new InformationTicketFragment(movie,user,time,date,theater,seats));
                 }
             }
         });
@@ -104,7 +107,7 @@ public class PaymentFragment extends Fragment {
                 .addToBackStack(null)
                 .commit();
     }
-    private  void createInvoic(){
+    private  void createInvoice(){
         invoiceModel.createInvoice(user.getUuid(), ticketsID, "0", phuongthuc, "Done", new InvoiceModel.InvoiceCallbacks() {
             @Override
             public void onSuccess(Invoice invoice) {
@@ -118,11 +121,19 @@ public class PaymentFragment extends Fragment {
         });
     }
     private void createTickets(){
+        final int[] a = {seats.size()};
+        AtomicInteger process = new AtomicInteger(0);
         for (String aSeat:seats) {
+            Log.e(TAG, "createTickets: "+user.getUuid()+movie.getId()+theater);
             ticketModel.createTicket(user.getUuid(), movie.getId(), theater, aSeat, date, time, new TicketModel.TicketCallbacks() {
                 @Override
                 public void onSuccess(Ticket ticket) {
                     ticketsID.add(ticket.getId());
+
+                    int count = process.incrementAndGet();
+                    if(count == a[0]){
+                        createInvoice();
+                    }
                     Log.d(TAG, "onSuccess CreateTicket: "+ticket);
                 }
 
@@ -131,8 +142,8 @@ public class PaymentFragment extends Fragment {
 
                 }
             });
-
         }
+
     }
     private void init(View view){
         momo = view.findViewById(R.id.LN_Momo);
@@ -157,25 +168,32 @@ public class PaymentFragment extends Fragment {
         tv_theater.setText(theater);
         tv_seats.setText(seats.toString());
         tv_quantity.setText(String.valueOf(seats.size()));
+        final int[] a = {seats.size()};
+        AtomicInteger process = new AtomicInteger(0);
         for(String seat:seats){
             checkSeat(seat);
+            int count = process.incrementAndGet();
+            if(count == a[0]){
+                Log.e(TAG, "init: "+tongtien );
+
+            }
         }
-        tv_total.setText(String.valueOf(tongtien));
-        tv_total2.setText(String.valueOf(tongtien));
+
     }
     private void checkSeat(String aSeat){
-        long moneyforaSeat = 0;
-        String col = aSeat.substring(0,1);
-        String cow = aSeat.substring(1,2);
-        if(col.equalsIgnoreCase("C") || col.equalsIgnoreCase("D") || col.equalsIgnoreCase("B")){
-            if(cow.equalsIgnoreCase("4") || cow.equalsIgnoreCase("5") || cow.equalsIgnoreCase("6") || cow.equalsIgnoreCase("3")){
-                moneyforaSeat = 90000;
-            }else{
-                moneyforaSeat = 45000;
+        movieModel.getMovie(movie.getId(), new MovieModel.MovieCallbacks() {
+            @Override
+            public void onSuccess(Movie movie2) {
+                tongtien+= movie.getPrice();
+                tv_total.setText(String.valueOf(tongtien));
+                tv_total2.setText(String.valueOf(tongtien));
+                Log.e(TAG, "onSuccess: "+tongtien );
             }
-        }else {
-            moneyforaSeat = 45000;
-        }
-        tongtien += moneyforaSeat;
+
+            @Override
+            public void onFailed(Exception e) {
+
+            }
+        });
     }
 }
