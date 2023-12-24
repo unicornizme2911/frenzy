@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Frenzy</string>
     <string-array name="theater_array">
-        <item>"BHD"</item>
-        <item>"CGV"</item>
-        <item>"Lotte"</item>
-        <item>"Galaxy"</item>
+        <item>"BHD Long Xuyên"</item>
+        <item>"CGV Chợ Mới"</item>
+        <item>"Lotte Mỹ Luông"</item>
+        <item>"Galaxy Tịnh Biên"</item>
     </string-array>
     <string-array name="wrong">
     </string-array>

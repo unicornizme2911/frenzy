@@ -44,7 +44,7 @@ public class MovieFollowFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie_follow, container, false);
-        view.findViewById(R.id.iv_back).setOnClickListener(view1 -> changeFragment(new HomeFragment(user)));
+        view.findViewById(R.id.iv_back).setOnClickListener(view1 -> changeFragment(new DetailUserFragment(user)));
         init(view);
         downlist();
         return view;
@@ -70,9 +70,6 @@ public class MovieFollowFragment extends Fragment {
             @Override
             public void onSuccess(ArrayList<Movie> movies) {
                 Log.e(TAG, "onSuccess: "+ user.getMovieIds().size());
-                for (Movie movie: movies) {
-
-                }
                 for(String idMovie:user.getMovieIds()){
                     for(int i =0; i< movies.size();i++){
                         if(idMovie.equals(movies.get(i).getId())){

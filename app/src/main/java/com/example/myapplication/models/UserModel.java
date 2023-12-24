@@ -209,11 +209,13 @@ public class UserModel extends Model{
                             callbacks.onExists();
                             break;
                         }
+                    }else if (!isFound){
+                        callbacks.onNotFound();
                     }
-                }
-                if (!isFound){
+                }if (!isFound) {
                     callbacks.onNotFound();
                 }
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

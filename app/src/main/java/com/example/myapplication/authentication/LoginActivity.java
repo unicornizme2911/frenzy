@@ -20,6 +20,7 @@ import com.example.myapplication.models.TicketModel;
 import com.example.myapplication.models.UserModel;
 import com.example.myapplication.utlis.EmailUtils;
 import com.example.myapplication.utlis.PhoneUtils;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -66,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         @Override
                         public void onFailed(Exception e) {
-                            Log.d("User Login","fail");
+                            Snackbar.make(view, "Account dose not exits" + e.getMessage(), Snackbar.LENGTH_LONG).show();
                         }
                     });
                 }

@@ -57,7 +57,7 @@ public class MovieDetailFragment extends Fragment {
         follow = view.findViewById(R.id.btn_theodoi);
         movieModel.getMovie(movie.getId(), new MovieModel.MovieCallbacks() {
             @Override
-            public void onSuccess(Movie movie) {
+            public void onSuccess(Movie movie2) {
                 Glide.with(getContext())
                         .load(Uri.parse(movie.getImage()))
                         .into(poster);

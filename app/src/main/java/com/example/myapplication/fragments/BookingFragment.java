@@ -1,6 +1,7 @@
 package com.example.myapplication.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,18 +11,41 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.adapter.ListSeatAdapter;
+import com.example.myapplication.adapter.home.ListMovieAdapter;
 import com.example.myapplication.entities.Movie;
+import com.example.myapplication.entities.Ticket;
+import com.example.myapplication.entities.User;
+import com.example.myapplication.models.InvoiceModel;
+import com.example.myapplication.models.TicketModel;
+import com.google.android.material.button.MaterialButton;
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookingFragment extends Fragment {
     private static final String TAG = "BookingFragment";
     private Movie movie = new Movie();
+    private final BookingFragment bookingFragment = this;
+
     private TextView title,dateMovie,timeMovie;
-    String time,date,theater;
-    public BookingFragment(Movie movie, String time, String date, String theater){
+    private String time,date,theater;
+    private MaterialButton book;
+    private User user;
+    private ArrayList<String> seat = new ArrayList<>();
+    private ArrayList<String> seatPick = new ArrayList<>();
+    private TicketModel ticketModel = new TicketModel();
+    private List<String> tickets = new ArrayList<>();
+    private InvoiceModel invoiceModel = new InvoiceModel();
+
+    public BookingFragment(Movie movie, User user, String time, String date, String theater){
+        this.user = user;
         this.movie = movie;
         this.time = time;
         this.date = date;
@@ -33,7 +57,25 @@ public class BookingFragment extends Fragment {
         title = view.findViewById(R.id.tv_movie_title);
         dateMovie = view.findViewById(R.id.tv_date);
         timeMovie = view.findViewById(R.id.tv_runningTime);
+        book = view.findViewById(R.id.btn_Datve);
         init(view);
+        getSeat(view);
+        RecyclerView recyclerView = view.findViewById(R.id.rv_list_seat);
+        ListSeatAdapter seatAdapter = new ListSeatAdapter(bookingFragment.getContext(),seat);
+        recyclerView.setAdapter(seatAdapter);
+        seatAdapter.OnSetClickBookListener(new ListSeatAdapter.OnBookingListener() {
+            @Override
+            public void OnBooking(String seatName) {
+                seatPick.add(seatName);
+            }
+        });
+        book.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeFragment(new PaymentFragment(movie,user,time,date,theater,seatPick));
+            }
+        });
+
         return view;
     }
     private void init(View view){
@@ -46,6 +88,24 @@ public class BookingFragment extends Fragment {
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    private void getSeat(View view){
+        for(int i =1;i<9;i++) {
+            seat.add("A" + String.valueOf(i));
+        }
+        for(int i =1;i<9;i++) {
+            seat.add("B" + String.valueOf(i));
+        }
+        for(int i =1;i<9;i++) {
+            seat.add("C" + String.valueOf(i));
+        }
+        for(int i =1;i<9;i++) {
+            seat.add("D" + String.valueOf(i));
+        }
+        for(int i =1;i<9;i++) {
+            seat.add("E" + String.valueOf(i));
+        }
     }
 
 }

@@ -22,8 +22,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.home.ListMovieAdapter;
 import com.example.myapplication.entities.Movie;
+import com.example.myapplication.entities.Theater;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.models.MovieModel;
+import com.example.myapplication.models.TheaterModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -40,7 +42,7 @@ public class PremiereFragment extends Fragment {
     private static final String TAG = "PremiereFragment";
     private RecyclerView listPremiere;
     private PremiereFragment premiereFragment;
-    private MovieModel movieModel;
+    private TheaterModel theaterModel = new TheaterModel();
     private Movie movie;
     private TextView dateMovie,nameMovie;
     private ImageButton date;
@@ -80,7 +82,7 @@ public class PremiereFragment extends Fragment {
     public interface OnTimeSelectedListener {
         void onTimeSelected(String Time);
     }
-//    private ListMovieAdapter.OnUpdateListener listener;
+    //    private ListMovieAdapter.OnUpdateListener listener;
 //
 //    public void OnSetDetailListener(ListMovieAdapter.OnUpdateListener listener) {
 //        this.listener = listener;
@@ -88,44 +90,43 @@ public class PremiereFragment extends Fragment {
     private void getTheater(View view, OnTheaterSelectedListener listener,int check) {
         Log.d(TAG, "getTheater: "+check);
         if(check == 1){
-
-            ArrayAdapter<CharSequence> staticAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.wrong, android.R.layout.simple_spinner_item);
-            staticAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            if(!staticAdapter.equals(null)){
-                Spinner spnTheater = new Spinner(getContext());
-                spnTheater= view.findViewById(R.id.spinnerTheater);
-                spnTheater.setAdapter(staticAdapter);
-                spnTheater.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        String theaterSelected = parent.getItemAtPosition(position).toString();
-                        listener.onTheaterSelected(theaterSelected);
-
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                    }
-                });
-            }
+            List<String> time = movie.getShowTimes();
+            List<String> theater = new ArrayList<>();
+//            ArrayAdapter<String> staticAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, theater);
+//            staticAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         }else{
+//            ArrayList<String> listTheaters = new ArrayList<>();
+//            theaterModel.getAllTheaters(new TheaterModel.TheatersCallbacks() {
+//                @Override
+//                public void onSuccess(ArrayList<Theater> theaters) {
+//                    for (Theater theater3:theaters) {
+//                        listTheaters.add(theater3.getName());
+//                    }
+//                    Log.d(TAG, "onSuccess:ListT "+listTheaters);
+//                }
+//
+//                @Override
+//                public void onFailed(Exception e) {
+//
+//                }
+//            });
+//            Log.d(TAG, "getTheater: "+listTheaters);
             ArrayAdapter<CharSequence> staticAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.theater_array, android.R.layout.simple_spinner_item);
             staticAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            if(!staticAdapter.equals(null)){
-                Spinner spnTheater = new Spinner(getContext());
-                spnTheater= view.findViewById(R.id.spinnerTheater);
-                spnTheater.setAdapter(staticAdapter);
-                spnTheater.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        String theaterSelected = parent.getItemAtPosition(position).toString();
-                        listener.onTheaterSelected(theaterSelected);
+            Spinner spnTheater= view.findViewById(R.id.spinnerTheater);
+            spnTheater.setAdapter(staticAdapter);
+            spnTheater.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String theaterSelected = parent.getItemAtPosition(position).toString();
+                    Log.d(TAG, "onItemSelected: "+theaterSelected);
+                    listener.onTheaterSelected(theaterSelected);
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
 
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                    }
-                });
-            }
         }
     }
     private void getTimeOfMovie(View view, OnTimeSelectedListener listener, Movie movie,int check) {
@@ -147,13 +148,15 @@ public class PremiereFragment extends Fragment {
                 public void onNothingSelected(AdapterView<?> parent) {
                 }
             });
-        }else{
+        }
+        else{
             List<String> time = movie.getShowTimes();
             List<String> timeofmovie = new ArrayList<>();
             for ( String aTime:time) {
                 timeofmovie.add(aTime);
 
             }
+            Log.d(TAG, "getTimeOfMovie: "+timeofmovie);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, timeofmovie);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             Spinner spnTimeMovie = view.findViewById(R.id.spinnerTimeOfMovie);
@@ -194,12 +197,9 @@ public class PremiereFragment extends Fragment {
                         getTheater(view, theater -> {
                             theaterSelected[0] = theater;
                         },checkdate);
-                        Log.e(TAG, "onCreateView: " + theaterSelected[0]);
-
                         String[] timeSelected = {""};
                         getTimeOfMovie(view, time -> {
                             timeSelected[0] = time;
-                            Log.e(TAG, "onCreateView: " + theaterSelected[0]);
                         },movie,checkdate);
 
 
@@ -231,7 +231,7 @@ public class PremiereFragment extends Fragment {
                                                 choghe.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
-                                                        changeFragment(new BookingFragment(movie,timeSelected[0],dateMovie.getText().toString(),theaterSelected[0]));
+                                                        changeFragment(new BookingFragment(movie,user,timeSelected[0],dateMovie.getText().toString(),theaterSelected[0]));
                                                     }
                                                 });
                                             }else{
