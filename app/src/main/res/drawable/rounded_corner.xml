@@ -1,0 +1,5 @@
+<!-- res/drawable/rounded_corner.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="10dp" /> <!-- Đặt bán kính (radius) tùy ý -->
+    <solid android:color="#373637" /> <!-- Màu nền của LinearLayout -->
+</shape>

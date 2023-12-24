@@ -98,6 +98,7 @@ public class HomeFragment extends Fragment {
         });
     }
     private void downloadMovie(){
+//        movieModel.
         movieModel.getAllMovie(new MovieModel.MoviesCallbacks() {
             @Override
             public void onSuccess(ArrayList<Movie> moviesData) {

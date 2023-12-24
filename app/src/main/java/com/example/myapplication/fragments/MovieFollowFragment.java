@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.ListMovieFollowAdapter;
 import com.example.myapplication.adapter.home.ListMovieAdapter;
+import com.example.myapplication.authentication.RegisterActivity;
 import com.example.myapplication.entities.Movie;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.models.MovieModel;
@@ -69,17 +71,20 @@ public class MovieFollowFragment extends Fragment {
         movieModel.getAllMovie(new MovieModel.MoviesCallbacks() {
             @Override
             public void onSuccess(ArrayList<Movie> movies) {
-                Log.e(TAG, "onSuccess: "+ user.getMovieIds().size());
-                for(String idMovie:user.getMovieIds()){
-                    for(int i =0; i< movies.size();i++){
-                        if(idMovie.equals(movies.get(i).getId())){
-                            moviesData.add(movies.get(i));
+                if(user.getMovieIds() == null){
+                }else{
+                    for(String idMovie:user.getMovieIds()){
+                        for(int i =0; i< movies.size();i++){
+                            if(idMovie.equals(movies.get(i).getId())){
+                                moviesData.add(movies.get(i));
+                            }
                         }
                     }
+                    if(!moviesData.isEmpty()){
+                        listMovieAdapter.setData(moviesData,user.getUuid());
+                    }
                 }
-                if(!moviesData.isEmpty()){
-                    listMovieAdapter.setData(moviesData,user.getUuid());
-                }
+
             }
 
             @Override
