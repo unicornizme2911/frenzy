@@ -310,6 +310,7 @@ public class MovieModel extends Model{
                     try{
                         Date starting = sdf.parse(startingDate);
                         Date ending = sdf.parse(endingDate);
+                        Log.e(TAG, "onDataChange: " + starting + " " + ending + " " + currentDate);
                         if(type.equals("now")){
                             if(starting.compareTo(currentDate) <= 0 && ending.compareTo(currentDate) >= 0){
                                 movies.add(movie);

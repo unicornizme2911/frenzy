@@ -163,20 +163,23 @@ public class UserModel extends Model{
             throw new RuntimeException(e);
         }
     }
-    public void changePassword(String newPassword, String oldPassword, String email, LoginCallbacks callbacks){
+    public void changePassword(String newPassword, String oldPassword, String phone, LoginCallbacks callbacks){
         try{
             if(PasswordUtils.verifyPassword(oldPassword, newPassword)){
+                Log.w(TAG, "changePassword: " + "New password must be different from old password");
                 callbacks.onFailed(new Exception("New password must be different from old password"));
                 return;
             }
             String hashedPassword = PasswordUtils.hashPassword(newPassword);
+            String hashedOldPassword = PasswordUtils.hashPassword(oldPassword);
             database.child(USER_COLLECTION).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for(DataSnapshot dataSnapshot: snapshot.getChildren()){
-                        String emailUser = (String) dataSnapshot.child("email").getValue();
-                        if(emailUser != null){
-                            if(emailUser.equals(email)){
+                        String phoneUser = (String) dataSnapshot.child("phone").getValue();
+                        String passwordUser = (String) dataSnapshot.child("password").getValue();
+                        if(phoneUser != null){
+                            if(phoneUser.equals(phone) && passwordUser.equals(hashedOldPassword)){
                                 database.child(USER_COLLECTION).child(dataSnapshot.getKey()).child("password").setValue(hashedPassword);
                                 callbacks.onSuccess(null);
                                 break;
@@ -196,15 +199,16 @@ public class UserModel extends Model{
     public String getCurrentUserUid(){
         return mAuth.getCurrentUser().getUid();
     }
-    public void checkUserIsExists(String phone, CheckExistsCallbacks callbacks){
+    public void checkUserIsExists(String value, CheckExistsCallbacks callbacks){
         database.child(USER_COLLECTION).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean isFound = false;
                 for(DataSnapshot dataSnapshot: snapshot.getChildren()){
                     String phoneUser = (String) dataSnapshot.child("phone").getValue();
-                    if(phoneUser != null){
-                        if(phoneUser.equals(phone)){
+                    String emailUser = (String) dataSnapshot.child("email").getValue();
+                    if(phoneUser != null && emailUser != null){
+                        if(phoneUser.equals(value) || emailUser.equals(value)){
                             isFound = true;
                             callbacks.onExists();
                             break;
@@ -415,6 +419,7 @@ public class UserModel extends Model{
     public void updateUser(String uuid, Map<String, Object> newData, UserCallbacks callbacks){
         database.child(USER_COLLECTION).child(uuid).updateChildren(newData).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+                Log.e(TAG, "onComplete: " + "update user success");
                 callbacks.onSuccess(null);
             } else {
                 callbacks.onFailed(task.getException());

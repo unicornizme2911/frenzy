@@ -16,6 +16,8 @@
             android:exported="false">
         </activity>
         <activity android:name=".authentication.RegisterActivity"></activity>
+        <activity android:name=".authentication.OTPVerifyActivity"></activity>
+        <activity android:name=".authentication.ForgotPasswordActivity"></activity>
         <activity android:name=".activity.PaymentHistoryActivity"></activity>
         <activity
             android:name=".activity.MainActivity"

@@ -50,7 +50,7 @@ public class TicketModel extends Model{
                     return;
                 }
                 JSONObject jsonObject = new JSONObject((Map) snapshot.getValue());
-                ticketPrice[0] = jsonObject.optDouble("ticketPrice");
+                ticketPrice[0] = jsonObject.optDouble("price");
             }
 
             @Override
@@ -110,8 +110,8 @@ public class TicketModel extends Model{
             this.col = col;
         }
         public boolean isVip(int row, int col){
-            int[] vipRow = {4,5,6,7};
-            int[] vipCol = {3,4,5,6,7,8,9};
+            int[] vipRow = {2,3,4};
+            int[] vipCol = {3,4,5,6};
             return Arrays.stream(vipRow).anyMatch(r -> r == row) && Arrays.stream(vipCol).anyMatch(c -> c == col);
         }
     }

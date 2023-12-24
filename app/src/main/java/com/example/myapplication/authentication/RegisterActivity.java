@@ -23,11 +23,18 @@ import com.example.myapplication.R;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.fragments.HomeFragment;
 import com.example.myapplication.models.UserModel;
+import com.example.myapplication.utlis.PasswordUtils;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthOptions;
+import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
@@ -46,6 +53,9 @@ public class RegisterActivity extends AppCompatActivity {
     private RadioButton male;
     private RadioGroup gender;
     private String btn_gender;
+    PhoneAuthProvider provider;
+    PhoneAuthOptions options;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
     public RegisterActivity() {
     }
 
@@ -97,17 +107,49 @@ public class RegisterActivity extends AppCompatActivity {
 
                         @Override
                         public void onNotFound() {
-                            userModel.register(txt_email, txt_phone, txt_password,txt_fullname ,txt_khuvuc,txt_bd,txt_gender, new UserModel.RegisterCallbacks() {
-                                @Override
-                                public void onSuccess(User user) {
-                                    Toast.makeText(RegisterActivity.this,"Successful account registration",Toast.LENGTH_LONG).show();
-                                    swapLogin();
-                                }
-                                @Override
-                                public void onFailed(Exception e) {
-                                    Snackbar.make(view, "Register fail", Snackbar.LENGTH_LONG).show();
-                                }
-                            });
+                            options = PhoneAuthOptions.newBuilder(mAuth)
+                                    .setPhoneNumber("+84" + txt_phone)
+                                    .setTimeout(60L, TimeUnit.SECONDS)
+                                    .setActivity(RegisterActivity.this)
+                                    .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                                        @Override
+                                        public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+
+                                        }
+
+                                        @Override
+                                        public void onVerificationFailed(@NonNull FirebaseException e) {
+                                            Toast.makeText(RegisterActivity.this, "Phone number is not valid", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                                            super.onCodeSent(s, forceResendingToken);
+                                            Log.d(TAG, "onCodeSent: code sent" + s);
+                                            Intent otpIntent = new Intent(RegisterActivity.this, OTPVerifyActivity.class);
+                                            otpIntent.putExtra("verificationId", s);
+                                            otpIntent.putExtra("fullname", txt_fullname.trim());
+                                            otpIntent.putExtra("email", txt_email.trim());
+                                            otpIntent.putExtra("address", txt_khuvuc.trim());
+                                            otpIntent.putExtra("birthday", txt_bd.trim());
+                                            otpIntent.putExtra("gender", txt_gender.trim());
+                                            otpIntent.putExtra("phone", txt_phone.trim());
+                                            String password = txt_password.trim();
+                                            try {
+                                                otpIntent.putExtra("password", password);
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                                Toast.makeText(RegisterActivity.this, "Password invalid", Toast.LENGTH_SHORT).show();
+                                                return;
+                                            }
+                                            otpIntent.putExtra("recentToken", forceResendingToken);
+                                            otpIntent.putExtra("actionOption", OTPVerifyActivity.REGISTRATION);
+                                            startActivity(otpIntent);
+                                            finish();
+                                        }
+                                    })
+                                    .build();
+                            PhoneAuthProvider.verifyPhoneNumber(options);
                         }
                     });
                 }

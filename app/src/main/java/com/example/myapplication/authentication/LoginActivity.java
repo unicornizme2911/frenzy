@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import com.example.myapplication.entities.Movie;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.fragments.HomeFragment;
 import com.example.myapplication.models.MovieModel;
+import com.example.myapplication.models.TheaterModel;
 import com.example.myapplication.models.TicketModel;
 import com.example.myapplication.models.UserModel;
 import com.example.myapplication.utlis.EmailUtils;
@@ -23,12 +25,15 @@ import com.example.myapplication.utlis.PhoneUtils;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
 
     private EditText username;
     private EditText password;
+    private TextView forgotPassword;
     private final UserModel userModel = new UserModel();
 
     private Button btnDangky;
@@ -42,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         btnDangNhap = findViewById(R.id.btn_login);
         username = findViewById(R.id.et_username_lg);
         password = findViewById(R.id.et_password_lg);
+        forgotPassword = findViewById(R.id.tv_forgot_password);
         btnDangky.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,6 +77,16 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
                 }
+            }
+        });
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+//                clear stack activity
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+//                finish();
             }
         });
     }

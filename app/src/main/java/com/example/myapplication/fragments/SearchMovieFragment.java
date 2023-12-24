@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.AllMovieAdapter;
 import com.example.myapplication.adapter.SearchMovieAdapter;
-import com.example.myapplication.adapter.home.RandomMovieAdapter;
 import com.example.myapplication.entities.Movie;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.models.MovieModel;

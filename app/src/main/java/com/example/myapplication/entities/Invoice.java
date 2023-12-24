@@ -12,12 +12,12 @@ public class Invoice {
     private String paymentMethod;
     private String paymentDate;
     private double totalPrice;
-
+    private double taxes;
     public Invoice() {
         super();
     }
 
-    public Invoice(String id, String userId, List<String> ticketId, String promotionId, String paymentMethod, String paymentDate, double totalPrice) {
+    public Invoice(String id, String userId, List<String> ticketId, String promotionId, String paymentMethod, String paymentDate, double totalPrice, double taxes) {
         this.id = id;
         this.userId = userId;
         this.ticketId = ticketId;
@@ -25,15 +25,17 @@ public class Invoice {
         this.paymentMethod = paymentMethod;
         this.paymentDate = paymentDate;
         this.totalPrice = totalPrice;
+        this.taxes = taxes;
     }
 
-    public Invoice(String userId, List<String> ticketId, String promotionId, String paymentMethod, String paymentDate, double totalPrice) {
+    public Invoice(String userId, List<String> ticketId, String promotionId, String paymentMethod, String paymentDate, double totalPrice, double taxes) {
         this.userId = userId;
         this.ticketId = ticketId;
         this.promotionId = promotionId;
         this.paymentMethod = paymentMethod;
         this.paymentDate = paymentDate;
         this.totalPrice = totalPrice;
+        this.taxes = taxes;
     }
 
     public Invoice(HashMap<String, Object> invoiceMap){
@@ -44,7 +46,8 @@ public class Invoice {
                 invoiceMap.get("promotionId").toString(),
                 invoiceMap.get("paymentMethod").toString(),
                 invoiceMap.get("paymentDate").toString(),
-                Double.parseDouble(invoiceMap.get("totalPrice").toString())
+                Double.parseDouble(invoiceMap.get("totalPrice").toString()),
+                Double.parseDouble(invoiceMap.get("taxes").toString())
         );
     }
 
@@ -57,6 +60,7 @@ public class Invoice {
         result.put("paymentMethod", paymentMethod);
         result.put("paymentDate", paymentDate);
         result.put("totalPrice", totalPrice);
+        result.put("taxes", taxes);
         return result;
     }
 
@@ -115,7 +119,13 @@ public class Invoice {
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
+    public double getTaxes() {
+        return taxes;
+    }
 
+    public void setTaxes(double taxes) {
+        this.taxes = taxes;
+    }
     @Override
     public String toString() {
         return "Invoice{" +
@@ -126,6 +136,7 @@ public class Invoice {
                 ", paymentMethod='" + paymentMethod + '\'' +
                 ", paymentDate='" + paymentDate + '\'' +
                 ", totalPrice=" + totalPrice +
+                ", taxes=" + taxes +
                 '}';
     }
 }

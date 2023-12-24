@@ -61,18 +61,28 @@
                     app:backgroundTint="@color/red"
 
                     android:layout_marginTop="30dp"
-                    android:layout_marginBottom="50dp"
+                    android:layout_marginBottom="20dp"
                     />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_to_register"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    app:cornerRadius="10dp"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="@color/white"
-                    app:backgroundTint="#979191"
                     android:text="Đăng ký tài khoản Frenzy"
+                    android:textColor="@color/black"
+                    app:backgroundTint="#979191"
+                    app:cornerRadius="10dp"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="1dp" />
+                <TextView
+                    android:id="@+id/tv_forgot_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Quên mật khẩu?"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center"
                     />
             </LinearLayout>
         </LinearLayout>

@@ -1,5 +1,7 @@
 package com.example.myapplication.models;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.myapplication.entities.Theater;
@@ -112,7 +114,9 @@ public class TheaterModel extends Model{
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<Theater> theaters = new ArrayList<>();
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    String key = dataSnapshot.getKey();
                     Theater theater = dataSnapshot.getValue(Theater.class);
+                    theater.setId(key);
                     theaters.add(theater);
                 }
                 callback.onSuccess(theaters);
