@@ -45,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
     private RadioButton fmale;
     private RadioButton male;
     private RadioGroup gender;
-
+    private String btn_gender;
     public RegisterActivity() {
     }
 
@@ -67,9 +67,9 @@ public class RegisterActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // Kiểm tra xem RadioButton nào được chọn
                 if (checkedId == R.id.radioF) {
-                    fmale.setText("Female");
+                    btn_gender= "Female";
                 } else if (checkedId == R.id.radioM) {
-                    fmale.setText("Male");
+                    btn_gender = "Male";
                 }
             }
         });
@@ -82,28 +82,13 @@ public class RegisterActivity extends AppCompatActivity {
                 String txt_password = password.getText().toString();
                 String txt_khuvuc = khuvuc.getText().toString();
                 String txt_bd = birthday.getText().toString();
-                String txt_gender = fmale.getText().toString();
+                String txt_gender = btn_gender;
                 if(TextUtils.isEmpty(txt_fullname) || TextUtils.isEmpty(txt_phone)|| TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(txt_khuvuc)){
                     Toast.makeText(RegisterActivity.this,"Empty credentials",Toast.LENGTH_LONG).show();
                 } else if(txt_password.length() < 6){
                     Toast.makeText(RegisterActivity.this, "Password to short", Toast.LENGTH_LONG).show();
                 } else
                 {
-//                    userModel.register(txt_email, txt_phone, txt_password,txt_fullname ,txt_khuvuc,txt_bd, txt_gender, new UserModel.RegisterCallbacks() {
-//                        @Override
-//                        public void onSuccess(User user) {
-//                            Toast.makeText(RegisterActivity.this,"Successful account registration",Toast.LENGTH_LONG).show();
-////                            getSupportFragmentManager().beginTransaction()
-////                                    .replace(R.id.fragment_container, new HomeFragment(user))
-////                                    .commit();
-//                            swapLogin();
-//                        }
-//                        @Override
-//                        public void onFailed(Exception e) {
-//                            Snackbar.make(view, "Register fail: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
-//
-//                        }
-//                    });
                     userModel.checkUserIsExists(txt_phone, new UserModel.CheckExistsCallbacks() {
                         @Override
                         public void onExists() {

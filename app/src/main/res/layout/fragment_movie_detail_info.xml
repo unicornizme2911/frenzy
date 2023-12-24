@@ -194,7 +194,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="20dp"
-                        android:text="Hehehehehe lala lolo"
+                        android:text="Hehehehehe lala Bộ phim xoay quanh gia đình ba thế hệ của bà Ngọc Nữ, một gia đình làm nghề bán bánh canh cua trong một khu chung cư cũ do ông Liêm quản lý. Bà Ngọc Nữ có người mẹ tên Ngọc Ngà hai đứa con gái là Ngọc Như và Ngọc Nhi. Do có mâu thuẫn với chồng, cả hai ly hôn và chồng bà rời bỏ gia đình, bà Ngọc Nữ đã một mình nuôi lớn hai đứa con nên bà có mối thù cực kỳ lớn đối với những người đàn ông. Khi đứa con gái lớn của bà có chồng là Phú Nhuận đã khiến cho bà Ngọc Nữ vô cùng khó chịu. Chính vì vậy mà bà luôn cố gắng bảo vệ cho đứa con gái út của mình là Ngọc Nhi tránh xa nhằm hy vọng đứa con gái không bị tổn thương giống như mình.Bộ phim xoay quanh gia đình ba thế hệ của bà Ngọc Nữ, một gia đình làm nghề bán bánh canh cua trong một khu chung cư cũ do ông Liêm quản lý. Bà Ngọc Nữ có người mẹ tên Ngọc Ngà hai đứa con gái là Ngọc Như và Ngọc Nhi. Do có mâu thuẫn với chồng, cả hai ly hôn và chồng bà rời bỏ gia đình, bà Ngọc Nữ đã một mình nuôi lớn hai đứa con nên bà có mối thù cực kỳ lớn đối với những người đàn ông. Khi đứa con gái lớn của bà có chồng là Phú Nhuận đã khiến cho bà Ngọc Nữ vô cùng khó chịu. Chính vì vậy mà bà luôn cố gắng bảo vệ cho đứa con gái út của mình là Ngọc Nhi tránh xa  nhằm hy vọng đứa con gái không bị tổn thương giống như mình.loloasdddddddddddddddddddddddsaaddd"
                         android:textStyle="bold"
                         />
                     <View
@@ -264,43 +264,41 @@
                             android:text="Xem trailer" />
                     </LinearLayout>
                 </LinearLayout>
-
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:orientation="horizontal"
+                    >
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_margin="20dp"
+                        android:id="@+id/btn_xemxuatchiet"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_horizontal"
+                        app:cornerRadius="10dp"
+                        app:strokeWidth="1dp"
+                        android:textColor="@color/white"
+                        app:strokeColor="@color/white"
+                        app:backgroundTint="#979191"
+                        android:text="Xem xuất chiếu">
+                    </com.google.android.material.button.MaterialButton>
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_margin="20dp"
+                        android:id="@+id/btn_theodoi"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_horizontal"
+                        app:cornerRadius="10dp"
+                        app:strokeWidth="1dp"
+                        android:textColor="@color/white"
+                        app:strokeColor="@color/white"
+                        app:backgroundTint="#979191"
+                        android:text="Theo dỗi">
+                    </com.google.android.material.button.MaterialButton>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
-        >
-        <com.google.android.material.button.MaterialButton
-            android:layout_margin="20dp"
-            android:id="@+id/btn_xemxuatchiet"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_gravity="center_horizontal"
-            app:cornerRadius="10dp"
-            app:strokeWidth="1dp"
-            android:textColor="@color/white"
-            app:strokeColor="@color/white"
-            app:backgroundTint="#979191"
-            android:text="Xem xuất chiếu">
-        </com.google.android.material.button.MaterialButton>
-        <com.google.android.material.button.MaterialButton
-            android:layout_margin="20dp"
-            android:id="@+id/btn_theodoi"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_gravity="center_horizontal"
-            app:cornerRadius="10dp"
-            app:strokeWidth="1dp"
-            android:textColor="@color/white"
-            app:strokeColor="@color/white"
-            app:backgroundTint="#979191"
-            android:text="Theo dỗi">
-        </com.google.android.material.button.MaterialButton>
-    </LinearLayout>
-
 </LinearLayout>

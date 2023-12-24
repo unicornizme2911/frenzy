@@ -1,7 +1,7 @@
 package com.example.myapplication.adapter;
 
+import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +21,7 @@ import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
-public class  AllMovieAdapter extends RecyclerView.Adapter<AllMovieAdapter.MyViewHolder> {
+public class  SearchMovieAdapter extends RecyclerView.Adapter<SearchMovieAdapter.MyViewHolder> {
     private static final String TAG = "ListMovieAdapter";
     private ArrayList<Movie> dataMovie = new ArrayList<>();
     private User user;
@@ -36,20 +36,20 @@ public class  AllMovieAdapter extends RecyclerView.Adapter<AllMovieAdapter.MyVie
         this.listener = listener;
     }
 
-    public AllMovieAdapter(android.content.Context context, ArrayList<Movie> movies) {
+    public SearchMovieAdapter(android.content.Context context, ArrayList<Movie> movies) {
         this.context = context;
         this.dataMovie = movies;
     }
 
     @NonNull
     @Override
-    public AllMovieAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, parent, false);
-        return new AllMovieAdapter.MyViewHolder(view);
+    public SearchMovieAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search, parent, false);
+        return new SearchMovieAdapter.MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AllMovieAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SearchMovieAdapter.MyViewHolder holder, int position) {
         Movie movie = dataMovie.get(position);
         Glide.with(context)
                 .load(Uri.parse(movie.getImage()))
@@ -81,7 +81,7 @@ public class  AllMovieAdapter extends RecyclerView.Adapter<AllMovieAdapter.MyVie
             ig_poster = itemView.findViewById(R.id.iv_poster_follow);
             dayStart = itemView.findViewById(R.id.tv_release_date_follow);
             time = itemView.findViewById(R.id.tv_time_follw);
-            chooseTheaterAgain = itemView.findViewById(R.id.btn_confirm_theater);
+            chooseTheaterAgain = itemView.findViewById(R.id.btn_xemchitiet);
         }
     }
 }

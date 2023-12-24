@@ -16,14 +16,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <include layout="@layout/toolbar_main"/>
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabs"
-                android:background="#615E5E"
-                app:tabTextColor="@color/white"
-                app:tabIndicatorColor="@color/white"
-                android:elevation="10dp"
+            <LinearLayout
+                android:id="@+id/LN_search"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:background="#000000">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ic_home_movielist_btn"
+                    android:text="Tìm kiếm phim"
+                    android:gravity="left"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="#FFFFFF"/>
+            </LinearLayout>
+
             <include layout="@layout/fragment_home"/>
         </com.google.android.material.appbar.AppBarLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

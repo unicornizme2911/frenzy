@@ -92,23 +92,36 @@ public class MovieDetailFragment extends Fragment {
                         changeFragment(new PremiereFragment(movie,user));
                     }
                 });
-                follow.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        follow.setText("Đã theo dỗi");
-                        userModel.addMovieToFavorite(user.getUuid(), movie.getId(), new UserModel.UserCallbacks() {
-                            @Override
-                            public void onSuccess(User userloi) {
-                                user.getMovieIds().add(movie.getId());
-                            }
+                if(user.getMovieIds() == null){
+                }else{
+                    for(String movieFollow:user.getMovieIds()){
+                        if(movie.getId().equalsIgnoreCase(movieFollow)){
+                            follow.setText("Đã theo dỗi");
+                            follow.setClickable(false);
+                            break;
+                        }else{
+                            follow.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    follow.setText("Đã theo dỗi");
+                                    userModel.addMovieToFavorite(user.getUuid(), movie.getId(), new UserModel.UserCallbacks() {
+                                        @Override
+                                        public void onSuccess(User userloi) {
+                                            Log.e(TAG, "onSuccess: "+movie );
+                                            user.getMovieIds().add(movie.getId());
+                                        }
 
-                            @Override
-                            public void onFailed(Exception e) {
+                                        @Override
+                                        public void onFailed(Exception e) {
 
-                            }
-                        });
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     }
-                });
+                }
+
 
             }
 
@@ -126,8 +139,6 @@ public class MovieDetailFragment extends Fragment {
 
 
     }
-    private void init(View view){
 
-    }
 
 }

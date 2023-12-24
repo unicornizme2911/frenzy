@@ -61,7 +61,6 @@ public class TheaterFragment extends Fragment {
                     @Override
                     public void OnTheater(Theater theater) {
                         changeFragment(new AllMovieFragment(user,theater));
-
                     }
                 });
             }

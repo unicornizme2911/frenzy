@@ -1,11 +1,9 @@
 package com.example.myapplication.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,44 +13,31 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.AllMovieAdapter;
-import com.example.myapplication.adapter.ListMovieFollowAdapter;
-import com.example.myapplication.adapter.home.ListMovieAdapter;
+import com.example.myapplication.adapter.SearchMovieAdapter;
+import com.example.myapplication.adapter.home.RandomMovieAdapter;
 import com.example.myapplication.entities.Movie;
-import com.example.myapplication.entities.Theater;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.models.MovieModel;
-import com.example.myapplication.models.UserModel;
 
 import java.util.ArrayList;
 
-public class AllMovieFragment extends Fragment {
+public class SearchMovieFragment extends Fragment {
+    private MovieModel movieModel = new MovieModel();
     private User user;
-    private Theater theater;
-    private static final String TAG = "MovieFollowFragment";
-    private final AllMovieFragment allMovieFragment = this;
+    private static final String TAG = "SearchMovieFragment";
+    private final SearchMovieFragment searchMovieFragment = this;
     private RecyclerView listMovie;
-
-    private TextView name, logout;
-    private final UserModel userModel = new UserModel();
-    private final MovieModel movieModel = new MovieModel();
-
-    public AllMovieFragment(User user, Theater theater ) {
+    public SearchMovieFragment(User user){
         this.user = user;
-        this.theater = theater;
     }
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_movie_follow, container, false);
-        view.findViewById(R.id.iv_back).setOnClickListener(view1 -> changeFragment(new TheaterFragment(user)));
-        init(view);
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
+        listMovie = view.findViewById(R.id.rv_list_movie_search);
+        view.findViewById(R.id.iv_back).setOnClickListener(view1 -> changeFragment(new HomeFragment(user)));
         downlist();
         return view;
-    }
-    private void init(View view){
-        listMovie = view.findViewById(R.id.rv_list_movie_follow);
     }
     private void changeFragment(Fragment fragment) {
         getActivity().getSupportFragmentManager().beginTransaction()
@@ -65,13 +50,13 @@ public class AllMovieFragment extends Fragment {
             @Override
             public void onSuccess(ArrayList<Movie> movies) {
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                AllMovieAdapter listMovieAdapter = new AllMovieAdapter(allMovieFragment.getContext(),movies);
+                SearchMovieAdapter listMovieAdapter = new SearchMovieAdapter(searchMovieFragment.getContext(),movies);
                 listMovie.setLayoutManager(layoutManager);
                 listMovie.setAdapter(listMovieAdapter);
-                listMovieAdapter.OnSetClickListener(new AllMovieAdapter.OnClickListener() {
+                listMovieAdapter.OnSetClickListener(new SearchMovieAdapter.OnClickListener() {
                     @Override
                     public void OnClick(Movie movie) {
-                        changeFragment(new PremiereFragment(movie,user));
+                        changeFragment(new MovieDetailFragment(movie,user));
                     }
                 });
             }
