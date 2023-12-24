@@ -44,18 +44,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Log.d(TAG, "onCreate: "+ "login");
-//        TicketModel ticketModel = new TicketModel();
-//        ticketModel.createTicket("61acc962-9b66-4130-8f64-8883d64d6a61", "0XP3WQZ7", "0DR51TFM", "A1", "1", "1", "1", new TicketModel.TicketCallbacks() {
-//            @Override
-//            public void onSuccess(Ticket ticket) {
-//                Log.d(TAG, "onSuccess: "+ ticket.getId());
-//            }
-//
-//            @Override
-//            public void onFailed(Exception e) {
-//                Log.d(TAG, "onFailed: "+ e.getMessage());
-//            }
-//        });
         btnDangky = findViewById(R.id.btn_to_register);
         btnDangNhap = findViewById(R.id.btn_login);
         username = findViewById(R.id.et_username_lg);

@@ -51,6 +51,20 @@ public class TicketModel extends Model{
                 }
                 JSONObject jsonObject = new JSONObject((Map) snapshot.getValue());
                 ticketPrice[0] = jsonObject.optDouble("price");
+                int row = seatNumber.substring(0,1).charAt(0) - 'A';
+                int col = Integer.parseInt(seatNumber.substring(1));
+                Seat seat = new Seat(seatNumber, row, col);
+                if(seat.isVip(row, col)){
+                    ticketPrice[0] += 45000;
+                }
+                Ticket ticket = new Ticket(id, movieId, theaterId, userId, seatNumber, ticketPrice[0], date, time);
+                DatabaseReference query = database.child(TICKET_COLLECTION).child(id);
+                query.setValue(ticket).addOnSuccessListener(aVoid -> {
+                    callback.onSuccess(ticket);
+                }).addOnFailureListener(e -> {
+                    callback.onFailed(e);
+                });
+                query.child("seat").setValue(seat);
             }
 
             @Override
@@ -58,20 +72,6 @@ public class TicketModel extends Model{
                 callback.onFailed(new Exception(error.getMessage()));
             }
         });
-        int row = seatNumber.substring(0,1).charAt(0) - 'A';
-        int col = Integer.parseInt(seatNumber.substring(1));
-        Seat seat = new Seat(seatNumber, row, col);
-        if(seat.isVip(row, col)){
-            ticketPrice[0] += 45000;
-        }
-        Ticket ticket = new Ticket(id, movieId, theaterId, userId, seatNumber, ticketPrice[0], date, time);
-        DatabaseReference query = database.child(TICKET_COLLECTION).child(id);
-        query.setValue(ticket).addOnSuccessListener(aVoid -> {
-            callback.onSuccess(ticket);
-        }).addOnFailureListener(e -> {
-            callback.onFailed(e);
-        });
-        query.child("seat").setValue(seat);
     }
     public void getSeatIsBooked(String theaterId, String movieId, String date, String time, SeatCallbacks callback){
         ArrayList<String> seatIsBooked = new ArrayList<>();
