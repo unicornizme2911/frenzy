@@ -64,7 +64,7 @@ public class TicketModel extends Model{
         if(seat.isVip(row, col)){
             ticketPrice[0] += 45000;
         }
-        Ticket ticket = new Ticket(id, userId, movieId, theaterId, seatNumber, ticketPrice[0], date, time);
+        Ticket ticket = new Ticket(id, movieId, theaterId, userId, seatNumber, ticketPrice[0], date, time);
         DatabaseReference query = database.child(TICKET_COLLECTION).child(id);
         query.setValue(ticket).addOnSuccessListener(aVoid -> {
             callback.onSuccess(ticket);
