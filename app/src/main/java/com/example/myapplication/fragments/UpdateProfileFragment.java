@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -46,12 +47,20 @@ public class UpdateProfileFragment extends Fragment {
         this.user = user;
     }
     private static final String TAG = "UpdateProfileFragment";
+    private ImageView imageView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_update_user, container, false);
         init(view);
         fillData();
+        imageView = view.findViewById(R.id.iv_back);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeFragment(new DetailUserFragment(user));
+            }
+        });
         bd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

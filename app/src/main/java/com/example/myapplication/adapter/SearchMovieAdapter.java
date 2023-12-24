@@ -27,6 +27,10 @@ public class  SearchMovieAdapter extends RecyclerView.Adapter<SearchMovieAdapter
     private User user;
     private Theater theater;
     private final android.content.Context context;
+    public void setData(ArrayList<Movie> movies) {
+        this.dataMovie = movies;
+        notifyDataSetChanged();
+    }
     public interface OnClickListener{
         void OnClick(Movie movie);
     }

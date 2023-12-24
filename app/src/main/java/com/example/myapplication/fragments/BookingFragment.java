@@ -24,6 +24,7 @@ import com.example.myapplication.models.InvoiceModel;
 import com.example.myapplication.models.TicketModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -70,10 +71,15 @@ public class BookingFragment extends Fragment {
             @Override
             public void onSuccess(ArrayList<String> seats) {
                 for(String seat : seats){
-                    Gson gson = new Gson();
-                    Type type = gson.fromJson(seat, Map.class).getClass();
-                    Map<String, Object> map = gson.fromJson(seat, type);
-                    seatIsExit.add(map.get("seatName").toString());
+                    try{
+                        Gson gson = new Gson();
+                        Type type = gson.fromJson(seat, Map.class).getClass();
+                        Map<String, Object> map = gson.fromJson(seat, type);
+                        seatIsExit.add(map.get("seatName").toString());
+                    }catch (IllegalStateException | JsonSyntaxException exception){
+
+                    }
+
                 }
                 Log.e(TAG, "onCreateView: "+seatIsExit);
                 RecyclerView recyclerView = view.findViewById(R.id.rv_list_seat);

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import androidx.annotation.NonNull;
@@ -39,22 +40,27 @@ public class DetailUserFragment extends Fragment {
         this.user = user;
     }
     private static final String TAG = "DetailUserFragment";
-
+    private LinearLayout linearLayout;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail_user2, container, false);
         init(view);
         Listener(view);
+        avatar = view.findViewById(R.id.profile_image);
+        Glide.with(getContext())
+                .load(user.getAvatar())
+                .into(avatar);
         name = view.findViewById(R.id.tv_name);
+        linearLayout = view.findViewById(R.id.LN_update_user);
         fillData();
-        name.setOnClickListener(new View.OnClickListener() {
+        linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 changeFragment(new UpdateProfileFragment(user));
             }
         });
-        avatar = view.findViewById(R.id.profile_image);
+
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

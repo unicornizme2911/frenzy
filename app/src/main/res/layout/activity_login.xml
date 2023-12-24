@@ -62,7 +62,6 @@
                     android:text="Đăng nhập"
                     app:cornerRadius="10dp"
                     app:backgroundTint="@color/red"
-
                     android:layout_marginTop="30dp"
                     android:layout_marginBottom="20dp"
                     />
@@ -78,8 +77,9 @@
                     app:strokeColor="@color/white"
                     app:strokeWidth="1dp" />
                 <TextView
+                    android:layout_gravity="center"
                     android:id="@+id/tv_forgot_password"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Quên mật khẩu?"
                     android:textColor="@color/white"

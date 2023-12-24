@@ -2,6 +2,7 @@ package com.example.myapplication.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,20 +53,31 @@ public class ListSeatAdapter extends RecyclerView.Adapter<ListSeatAdapter.MyView
         String seat= seatData.get(position);
         holder.rbseat.setText(seat);
 //        Log.e(TAG, "onBindViewHolder: "+seatIsExits );
+        if(seatIsExits.isEmpty()){
+            holder.rbseat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.OnBooking(seat);
+                }
+            });
+        }
         for(String seatEqual:seatIsExits){
             if(seat.equalsIgnoreCase(seatEqual)){
                 Log.e(TAG, "onBindViewHolder Equal: "+seatEqual );
                 holder.rbseat.setClickable(false);
                 holder.rbseat.setBackgroundColor(Color.GRAY);
+                holder.rbseat.setBackgroundResource(R.drawable.rounded_corner);
+            }else{
+                holder.rbseat.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.OnBooking(seat);
+                    }
+                });
             }
         }
-        holder.rbseat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Log.e(TAG, "onBindViewHolder: "+seat );
-                listener.OnBooking(seat);
-            }
-        });
+
+
 
     }
 
