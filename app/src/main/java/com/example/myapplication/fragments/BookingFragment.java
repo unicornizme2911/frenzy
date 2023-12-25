@@ -98,7 +98,24 @@ public class BookingFragment extends Fragment {
             @Override
             public void OnBooking(String seatName) {
                 Log.e(TAG, "OnBooking: "+seatName );
-                seatPick.add(seatName);
+                int i = 0;
+                if(seatPick.isEmpty()){
+                    seatPick.add(seatName);
+                }else{
+                    Log.e(TAG, "OnBooking: SeatPick"+seatPick );
+                    for(String seat:seatPick){
+                        if(seatName==seat){
+                            i=0;
+                            break;
+                        }else{
+                            i=1;
+                        }
+                    }
+                    if(i==1){
+                        seatPick.add(seatName);
+                    }
+                }
+
             }
         });
         book.setOnClickListener(new View.OnClickListener() {

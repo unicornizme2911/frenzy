@@ -49,12 +49,12 @@ public class ListTheatersAdapter extends RecyclerView.Adapter<ListTheatersAdapte
         Theater theater = theaters.get(position);
         Log.d(TAG, "onBindViewHolder: "+theater);
         holder.theater.setText(theater.getName());
-//        holder.theater.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                listener.OnTheater(theater);
-//            }
-//        });
+        holder.theater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.OnTheater(theater);
+            }
+        });
     }
 
 

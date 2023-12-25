@@ -41,6 +41,8 @@ public class ListSeatAdapter extends RecyclerView.Adapter<ListSeatAdapter.MyView
         this.seatData = seat;
         this.seatIsExits = seatIsExits;
     }
+    public int i =0;
+
     @NonNull
     @Override
     public ListSeatAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -61,6 +63,7 @@ public class ListSeatAdapter extends RecyclerView.Adapter<ListSeatAdapter.MyView
                 }
             });
         }
+
         for(String seatEqual:seatIsExits){
             if(seat.equalsIgnoreCase(seatEqual)){
                 Log.e(TAG, "onBindViewHolder Equal: "+seatEqual );
@@ -68,10 +71,13 @@ public class ListSeatAdapter extends RecyclerView.Adapter<ListSeatAdapter.MyView
                 holder.rbseat.setBackgroundColor(Color.GRAY);
                 holder.rbseat.setBackgroundResource(R.drawable.rounded_corner);
             }else{
+
                 holder.rbseat.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        holder.rbseat.setClickable(false);
                         listener.OnBooking(seat);
+                        holder.rbseat.setClickable(false);
                     }
                 });
             }
