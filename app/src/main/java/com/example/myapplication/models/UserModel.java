@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class UserModel extends Model{
     public static final String TAG = "UserModel";
@@ -59,6 +60,10 @@ public class UserModel extends Model{
         void onNotFound();
     }
     public interface SuggestionsCallbacks{
+        void onSuccess(ArrayList<Movie> movies);
+        void onFailed(Exception e);
+    }
+    public interface HistoryMovieCallbacks{
         void onSuccess(ArrayList<Movie> movies);
         void onFailed(Exception e);
     }
@@ -433,6 +438,104 @@ public class UserModel extends Model{
                 callbacks.onSuccess(null);
             } else {
                 callbacks.onFailed(task.getException());
+            }
+        });
+    }
+    public void historyMovie(String uuid, HistoryMovieCallbacks callbacks){
+        database.child(USER_COLLECTION).child(uuid).child("invoiceIds").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> invoiceIds = (ArrayList<String>) snapshot.getValue();
+                ArrayList<String> movieIds = new ArrayList<>();
+                final ArrayList<String> invoices = new ArrayList<>();
+
+                final int[] count = {0};
+                final int[] invoiceCount = {invoiceIds.size()};
+                AtomicInteger processedInvoices = new AtomicInteger(0);
+                if(invoiceIds == null){
+                    invoiceIds = new ArrayList<>();
+                }
+                for(String invoiceId: invoiceIds){
+                    database.child("invoices").child(invoiceId).child("ticketId").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            ArrayList<String> ticketIds = (ArrayList<String>) snapshot.getValue();
+                            count[0] += ticketIds.size();
+                            invoices.add(invoiceId);
+                            int c = processedInvoices.getAndIncrement();
+                            if(c == invoiceCount[0]-1){
+                                Log.e(TAG, "abcxyz: " + count[0]);
+                                AtomicInteger processedMovies = new AtomicInteger(0);
+                                for(String invoice: invoices){
+                                    database.child("invoices").child(invoice).child("ticketId").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            ArrayList<String> ticketIds = (ArrayList<String>) snapshot.getValue();
+                                            if(ticketIds == null){
+                                                ticketIds = new ArrayList<>();
+                                            }
+                                            for(String ticketId : ticketIds){
+                                                database.child("tickets").child(ticketId).child("movieId").addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                        String movieId = (String) snapshot.getValue();
+                                                        int c = processedMovies.getAndIncrement();
+                                                        if(movieId != null && !movieIds.contains(movieId)){
+                                                            movieIds.add(movieId);
+                                                        }
+                                                        if(c == count[0]-1){
+                                                            ArrayList<Movie> movies = new ArrayList<>();
+                                                            final int[] movieCount = {movieIds.size()};
+                                                            AtomicInteger processedMovie = new AtomicInteger(0);
+                                                            for(String id: movieIds){
+                                                                Log.e(TAG, "onDataChange: " + id);
+                                                                movieModel.getMovie(id, new MovieModel.MovieCallbacks() {
+                                                                    @Override
+                                                                    public void onSuccess(Movie movie) {
+                                                                        movies.add(movie);
+                                                                        int c = processedMovie.getAndIncrement();
+                                                                        if(c == movieCount[0]-1){
+                                                                            callbacks.onSuccess(movies);
+                                                                        }
+                                                                    }
+                                                                    @Override
+                                                                    public void onFailed(Exception e) {
+                                                                        callbacks.onFailed(e);
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    }
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+                                                        Log.e(TAG, "onCancelled: " + error.toString());
+                                                        callbacks.onFailed(error.toException());
+                                                    }
+                                                });
+                                            }
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            Log.e(TAG, "onCancelled: " + error.toString());
+                                            callbacks.onFailed(error.toException());
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.e(TAG, "onCancelled: " + error.toString());
+                            callbacks.onFailed(error.toException());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "onCancelled: " + error.toString());
+                callbacks.onFailed(error.toException());
             }
         });
     }

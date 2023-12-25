@@ -55,7 +55,7 @@ public class MovieModel extends Model{
     }
 
     public void getMovie(String id, MovieCallbacks callbacks){
-        database.child(MOVIE_COLLECTION).child(id).addValueEventListener(new ValueEventListener() {
+        database.child(MOVIE_COLLECTION).child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.getValue() == null){
