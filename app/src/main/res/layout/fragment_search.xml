@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/black"
     android:orientation="vertical">
     <androidx.core.widget.NestedScrollView
@@ -49,6 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
+                    android:layout_margin="12dp"
                     android:id="@+id/et_search"
                     android:layout_width="match_parent"
                     android:hint="Tìm kiếm phim"

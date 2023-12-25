@@ -42,49 +42,14 @@ public class SearchMovieFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         listMovie = view.findViewById(R.id.rv_list_movie_search);
         view.findViewById(R.id.iv_back).setOnClickListener(view1 -> changeFragment(new HomeFragment(user)));
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        listMovie.setAdapter(searchMovieAdapter);
+        listMovie.setLayoutManager(layoutManager);
+        searchMovieAdapter = new SearchMovieAdapter(getContext());
+        listMovie.setAdapter(searchMovieAdapter);
         search = view.findViewById(R.id.et_search);
         downlist();
-
-        search.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Log.e(TAG, "onTextChanged: "+charSequence.toString() );
-                String searchText = charSequence.toString();
-                movieModel.getAllMovie(new MovieModel.MoviesCallbacks() {
-                    @Override
-                    public void onSuccess(ArrayList<Movie> moviesData) {
-                        try {
-                            movies.clear();
-                            for (Movie movie : moviesData) {
-                                if (movieMatchesCriteria(movie, searchText)) {
-                                    Log.e(TAG, "onSuccess: "+movie.getName()+searchText );
-                                    movies.add(movie);
-                                }
-                            }
-                            searchMovieAdapter.setData(movies);
-                            searchMovieAdapter.notifyDataSetChanged();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailed(Exception e) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
+        search();
         return view;
     }
     private void changeFragment(Fragment fragment) {
@@ -95,18 +60,25 @@ public class SearchMovieFragment extends Fragment {
     }
     private void downlist(){
         movieModel.getAllMovie(new MovieModel.MoviesCallbacks() {
+            private ArrayList<Movie> movies2 = new ArrayList<>();
+
             @Override
             public void onSuccess(ArrayList<Movie> movies) {
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                SearchMovieAdapter listMovieAdapter = new SearchMovieAdapter(searchMovieFragment.getContext(),movies);
-                listMovie.setLayoutManager(layoutManager);
-                listMovie.setAdapter(listMovieAdapter);
-                listMovieAdapter.OnSetClickListener(new SearchMovieAdapter.OnClickListener() {
-                    @Override
-                    public void OnClick(Movie movie) {
-                        changeFragment(new MovieDetailFragment(movie,user));
+
+                try{
+                    for(Movie movie:movies){
+                        if(!movie.getName().equals("") || !movie.getGenres().equals("")){
+                            movies2.add(movie);
+                        }
                     }
-                });
+                    movies2.clear();
+                    for(Movie student:movies2){
+                        movies.add(student);
+                    }
+                    searchMovieAdapter.setData(movies);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -122,9 +94,50 @@ public class SearchMovieFragment extends Fragment {
 
     private void searchMovie(String text){
         Log.e(TAG, "searchMovie: "+text );
-        search(text);
+        getSearch(text);
     }
-    private void search(String searchText){
+    private void  getSearch(String ext){
+        movieModel.getAllMovie(new MovieModel.MoviesCallbacks() {
+            @Override
+            public void onSuccess(ArrayList<Movie> movies) {
+                try {
+                    ArrayList<Movie> movies1 = new ArrayList<>();
 
+                    Log.e(TAG, "onSuccess: "+movies );
+                    for (Movie movie : movies) {
+                        if (movieMatchesCriteria(movie, ext)) {
+                            movies1.add(movie);
+                        }
+                    }
+                    searchMovieAdapter.setData(movies1);
+                    searchMovieAdapter.notifyDataSetChanged();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailed(Exception e) {
+
+            }
+        });
+    }
+    private void search(){
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String searchText = charSequence.toString();
+                searchMovie(searchText);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 }

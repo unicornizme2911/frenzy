@@ -100,7 +100,7 @@
                 app:cornerRadius="10dp"
                 app:strokeWidth="1dp"
                 app:backgroundTint="@color/red"
-                android:text="Xem xuất chiếu và xác nhận lại rạp"
+                android:text="Xem xuất chiếu"
                 android:textColor="@color/white">
 
             </com.google.android.material.button.MaterialButton>

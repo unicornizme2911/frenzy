@@ -39,6 +39,9 @@ public class  SearchMovieAdapter extends RecyclerView.Adapter<SearchMovieAdapter
     public void OnSetClickListener(OnClickListener  listener) {
         this.listener = listener;
     }
+    public SearchMovieAdapter(android.content.Context context) {
+        this.context = context;
+    }
 
     public SearchMovieAdapter(android.content.Context context, ArrayList<Movie> movies) {
         this.context = context;

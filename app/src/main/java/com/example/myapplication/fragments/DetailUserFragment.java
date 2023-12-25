@@ -40,7 +40,7 @@ public class DetailUserFragment extends Fragment {
         this.user = user;
     }
     private static final String TAG = "DetailUserFragment";
-    private LinearLayout linearLayout;
+    private LinearLayout linearLayout,bookfilm;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,12 +53,20 @@ public class DetailUserFragment extends Fragment {
                 .into(avatar);
         name = view.findViewById(R.id.tv_name);
         linearLayout = view.findViewById(R.id.LN_update_user);
+        bookfilm = view.findViewById(R.id.LN_book_film);
         fillData();
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 changeFragment(new UpdateProfileFragment(user));
             }
+        });
+        bookfilm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeFragment(new AllMovieFragment(user));
+            }
+
         });
 
         avatar.setOnClickListener(new View.OnClickListener() {

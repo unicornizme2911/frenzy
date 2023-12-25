@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import com.example.myapplication.authentication.ForgotPasswordActivity;
 import com.example.myapplication.authentication.OTPVerifyActivity;
 import com.example.myapplication.entities.Movie;
+import com.example.myapplication.entities.Ticket;
 import com.example.myapplication.entities.User;
 import com.example.myapplication.utlis.EmailUtils;
 import com.example.myapplication.utlis.PasswordUtils;
@@ -64,7 +65,7 @@ public class UserModel extends Model{
         void onFailed(Exception e);
     }
     public interface HistoryMovieCallbacks{
-        void onSuccess(ArrayList<Movie> movies);
+        void onSuccess(ArrayList<Movie> movies, String ticket,ArrayList<String> invoice);
         void onFailed(Exception e);
     }
     public UserModel() {
@@ -448,7 +449,7 @@ public class UserModel extends Model{
                 ArrayList<String> invoiceIds = (ArrayList<String>) snapshot.getValue();
                 ArrayList<String> movieIds = new ArrayList<>();
                 final ArrayList<String> invoices = new ArrayList<>();
-
+                ArrayList<String> invoices2 = new ArrayList<>();
                 final int[] invoiceCount = {invoiceIds.size()};
                 AtomicInteger processedInvoices = new AtomicInteger(0);
                 if (invoiceIds == null) {
@@ -466,6 +467,7 @@ public class UserModel extends Model{
                                     int c = processedInvoices.getAndIncrement();
                                     if(movieId != null && !movieIds.contains(movieId)){
                                         movieIds.add(movieId);
+                                        invoices2.add(invoiceId);
                                     }
                                     if(c == invoiceCount[0]-1){
                                         ArrayList<Movie> movies = new ArrayList<>();
@@ -479,7 +481,8 @@ public class UserModel extends Model{
                                                     movies.add(movie);
                                                     int c = processedMovie.getAndIncrement();
                                                     if(c == movieCount[0]-1){
-                                                        callbacks.onSuccess(movies);
+                                                        Log.e(TAG, "onSuccess: "+movies+invoices2 );
+                                                        callbacks.onSuccess(movies,ticket.get(0),invoices2);
                                                     }
                                                 }
                                                 @Override

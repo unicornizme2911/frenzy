@@ -36,9 +36,8 @@ public class AllMovieFragment extends Fragment {
     private final UserModel userModel = new UserModel();
     private final MovieModel movieModel = new MovieModel();
 
-    public AllMovieFragment(User user, Theater theater ) {
+    public AllMovieFragment(User user ) {
         this.user = user;
-        this.theater = theater;
     }
 
 

@@ -163,6 +163,7 @@
             android:orientation="horizontal"
             android:paddingBottom="20dp">
             <LinearLayout
+                android:id="@+id/LN_book_film"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

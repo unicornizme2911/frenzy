@@ -57,12 +57,12 @@ public class TheaterFragment extends Fragment {
                 ListTheatersAdapter listTheatersAdapter = new ListTheatersAdapter(theaterFragment.getContext(),theaters);
                 rvListTheaters.setLayoutManager(layoutManager);
                 rvListTheaters.setAdapter(listTheatersAdapter);
-                listTheatersAdapter.OnSetTheatersListener(new ListTheatersAdapter.OnTheaterListener() {
-                    @Override
-                    public void OnTheater(Theater theater) {
-                        changeFragment(new AllMovieFragment(user,theater));
-                    }
-                });
+//                listTheatersAdapter.OnSetTheatersListener(new ListTheatersAdapter.OnTheaterListener() {
+//                    @Override
+//                    public void OnTheater(Theater theater) {
+//                        changeFragment(new AllMovieFragment(user,theater));
+//                    }
+//                });
             }
 
             @Override
