@@ -3,7 +3,7 @@
     android:background="@color/black"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
-    <androidx.appcompat.widget.AppCompatRadioButton
+    <CheckBox
         android:layout_marginBottom="5dp"
         android:id="@+id/rbt_seat"
         android:layout_weight="1"

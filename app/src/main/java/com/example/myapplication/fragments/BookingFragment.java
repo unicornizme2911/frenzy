@@ -81,6 +81,7 @@ public class BookingFragment extends Fragment {
                         Type type = gson.fromJson(seat, Map.class).getClass();
                         Map<String, Object> map = gson.fromJson(seat, type);
                         seatIsExit.add(map.get("seatName").toString());
+                        Log.d(TAG, "onSuccess: " + map.get("seatName").toString());
                     }catch (IllegalStateException | JsonSyntaxException exception){
 
                     }
@@ -103,14 +104,12 @@ public class BookingFragment extends Fragment {
             @Override
             public void OnBooking(String seatName) {
                 ArrayList<String> result = seatPick;
-                Log.e(TAG, "OnBooking: "+seatName );
                 int i = 0;
                 if(seatPick.isEmpty()){
                     seatPick.add(seatName);
                 }else{
-                    Log.e(TAG, "OnBooking: SeatPick"+seatPick );
                     for(String seat:seatPick){
-                        if(seatName==seat){
+                        if(seatName.equalsIgnoreCase(seat)){
                             result.remove(seatName);
                             i=0;
                             break;
@@ -119,10 +118,10 @@ public class BookingFragment extends Fragment {
                         }
                     }
                     seatPick = result;
-                    Log.d(TAG, "OnBooking: "+seatPick);
                     if(i==1){
                         seatPick.add(seatName);
                     }
+                    Log.d(TAG, "OnBooking: "+seatPick);
                 }
 
             }
@@ -131,6 +130,11 @@ public class BookingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ArrayList<String> coupleSeat = new ArrayList<>();
+                ArrayList<String> seats = new ArrayList<>();
+                for(String seat: seatPick){
+                    String[] seatList = seat.split(":");
+                    seats.add(seatList[0]);
+                }
                 Log.e(TAG, "onClick Book: "+seatPick );
                 for(String seat: seatPick){
                     String[] seatList = seat.split(":");
@@ -157,7 +161,7 @@ public class BookingFragment extends Fragment {
                         }
                     }
                     if(exist == 0){
-                        changeFragment(new PaymentFragment(movie,user,time,date,theater,seatPick));
+                        changeFragment(new PaymentFragment(movie,user,time,date,theater,seats));
                     }
                 }
             }
