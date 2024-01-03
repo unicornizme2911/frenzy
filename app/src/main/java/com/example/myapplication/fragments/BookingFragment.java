@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R;
 import com.example.myapplication.adapter.ListSeatAdapter;
 import com.example.myapplication.adapter.home.ListMovieAdapter;
+import com.example.myapplication.authentication.LoginActivity;
 import com.example.myapplication.entities.Movie;
 import com.example.myapplication.entities.Ticket;
 import com.example.myapplication.entities.User;
@@ -31,6 +33,9 @@ import org.w3c.dom.Text;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -97,6 +102,7 @@ public class BookingFragment extends Fragment {
         seatAdapter.OnSetClickBookListener(new ListSeatAdapter.OnBookingListener() {
             @Override
             public void OnBooking(String seatName) {
+                ArrayList<String> result = seatPick;
                 Log.e(TAG, "OnBooking: "+seatName );
                 int i = 0;
                 if(seatPick.isEmpty()){
@@ -105,12 +111,15 @@ public class BookingFragment extends Fragment {
                     Log.e(TAG, "OnBooking: SeatPick"+seatPick );
                     for(String seat:seatPick){
                         if(seatName==seat){
+                            result.remove(seatName);
                             i=0;
                             break;
                         }else{
                             i=1;
                         }
                     }
+                    seatPick = result;
+                    Log.d(TAG, "OnBooking: "+seatPick);
                     if(i==1){
                         seatPick.add(seatName);
                     }
@@ -121,8 +130,36 @@ public class BookingFragment extends Fragment {
         book.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ArrayList<String> coupleSeat = new ArrayList<>();
                 Log.e(TAG, "onClick Book: "+seatPick );
-                changeFragment(new PaymentFragment(movie,user,time,date,theater,seatPick));
+                for(String seat: seatPick){
+                    String[] seatList = seat.split(":");
+                    if(seatList[1].equalsIgnoreCase("Couple")){
+                        coupleSeat.add(seatList[0]);
+                    }
+
+                }
+                Collections.sort(coupleSeat);
+                if(coupleSeat.size() %2 ==1){
+                    Toast.makeText(getContext(),"Book an even number of tickets",Toast.LENGTH_LONG).show();
+                }else{
+                    int exist = 0;
+                    for(int i=0;i<coupleSeat.size();i+=2){
+                        int seat1 = Integer.parseInt(coupleSeat.get(i).substring(1));
+                        int seat2 = Integer.parseInt(coupleSeat.get(i+1).substring(1));
+
+                        if(seat1 % 2 == 1 && seat2 % 2 == 0 && seat2 - seat1 == 1 ){
+                            continue;
+                        }else{
+                            Toast.makeText(getContext(),"Please book couple tickets next to each other",Toast.LENGTH_LONG).show();
+                            exist = 1;
+                            break;
+                        }
+                    }
+                    if(exist == 0){
+                        changeFragment(new PaymentFragment(movie,user,time,date,theater,seatPick));
+                    }
+                }
             }
         });
 
@@ -140,20 +177,33 @@ public class BookingFragment extends Fragment {
     }
 
     private void getSeat(View view){
+        String cp = "Couple";
+        String sg = "Single";
+        String vip= "VIP";
         for(int i =1;i<9;i++) {
-            seat.add("A" + String.valueOf(i));
+            seat.add("A" + String.valueOf(i)+":"+sg);
         }
         for(int i =1;i<9;i++) {
-            seat.add("B" + String.valueOf(i));
+            if( i >2 && i<7 ){
+                seat.add("B" + String.valueOf(i)+":"+vip);
+            }else{
+                seat.add("B" + String.valueOf(i)+":"+sg);
+            }
         }
         for(int i =1;i<9;i++) {
-            seat.add("C" + String.valueOf(i));
-        }
+            if( i >2 && i<7 ){
+                seat.add("C" + String.valueOf(i)+":"+vip);
+            }else{
+                seat.add("C" + String.valueOf(i)+":"+sg);
+            }        }
         for(int i =1;i<9;i++) {
-            seat.add("D" + String.valueOf(i));
-        }
+            if( i >2 && i<7 ){
+                seat.add("D" + String.valueOf(i)+":"+vip);
+            }else{
+                seat.add("D" + String.valueOf(i)+":"+sg);
+            }        }
         for(int i =1;i<9;i++) {
-            seat.add("E" + String.valueOf(i));
+            seat.add("E" + String.valueOf(i) + ":"+cp);
         }
     }
 }

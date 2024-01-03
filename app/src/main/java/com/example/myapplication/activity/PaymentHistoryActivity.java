@@ -18,10 +18,10 @@ public class PaymentHistoryActivity extends AppCompatActivity {
     private static final String TAG = "PaymentHistoryAdapter";
 
     private User user;
-    private PaymentHistoryActivity(){
+    public PaymentHistoryActivity(){
 
     }
-    private PaymentHistoryActivity(User user){
+    public PaymentHistoryActivity(User user){
         this.user = user;
     }
     @Override
